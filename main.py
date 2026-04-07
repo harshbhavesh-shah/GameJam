@@ -47,6 +47,7 @@ while running:
 
     # BOUCLE MAIN #
     
+    joueur.move(keys)
     py.draw.rect(screen,"red",py.Rect(joueur.getXY(),(TILE_SIZE,TILE_SIZE)))
     for bloc in objets:
         py.draw.rect(screen,"brown",bloc)
