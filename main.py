@@ -26,6 +26,7 @@ while running:
     
     joueur.move(keys)
     collisions(blocs,joueur)
+    teleporte(portes, joueur, keys)
     py.draw.rect(screen,"red",joueur.getRect())
     for objet in blocs:
         py.draw.rect(screen,"brown",objet)

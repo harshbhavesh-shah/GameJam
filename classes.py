@@ -43,3 +43,6 @@ class Porte:
     def __init__(self,pos:tuple[int,int]):
         self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
         self.id = id(self)
+
+    def getRect(self):
+        return self.rect
