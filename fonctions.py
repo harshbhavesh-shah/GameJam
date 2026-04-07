@@ -11,6 +11,7 @@ def keybinds(keys):
     if keys[py.K_TAB]:
         pass    #Pour ouvrir l'inventaire
 
+
 def collisions(blocs:list[Bloc],j:Joueur):
     joueur_rect = j.getRect()
     
@@ -26,14 +27,25 @@ def collisions(blocs:list[Bloc],j:Joueur):
             
             if min_overlap == overlap_top:  # Collision par le haut
                 j.setY(bloc.top - joueur_rect.height)
+                j.setFallState(False) # Reset du saut
+                j.setJumpTimer(0)
+                j.setFallSpeed(0)
             elif min_overlap == overlap_bottom:  # Collision par le bas
                 j.setY(bloc.bottom)
+                j.setFallState(True)
             elif min_overlap == overlap_left:  # Collision par la gauche
                 j.setX(bloc.left - joueur_rect.width)
             elif min_overlap == overlap_right:  # Collision par la droite
                 j.setX(bloc.right)
             
             joueur_rect = j.getRect()  # Mise à jour
+        
+    if not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+        if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
+            j.setCoyoteTimer(j.getCoyoteTimer()+1)
+        else:
+            j.setCoyoteTimer(0)
+            j.setFallState(True)  
             
 
 def defgrille(lvl:int):

@@ -23,7 +23,7 @@ while running:
     screen.fill("cyan")
 
     # BOUCLE MAIN #
-    
+
     joueur.move(keys)
     collisions(blocs,joueur)
     py.draw.rect(screen,"red",joueur.getRect())
