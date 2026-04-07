@@ -22,7 +22,7 @@ while running:
     screen.fill("cyan")
 
     # BOUCLE MAIN #
-    
+
     joueur.move(keys)
     collisions(blocs, blocpics, joueur)
     teleporte(portes, joueur, keys)
