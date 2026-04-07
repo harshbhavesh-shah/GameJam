@@ -1,8 +1,5 @@
 import pygame as py
-<<<<<<< HEAD
-=======
 from constantes import *
->>>>>>> 8096649530d765b6e12f40dca302ef0c1f106df6
 
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
