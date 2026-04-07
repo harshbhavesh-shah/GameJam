@@ -24,7 +24,7 @@ def collisions(blocs:list[Bloc],j:Joueur):
             if bloc.y < j.getY() :  # bloc en haut
                 j.setY(bloc.y + bloc.height)
 
-def defgrille(lvl):
+def defgrille(lvl:int):
     blocs, portes = [], []
     map_tile = level1[lvl]
     for i in range(len(map_tile)):
@@ -33,3 +33,9 @@ def defgrille(lvl):
                 case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                 case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
     return blocs, portes
+
+def teleporte(portes:list[Porte], j:Joueur, keys):
+    for porte in portes:
+        if porte.colliderect(j.getRect()):
+            if keys[py.K_e]:
+                py.quit()

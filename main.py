@@ -8,7 +8,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
 joueur = Joueur((100,100))
-blocs, portes = defgrille("map1")
+blocs, portes = defgrille(1)
 
 running = True
 clock = py.time.Clock()

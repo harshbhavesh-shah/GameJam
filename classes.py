@@ -40,4 +40,6 @@ class Bloc(py.Rect):
     pass
 
 class Porte(Bloc):
-    pass
+    def __init__(self, single_arg):
+        super().__init__(single_arg)
+        self.id = id
