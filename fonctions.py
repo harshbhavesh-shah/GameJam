@@ -73,12 +73,12 @@ def affichagelevel(blocs, portes, blocpics, screen):
 
 def teleporte(portes:list[Porte], j:Joueur, keys):
     for porte in portes:
-        if porte.getRect().right - j.getRect().right <= 0:
+        if porte.getRect().right - j.getRect().right <= 0 and porte.getRect().right - j.getRect().right >= -TILE_SIZE:
             if keys[py.K_e]:
                 py.quit()
-        if porte.getRect().top - j.getRect().top <= 0:
+        if porte.getRect().top - j.getRect().top <= 0 and porte.getRect().top - j.getRect().top >= -TILE_SIZE:
             if keys[py.K_e]:
                 py.quit()
-        if porte.getRect().left - j.getRect().left <= 0:
+        if porte.getRect().left - j.getRect().left <= 0 and porte.getRect().left - j.getRect().left >= -TILE_SIZE:
             if keys[py.K_e]:
                 py.quit()
