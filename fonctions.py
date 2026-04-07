@@ -1,5 +1,6 @@
 import pygame as py
 from classes import *
+from levels import *
 
 def keybinds(keys):
     """
@@ -23,4 +24,12 @@ def collisions(blocs:list[Bloc],j:Joueur):
             if bloc.y < j.getY() :  # bloc en haut
                 j.setY(bloc.y + bloc.height)
 
-#def defgrille()
+def defgrille(lvl):
+    blocs, portes = [], []
+    map_tile = level1[lvl]
+    for i in range(len(map_tile)):
+        for j in range(len(map_tile[i])):
+            match map_tile[i][j]:
+                case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+    return blocs, portes

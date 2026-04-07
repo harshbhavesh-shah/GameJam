@@ -1,6 +1,5 @@
 import pygame as py
 from fonctions import *
-from levels import *
 
 
 py.init()
@@ -9,14 +8,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
 joueur = Joueur((100,100))
-blocs = []
-portes = []
-map_tile = level1["map1"]
-for i in range(len(map_tile)):
-    for j in range(len(map_tile[i])):
-        match map_tile[i][j]:
-            case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-            case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+blocs, portes = defgrille("map1")
 
 running = True
 clock = py.time.Clock()
