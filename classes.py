@@ -3,36 +3,38 @@ from constantes import *
 
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
-        self.x = pos[0]
-        self.y = pos[1]
+        self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
 
     def setX(self,x):
-        self.x = x
+        self.rect.x = x
 
     def getX(self):
-        return self.x
+        return self.rect.x
     
     def setY(self,y):
-        self.y = y
+        self.rect.y = y
 
     def getY(self):
-        return self.y
+        return self.rect.y
     
     def getXY(self):
-        return (self.x,self.y)
+        return (self.rect.x,self.rect.y)
+    
+    def getRect(self):
+        return self.rect
     
     def move(self, keys):
         """
         Fonction qui gére les déplacement (sans gravité) du joueur
         """
         if keys[py.K_d]:
-            self.x += PLAYER_SPEED
+            self.rect.x += PLAYER_SPEED
         if keys[py.K_q]:
-            self.x -= PLAYER_SPEED
+            self.rect.x -= PLAYER_SPEED
         if keys[py.K_z]:
-            self.y -= PLAYER_SPEED
+            self.rect.y -= PLAYER_SPEED
         if keys[py.K_s]:
-            self.y += PLAYER_SPEED
+            self.rect.y += PLAYER_SPEED
 
 class Bloc(py.Rect):
     pass

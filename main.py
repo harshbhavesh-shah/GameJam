@@ -1,7 +1,6 @@
 import pygame as py
-from constantes import *
 from fonctions import *
-from classes import *
+
 
 py.init()
 
@@ -48,7 +47,8 @@ while running:
     # BOUCLE MAIN #
     
     joueur.move(keys)
-    py.draw.rect(screen,"red",py.Rect(joueur.getXY(),(TILE_SIZE,TILE_SIZE)))
+    collisions(objets,joueur)
+    py.draw.rect(screen,"red",joueur.getRect())
     for bloc in objets:
         py.draw.rect(screen,"brown",bloc)
 
