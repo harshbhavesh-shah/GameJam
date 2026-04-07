@@ -38,3 +38,6 @@ class Joueur:
 
 class Bloc(py.Rect):
     pass
+
+class Porte(Bloc):
+    pass
