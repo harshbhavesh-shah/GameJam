@@ -12,17 +12,29 @@ def keybinds(keys):
         pass    #Pour ouvrir l'inventaire
 
 def collisions(blocs:list[Bloc],j:Joueur):
+    joueur_rect = j.getRect()
+    
     for bloc in blocs:
-        if bloc.colliderect(j.getRect()):
-
-            if bloc.x > j.getX() :  # bloc à droite
-                j.setX(bloc.x - j.getRect().width)
-            if bloc.x < j.getX() :  # bloc à gauche
-                j.setX(bloc.x + bloc.width)
-            if bloc.y > j.getY() :  # bloc en bas
-                j.setY(bloc.y - j.getRect().height)
-            if bloc.y < j.getY() :  # bloc en haut
-                j.setY(bloc.y + bloc.height)
+        if bloc.colliderect(joueur_rect):
+            # Calcul de l'overlap
+            overlap_left = joueur_rect.right - bloc.left      # bloc à droite du joueur
+            overlap_right = bloc.right - joueur_rect.left     # bloc à gauche du joueur
+            overlap_top = joueur_rect.bottom - bloc.top       # bloc en haut du joueur
+            overlap_bottom = bloc.bottom - joueur_rect.top    # bloc en bas du joueur
+            
+            min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+            
+            if min_overlap == overlap_top:  # Collision par le haut
+                j.setY(bloc.top - joueur_rect.height)
+            elif min_overlap == overlap_bottom:  # Collision par le bas
+                j.setY(bloc.bottom)
+            elif min_overlap == overlap_left:  # Collision par la gauche
+                j.setX(bloc.left - joueur_rect.width)
+            elif min_overlap == overlap_right:  # Collision par la droite
+                j.setX(bloc.right)
+            
+            joueur_rect = j.getRect()  # Mise à jour
+            
 
 def defgrille(lvl:int):
     blocs, portes = [], []
