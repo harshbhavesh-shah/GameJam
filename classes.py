@@ -39,5 +39,7 @@ class Joueur:
 class Bloc(py.Rect):
     pass
 
-class Porte(Bloc):
-    pass
+class Porte:
+    def __init__(self,pos:tuple[int,int], id):
+        self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
+        self.id = id

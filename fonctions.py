@@ -43,7 +43,7 @@ def defgrille(lvl:int):
         for j in range(len(map_tile[i])):
             match map_tile[i][j]:
                 case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE)))
     return blocs, portes
 
 def teleporte(portes:list[Porte], j:Joueur, keys):
