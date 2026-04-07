@@ -1,4 +1,8 @@
 import pygame as py
+<<<<<<< HEAD
+=======
+from constantes import *
+>>>>>>> 8096649530d765b6e12f40dca302ef0c1f106df6
 
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
@@ -19,6 +23,16 @@ class Joueur:
     
     def getXY(self):
         return (self.x,self.y)
+    
+    def move(self, keys):
+        if keys[py.K_d]:
+            self.x += PLAYER_SPEED
+        elif keys[py.K_q]:
+            self.x -= PLAYER_SPEED
+        elif keys[py.K_z]:
+            self.y += PLAYER_SPEED
+        elif keys[py.K_s]:
+            self.y -= PLAYER_SPEED
 
 class Bloc(py.Rect):
     pass
