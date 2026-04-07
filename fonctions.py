@@ -11,7 +11,7 @@ def keybinds(keys):
     if keys[py.K_TAB]:
         pass                                                  #Pour ouvrir l'inventaire
 
-def collisions(blocs:list[Bloc],j:Joueur):
+def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
     joueur_rect = j.getRect()
     
     for bloc in blocs:
@@ -34,17 +34,30 @@ def collisions(blocs:list[Bloc],j:Joueur):
                 j.setX(bloc.right)
             
             joueur_rect = j.getRect()  # Mise à jour
-            
+    
+    
+    for blocpic in blocpics:
+        if blocpic.colliderect(joueur_rect):
+            py.time.wait(500)            
 
-def defgrille(lvl:int):
-    blocs, portes = [], []
-    map_tile = level1[lvl]
+def preparationlevel(lvl:int):
+    blocs, portes, blocpics = [], [], []
+    map_tile = lvl
     for i in range(len(map_tile)):
         for j in range(len(map_tile[i])):
             match map_tile[i][j]:
                 case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                 case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE)))
-    return blocs, portes
+                case 3: blocpics.append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+    return blocs, portes, blocpics
+
+def affichagelevel(blocs, portes, blocpics, screen):
+    for objet in blocs:
+        py.draw.rect(screen,"brown",objet)
+    for objet in portes:
+        py.draw.rect(screen,"green",objet)
+    for objet in blocpics:
+        py.draw.rect(screen,"pink",objet)
 
 def teleporte(portes:list[Porte], j:Joueur, keys):
     for porte in portes:

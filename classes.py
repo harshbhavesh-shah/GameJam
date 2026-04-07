@@ -46,3 +46,6 @@ class Porte:
 
     def getRect(self):
         return self.rect
+
+class BlocPic(py.Rect):
+    pass

@@ -8,11 +8,10 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
 joueur = Joueur((100,100))
-blocs, portes = defgrille(1)
+blocs, portes, blocpics = preparationlevel(hub[1])
 
 running = True
 clock = py.time.Clock()
-
 while running:
     for event in py.event.get():
         if event.type == py.QUIT:
@@ -25,13 +24,10 @@ while running:
     # BOUCLE MAIN #
     
     joueur.move(keys)
-    collisions(blocs,joueur)
+    collisions(blocs, blocpics, joueur)
     teleporte(portes, joueur, keys)
     py.draw.rect(screen,"red",joueur.getRect())
-    for objet in blocs:
-        py.draw.rect(screen,"brown",objet)
-    for objet in portes:
-        py.draw.rect(screen,"green",objet)
+    affichagelevel(blocs, portes, blocpics, screen)
     
 
 
