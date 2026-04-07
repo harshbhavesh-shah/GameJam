@@ -1,3 +1,5 @@
+import pygame as py
+
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
         self.x = pos[0]
@@ -17,3 +19,6 @@ class Joueur:
     
     def getXY(self):
         return (self.x,self.y)
+
+class Bloc(py.Rect):
+    pass

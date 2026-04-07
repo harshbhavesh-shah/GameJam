@@ -9,6 +9,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
 joueur = Joueur((100,100))
+bloc = Bloc((200,300),(100,100))
 
 
 running = True
@@ -26,6 +27,7 @@ while running:
     # BOUCLE MAIN #
     
     py.draw.rect(screen,"red",py.Rect(joueur.getXY(),(100,100)))
+    py.draw.rect(screen,"brown",bloc)
 
 
 
