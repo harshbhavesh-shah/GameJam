@@ -40,6 +40,6 @@ class Bloc(py.Rect):
     pass
 
 class Porte:
-    def __init__(self,pos:tuple[int,int], id):
+    def __init__(self,pos:tuple[int,int]):
         self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
-        self.id = id
+        self.id = id(self)
