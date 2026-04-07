@@ -25,10 +25,10 @@ while running:
     screen.fill("cyan")
 
     # BOUCLE MAIN #
-    
+    joueur.move(keys)
     py.draw.rect(screen,"red",py.Rect(joueur.getXY(),(100,100)))
     py.draw.rect(screen,"brown",bloc)
-
+    
 
 
     py.display.flip()

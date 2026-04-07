@@ -22,14 +22,17 @@ class Joueur:
         return (self.x,self.y)
     
     def move(self, keys):
+        """
+        Fonction qui gére les déplacement (sans gravité) du joueur
+        """
         if keys[py.K_d]:
             self.x += PLAYER_SPEED
-        elif keys[py.K_q]:
+        if keys[py.K_q]:
             self.x -= PLAYER_SPEED
-        elif keys[py.K_z]:
-            self.y += PLAYER_SPEED
-        elif keys[py.K_s]:
+        if keys[py.K_z]:
             self.y -= PLAYER_SPEED
+        if keys[py.K_s]:
+            self.y += PLAYER_SPEED
 
 class Bloc(py.Rect):
     pass
