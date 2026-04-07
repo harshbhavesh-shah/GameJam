@@ -22,3 +22,5 @@ def collisions(blocs:list[Bloc],j:Joueur):
                 j.setY(bloc.y - j.getRect().height)
             if bloc.y < j.getY() :  # bloc en haut
                 j.setY(bloc.y + bloc.height)
+
+#def defgrille()

@@ -9,13 +9,14 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
 joueur = Joueur((100,100))
-objets = []
+blocs = []
+portes = []
 map_tile = level1["map1"]
 for i in range(len(map_tile)):
     for j in range(len(map_tile[i])):
         match map_tile[i][j]:
-            case 1: objets.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-            case 2: objets.append(Porte((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+            case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+            case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
 
 running = True
 clock = py.time.Clock()
@@ -32,11 +33,13 @@ while running:
     # BOUCLE MAIN #
     
     joueur.move(keys)
-    collisions(objets,joueur)
+    collisions(blocs,joueur)
     py.draw.rect(screen,"red",joueur.getRect())
-    for objet in objets:
-            py.draw.rect(screen,"brown",objet)
-            py.draw.rect(screen,"green",objet)
+    for objet in blocs:
+        py.draw.rect(screen,"brown",objet)
+    for objet in portes:
+        py.draw.rect(screen,"green",objet)
+    
 
 
 
