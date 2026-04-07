@@ -9,7 +9,7 @@ def keybinds(keys):
     if keys[py.K_ESCAPE]:
         py.quit()
     if keys[py.K_TAB]:
-        pass    #Pour ouvrir l'inventaire
+        pass                                                  #Pour ouvrir l'inventaire
 
 
 def collisions(blocs:list[Bloc],j:Joueur):
@@ -60,6 +60,12 @@ def defgrille(lvl:int):
 
 def teleporte(portes:list[Porte], j:Joueur, keys):
     for porte in portes:
-        if porte.colliderect(j.getRect()):
+        if porte.getRect().right - j.getRect().right <= 0:
+            if keys[py.K_e]:
+                py.quit()
+        if porte.getRect().top - j.getRect().top <= 0:
+            if keys[py.K_e]:
+                py.quit()
+        if porte.getRect().left - j.getRect().left <= 0:
             if keys[py.K_e]:
                 py.quit()
