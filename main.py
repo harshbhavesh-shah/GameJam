@@ -25,6 +25,7 @@ while running:
     
     if keys[py.K_e] and any(porte.getRect().colliderect(joueur.getRect()) for porte in dictDonnees["portes"]):
         dictDonnees = preparationLevel(niveaux, 1, 2)
+        joueur.setXY(80,560)
     affichageLevel(dictDonnees, screen)
     py.draw.rect(screen,"red",joueur.getRect())
     
@@ -32,7 +33,7 @@ while running:
 
 
     py.display.flip()
-    clock.tick(60)
+    clock.tick(120)
     
 
 

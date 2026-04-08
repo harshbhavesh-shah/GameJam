@@ -22,6 +22,9 @@ class Joueur:
     def getY(self):
         return self.rect.y
     
+    def setXY(self, x, y):
+        self.rect.topleft = (x,y)
+    
     def getXY(self):
         return (self.rect.x,self.rect.y)
     
