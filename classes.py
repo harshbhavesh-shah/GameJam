@@ -99,7 +99,7 @@ class Joueur:
 
         self.setDashState((self.getDashState()[0],self.getDashState()[1],max(self.getDashState()[2]-1,0))) # Cooldown Dash
 
-        if keys[py.K_a] and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0:
+        if keys[py.K_LSHIFT] and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0:
             if self.getDashState()[1] == "n":  # Seulement initialiser si le dash n'a pas commencé
                 if keys[py.K_d]:
                     self.setDashState((0,"d",DASH_COOLDOWN))
