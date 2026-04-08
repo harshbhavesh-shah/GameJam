@@ -156,7 +156,7 @@ class Porte:
     def getId(self):
         return self.id
 
-class BlocPic(py.Rect):
+class Pique(py.Rect):
     pass
 
 class BlocMouv:

@@ -54,7 +54,7 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
             joueur_rect = j.getRect()  # Mise à jour
     
     
-    for blocpic in objetsDict["blocpics"]:
+    for blocpic in objetsDict["piques"]:
         if blocpic.colliderect(joueur_rect):
             py.time.wait(500)            
             joueur_rect = j.getRect()  # Mise à jour      
@@ -118,14 +118,14 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "blocpics":[], "blocmouvs":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
                     case 1: objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case 2: objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
-                    case 3: objetsDict["blocpics"].append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                    case 3: objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case 4: objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
     return objetsDict
 
@@ -143,8 +143,8 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]], screen:py.Surf
         py.draw.rect(screen,"brown",objet)
     for objet in objetsDict["portes"]:
         screen.blit(sprite_porte,objet.getRect().topleft)
-    for objet in objetsDict["blocpics"]:
-        py.draw.rect(screen,"pink",objet)
+    for objet in objetsDict["piques"]:
+        screen.blit(sprite_pique,objet.topleft)
     for objet in objetsDict["blocmouvs"]:
         py.draw.rect(screen, "blue", objet)
         objet.move()

@@ -39,7 +39,6 @@ while running:
 
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
-    
 
 
 
