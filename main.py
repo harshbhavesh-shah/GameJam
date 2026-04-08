@@ -24,7 +24,7 @@ while running:
     # BOUCLE MAIN #
 
     joueur.move(keys)
-    collisions(blocs, blocpics, joueur)
+    collisions(blocs, blocpics, blocmouvs, joueur)
     telePorte(portes, joueur, keys)
     
     affichageLevel(blocs, portes, blocpics, blocmouvs, screen)

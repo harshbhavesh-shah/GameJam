@@ -11,7 +11,7 @@ def keybinds(keys):
     if keys[py.K_TAB]:
         pass                                                  #Pour ouvrir l'inventaire
 
-def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
+def collisions(blocs:list[Bloc], blocpics:list[BlocPic], blocmouvs:list[BlocMouv], j:Joueur):
     joueur_rect = j.getRect()
     
     for bloc in blocs:
@@ -37,20 +37,48 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
             elif min_overlap == overlap_right:  # Collision par la droite
                 j.setX(bloc.right)
             
-            joueur_rect = j.getRect()  # Mise à jour
-    
-    
-    for blocpic in blocpics:
-        if blocpic.colliderect(joueur_rect):
-            py.time.wait(500)            
-        
+            joueur_rect = j.getRect()  # Mise à jour           
     if not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
             j.setCoyoteTimer(0)
-            j.setFallState(True)  
+            j.setFallState(True)
+
+    for blocpic in blocpics:
+        if blocpic.colliderect(joueur_rect):
+            py.time.wait(500)   
+    
+    for blocmouv in blocmouvs:
+        if blocmouv.getRect().colliderect(joueur_rect):
+            # Calcul de l'overlap
+            overlap_left = joueur_rect.right - blocmouv.getRect().left      # bloc à droite du joueur
+            overlap_right = blocmouv.getRect().right - joueur_rect.left     # bloc à gauche du joueur
+            overlap_top = joueur_rect.bottom - blocmouv.getRect().top       # bloc en haut du joueur
+            overlap_bottom = blocmouv.getRect().bottom - joueur_rect.top    # bloc en bas du joueur
             
+            min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+            
+            if min_overlap == overlap_top:  # Collision par le haut
+                j.setY(blocmouv.getRect().top - joueur_rect.height)
+                j.setFallState(False) # Reset du saut
+                j.setJumpTimer(0)
+                j.setFallSpeed(0)
+            elif min_overlap == overlap_bottom:  # Collision par le bas
+                j.setY(blocmouv.getRect().bottom)
+                j.setFallState(True)
+            elif min_overlap == overlap_left:  # Collision par la gauche
+                j.setX(blocmouv.getRect().left - joueur_rect.width)
+            elif min_overlap == overlap_right:  # Collision par la droite
+                j.setX(blocmouv.getRect().right)
+            
+            joueur_rect = j.getRect()  # Mise à jour           
+    if not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in blocmouvs) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+        if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
+            j.setCoyoteTimer(j.getCoyoteTimer()+1)
+        else:
+            j.setCoyoteTimer(0)
+            j.setFallState(True)
 
 def preparationLevel(lvl:int):
     blocs, portes, blocpics, blocmouvs = [], [], [], []

@@ -118,3 +118,6 @@ class BlocMouv:
                 self.distyAParc -= 2
                 if self.distyAParc == 0:
                     self.directionOrd = "haut"
+
+    def getRect(self):
+        return self.rect
