@@ -24,7 +24,7 @@ while running:
     collisions(dictDonnees, joueur)
     
     if keys[py.K_e] and any(porte.getRect().colliderect(joueur.getRect()) for porte in dictDonnees["portes"]):
-        dictDonnees = telePorte(2, 2)
+        dictDonnees = preparationLevel(niveaux, 1, 2)
     affichageLevel(dictDonnees, screen)
     py.draw.rect(screen,"red",joueur.getRect())
     

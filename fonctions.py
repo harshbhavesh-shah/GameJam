@@ -110,6 +110,3 @@ def affichageLevel(dictDonnees, screen):
         py.draw.rect(screen, "blue", objet)
         objet.move()
 
-def telePorte(souszone:int, level:int):
-    return preparationLevel(niveaux, level, souszone)
-
