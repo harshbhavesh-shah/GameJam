@@ -1,5 +1,6 @@
 import pygame as py
 from constantes import *
+from random import seed
 
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
@@ -120,11 +121,15 @@ class Bloc(py.Rect):
 
 class Porte:
     def __init__(self,pos:tuple[int,int]):
+        seed(1)
         self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
         self.id = id(self)
 
     def getRect(self):
         return self.rect
+    
+    def getId(self):
+        return self.id
 
 class BlocPic(py.Rect):
     pass

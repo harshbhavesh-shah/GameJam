@@ -10,6 +10,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
 blocs, portes, blocpics, blocmouvs = preparationLevel(hub[1])
 
+print(portes[0].getId())
 running = True
 clock = py.time.Clock()
 while running:
