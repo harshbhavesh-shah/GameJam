@@ -11,7 +11,7 @@ def keybinds(keys):
     if keys[py.K_TAB]:
         pass                                                  #Pour ouvrir l'inventaire
 
-def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
+def collisions(blocs:list[Bloc], blocpics:list[BlocPic], blocmouvs:list[BlocMouv], j:Joueur):
     joueur_rect = j.getRect()
     
     for bloc in blocs:
@@ -44,7 +44,8 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
     for blocpic in blocpics:
         if blocpic.colliderect(joueur_rect):
             py.time.wait(500)            
-        
+            joueur_rect = j.getRect()  # Mise à jour      
+
     if not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
@@ -54,10 +55,45 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
 
     if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
         j.setDashState((0,"n",j.getDashState()[2])) 
+        j.setFallState(True) ############
+
+    for blocpic in blocpics:
+        if blocpic.colliderect(joueur_rect):
+            py.time.wait(500)   
+    
+    for blocmouv in blocmouvs:
+        if blocmouv.getRect().colliderect(joueur_rect):
+            # Calcul de l'overlap
+            overlap_left = joueur_rect.right - blocmouv.getRect().left      # bloc à droite du joueur
+            overlap_right = blocmouv.getRect().right - joueur_rect.left     # bloc à gauche du joueur
+            overlap_top = joueur_rect.bottom - blocmouv.getRect().top       # bloc en haut du joueur
+            overlap_bottom = blocmouv.getRect().bottom - joueur_rect.top    # bloc en bas du joueur
             
+            min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+            
+            if min_overlap == overlap_top:  # Collision par le haut
+                j.setY(blocmouv.getRect().top - joueur_rect.height)
+                j.setFallState(False) # Reset du saut
+                j.setJumpTimer(0)
+                j.setFallSpeed(0)
+            elif min_overlap == overlap_bottom:  # Collision par le bas
+                j.setY(blocmouv.getRect().bottom)
+                j.setFallState(True)
+            elif min_overlap == overlap_left:  # Collision par la gauche
+                j.setX(blocmouv.getRect().left - joueur_rect.width)
+            elif min_overlap == overlap_right:  # Collision par la droite
+                j.setX(blocmouv.getRect().right)
+            
+            joueur_rect = j.getRect()  # Mise à jour           
+    if not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in blocmouvs) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+        if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
+            j.setCoyoteTimer(j.getCoyoteTimer()+1)
+        else:
+            j.setCoyoteTimer(0)
+            j.setFallState(True)
 
 def preparationLevel(lvl:int):
-    blocs, portes, blocpics = [], [], []
+    blocs, portes, blocpics, blocmouvs = [], [], [], []
     map_tile = lvl
     for i in range(len(map_tile)):
         for j in range(len(map_tile[i])):
@@ -65,15 +101,19 @@ def preparationLevel(lvl:int):
                 case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                 case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE)))
                 case 3: blocpics.append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-    return blocs, portes, blocpics
+                case 4: blocmouvs.append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+    return blocs, portes, blocpics, blocmouvs
 
-def affichageLevel(blocs, portes, blocpics, screen):
+def affichageLevel(blocs, portes, blocpics, blocmouvs, screen):
     for objet in blocs:
         py.draw.rect(screen,"brown",objet)
     for objet in portes:
         py.draw.rect(screen,"green",objet)
     for objet in blocpics:
         py.draw.rect(screen,"pink",objet)
+    for  objet in blocmouvs:
+        py.draw.rect(screen, "blue", objet)
+        objet.move()
 
 def telePorte(portes:list[Porte], j:Joueur, keys):
     for porte in portes:
