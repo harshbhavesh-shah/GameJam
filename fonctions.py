@@ -103,7 +103,7 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
 
 
 
-def preparationZone(zone_collection:dict[int,dict[int,list[list[int]]]], zone:int, souszone:int) -> dict[str,list[Bloc|BlocMouv]]:
+def preparationZone(zone_collection:dict[int,dict[int,list[list[int]]]], zone:int, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
     Prends en paramètres :
@@ -125,7 +125,7 @@ def preparationZone(zone_collection:dict[int,dict[int,list[list[int]]]], zone:in
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
                     case 1: objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case 2: objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}{j}"))
+                    case 2: objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
                     case 3: objetsDict["blocpics"].append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case 4: objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
     return objetsDict
@@ -133,7 +133,7 @@ def preparationZone(zone_collection:dict[int,dict[int,list[list[int]]]], zone:in
 
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]], screen:py.Surface):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 

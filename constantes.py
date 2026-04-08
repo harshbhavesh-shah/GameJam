@@ -9,9 +9,14 @@ COYOTE_JUMP_TIME = 7
 DASH_TIMER = 10
 DASH_COOLDOWN = 40
 DASH_SPEED = 2*PLAYER_SPEED
+PORTE_COOLDOWN = 10
 
 
-
+# Zone - Sous-Zone - Ordonnées - Abcisses
 PORTES_CORRESPONDANCES = {
-    "1-1-TODO" : "machin"
+    "1-1-15-31" : "1-2-14-9",
+    "1-2-14-9" : "1-1-15-31",
+    "1-2-4-9" : "1-2-4-23",
+    "1-2-4-23" : "1-2-14-23",
+    "1-2-14-23" : "1-2-4-9"
 }

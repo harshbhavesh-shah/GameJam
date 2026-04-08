@@ -9,6 +9,7 @@ class Joueur:
         self.fallSpeed = MAX_FALL_SPEED
         self.coyoteTimer = 0
         self.dashState = (DASH_TIMER,"n",DASH_COOLDOWN)
+        self.porteCooldown = 0
 
     # Coordonnées
 
@@ -65,6 +66,14 @@ class Joueur:
 
     def getCoyoteTimer(self):
         return self.coyoteTimer
+
+    # Porte Cooldown
+
+    def setPorteCooldown(self,val):
+        self.porteCooldown = val
+    
+    def getPorteCooldown(self):
+        return self.porteCooldown
 
     # Dash
 

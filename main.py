@@ -24,9 +24,18 @@ while running:
     joueur.move(keys)
     collisions(objetsDict, joueur)
     
-    if keys[py.K_e] and any(porte.getRect().colliderect(joueur.getRect()) for porte in objetsDict["portes"]):
-        objetsDict = preparationZone(niveaux, 1, 2)
-        joueur.setXY(80,560)
+    joueur.setPorteCooldown(max(0,joueur.getPorteCooldown()-1))
+    if keys[py.K_e] and joueur.getPorteCooldown() == 0:         # TéléPortation
+        for porte in objetsDict["portes"]:
+            if porte.getRect().colliderect(joueur.getRect()):
+                destination_id = PORTES_CORRESPONDANCES[porte.getId()]
+                zone , souszone , y , x = int(destination_id.split('-')[0]) , int(destination_id.split('-')[1]) , int(destination_id.split('-')[2]) , int(destination_id.split('-')[3])
+                objetsDict = preparationZone(niveaux, zone, souszone)
+                joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
+                joueur.setPorteCooldown(PORTE_COOLDOWN)
+                break
+                
+
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
     
