@@ -55,7 +55,6 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], blocmouvs:list[BlocMouv
 
     if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
         j.setDashState((0,"n",j.getDashState()[2])) 
-        j.setFallState(True) ############
 
     for blocpic in blocpics:
         if blocpic.colliderect(joueur_rect):
