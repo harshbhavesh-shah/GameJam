@@ -140,7 +140,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]], screen:py.Surf
         \n- screen : la surface (pygame) sur laquelle on affiche les objets
     """
     for objet in objetsDict["blocs"]:
-        py.draw.rect(screen,"brown",objet)
+        screen.blit(sprite_bloc,objet.topleft)
     for objet in objetsDict["portes"]:
         screen.blit(sprite_porte,objet.getRect().topleft)
     for objet in objetsDict["piques"]:
