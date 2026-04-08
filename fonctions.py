@@ -126,5 +126,4 @@ def telePorte(portes:list[Porte], j:Joueur, keys):
 
 def background(ecran:py.Surface,zone):
     match zone:
-        case "foret":
-            ecran.blits(((bg_foret_1,(0,0)),(bg_foret_2,(0,0)),(bg_foret_3,(0,0))))
+        case "foret": ecran.blits(((bg_foret_1,(0,0)),(bg_foret_2,(0,0)),(bg_foret_3,(0,0))))
