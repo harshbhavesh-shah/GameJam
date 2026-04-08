@@ -142,7 +142,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]], screen:py.Surf
     for objet in objetsDict["blocs"]:
         py.draw.rect(screen,"brown",objet)
     for objet in objetsDict["portes"]:
-        py.draw.rect(screen,"green",objet)
+        screen.blit(sprite_porte,objet.getRect().topleft)
     for objet in objetsDict["blocpics"]:
         py.draw.rect(screen,"pink",objet)
     for objet in objetsDict["blocmouvs"]:
