@@ -11,10 +11,10 @@ def keybinds(keys):
     if keys[py.K_TAB]:
         pass                                                  #Pour ouvrir l'inventaire
 
-def collisions(blocs:list[Bloc], blocpics:list[BlocPic], blocmouvs:list[BlocMouv], j:Joueur):
+def collisions(dictDonnees, j:Joueur):
     joueur_rect = j.getRect()
     
-    for bloc in blocs:
+    for bloc in dictDonnees["blocs"]:
         if bloc.colliderect(joueur_rect):
             # Calcul de l'overlap
             overlap_left = joueur_rect.right - bloc.left      # bloc à droite du joueur
@@ -41,26 +41,22 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], blocmouvs:list[BlocMouv
             joueur_rect = j.getRect()  # Mise à jour
     
     
-    for blocpic in blocpics:
+    for blocpic in dictDonnees["blocpics"]:
         if blocpic.colliderect(joueur_rect):
             py.time.wait(500)            
             joueur_rect = j.getRect()  # Mise à jour      
 
-    if not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+    if not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in dictDonnees["blocs"]) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
             j.setCoyoteTimer(0)
             j.setFallState(True) 
 
-    if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
-        j.setDashState((0,"n",j.getDashState()[2])) 
-
-    for blocpic in blocpics:
-        if blocpic.colliderect(joueur_rect):
-            py.time.wait(500)   
+    if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in dictDonnees["blocs"]) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
+        j.setDashState((0,"n",j.getDashState()[2]))  
     
-    for blocmouv in blocmouvs:
+    for blocmouv in dictDonnees["blocmouvs"]:
         if blocmouv.getRect().colliderect(joueur_rect):
             # Calcul de l'overlap
             overlap_left = joueur_rect.right - blocmouv.getRect().left      # bloc à droite du joueur
@@ -84,39 +80,36 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], blocmouvs:list[BlocMouv
                 j.setX(blocmouv.getRect().right)
             
             joueur_rect = j.getRect()  # Mise à jour           
-    if not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in blocmouvs) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+    if not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in dictDonnees["blocmouvs"]) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
             j.setCoyoteTimer(0)
             j.setFallState(True)
 
-def preparationLevel(lvl:int):
-    blocs, portes, blocpics, blocmouvs = [], [], [], []
-    map_tile = lvl
-    for i in range(len(map_tile)):
-        for j in range(len(map_tile[i])):
-            match map_tile[i][j]:
-                case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE)))
-                case 3: blocpics.append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                case 4: blocmouvs.append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
-    return blocs, portes, blocpics, blocmouvs
+def preparationLevel(zone:dict, level:int, souszone:int):
+    dictDonnees = {"blocs":[], "portes":[], "blocpics":[], "blocmouvs":[]}
+    map_tile = zone[level]
+    for i in range(len(map_tile[souszone])):
+        for j in range(len(map_tile[souszone][i])):
+            match map_tile[souszone][i][j]:
+                    case 1: dictDonnees["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                    case 2: dictDonnees["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}"))
+                    case 3: dictDonnees["blocpics"].append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                    case 4: dictDonnees["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+    return dictDonnees
 
-def affichageLevel(blocs, portes, blocpics, blocmouvs, screen):
-    for objet in blocs:
+def affichageLevel(dictDonnees, screen):
+    for objet in dictDonnees["blocs"]:
         py.draw.rect(screen,"brown",objet)
-    for objet in portes:
+    for objet in dictDonnees["portes"]:
         py.draw.rect(screen,"green",objet)
-    for objet in blocpics:
+    for objet in dictDonnees["blocpics"]:
         py.draw.rect(screen,"pink",objet)
-    for  objet in blocmouvs:
+    for  objet in dictDonnees["blocmouvs"]:
         py.draw.rect(screen, "blue", objet)
         objet.move()
 
-def telePorte(portes:list[Porte], j:Joueur, keys):
-    for porte in portes:
-        if porte.getRect().colliderect(j.getRect()):
-            if keys[py.K_e]:
-                py.quit()
+def telePorte(souszone:int, level:int):
+    return preparationLevel(niveaux, level, souszone)
 

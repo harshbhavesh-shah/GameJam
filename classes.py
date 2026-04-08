@@ -1,6 +1,5 @@
 import pygame as py
 from constantes import *
-from random import seed
 
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
@@ -120,10 +119,9 @@ class Bloc(py.Rect):
     pass
 
 class Porte:
-    def __init__(self,pos:tuple[int,int]):
-        seed(1)
-        self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
-        self.id = id(self)
+    def __init__(self,pos:tuple[int,int], id: str):
+        self.rect = py.Rect(pos,(2*TILE_SIZE,2*TILE_SIZE))
+        self.id = id
 
     def getRect(self):
         return self.rect
@@ -136,7 +134,7 @@ class BlocPic(py.Rect):
 
 class BlocMouv:
     def __init__(self, pos:tuple[int,int], x=0, y=5):
-        self.rect = py.Rect(pos,(TILE_SIZE, TILE_SIZE))
+        self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
         self.distxParc, self.distyParc = x*TILE_SIZE, y*TILE_SIZE
         self.distxAParc, self.distyAParc = 0, 0
         self.directionAbs, self.directionOrd = "droite", "haut"

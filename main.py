@@ -5,12 +5,8 @@ from fonctions import *
 py.init()
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-
-
 joueur = Joueur((100,100))
-blocs, portes, blocpics, blocmouvs = preparationLevel(hub[1])
-
-print(portes[0].getId())
+dictDonnees = preparationLevel(niveaux, 1, 1)
 running = True
 clock = py.time.Clock()
 while running:
@@ -25,10 +21,11 @@ while running:
     # BOUCLE MAIN #
 
     joueur.move(keys)
-    collisions(blocs, blocpics, blocmouvs, joueur)
-    telePorte(portes, joueur, keys)
+    collisions(dictDonnees, joueur)
     
-    affichageLevel(blocs, portes, blocpics, blocmouvs, screen)
+    if keys[py.K_e] and any(porte.getRect().colliderect(joueur.getRect()) for porte in dictDonnees["portes"]):
+        dictDonnees = telePorte(2, 2)
+    affichageLevel(dictDonnees, screen)
     py.draw.rect(screen,"red",joueur.getRect())
     
 
