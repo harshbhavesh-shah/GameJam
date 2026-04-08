@@ -6,7 +6,7 @@ py.init()
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
-dictDonnees = preparationLevel(niveaux, 1, 1)
+dictDonnees = preparationZone(niveaux, 1, 1)
 running = True
 clock = py.time.Clock()
 while running:
@@ -24,9 +24,9 @@ while running:
     collisions(dictDonnees, joueur)
     
     if keys[py.K_e] and any(porte.getRect().colliderect(joueur.getRect()) for porte in dictDonnees["portes"]):
-        dictDonnees = preparationLevel(niveaux, 1, 2)
+        dictDonnees = preparationZone(niveaux, 1, 2)
         joueur.setXY(80,560)
-    affichageLevel(dictDonnees, screen)
+    affichageZone(dictDonnees, screen)
     py.draw.rect(screen,"red",joueur.getRect())
     
 

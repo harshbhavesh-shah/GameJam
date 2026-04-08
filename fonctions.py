@@ -16,7 +16,7 @@ def collisions(dictDonnees, j:Joueur):
     joueur_rect = j.getRect()
     
     for bloc in dictDonnees["blocs"]:
-        if bloc.colliderect(joueur_rect):
+        if bloc.colliderect(joueur_rect) and isinstance(bloc,Bloc): # ISINSTANCE pour l'autocomplétion
             # Calcul de l'overlap
             overlap_left = joueur_rect.right - bloc.left      # bloc à droite du joueur
             overlap_right = bloc.right - joueur_rect.left     # bloc à gauche du joueur
@@ -79,8 +79,8 @@ def collisions(dictDonnees, j:Joueur):
                 j.setX(blocmouv.getRect().left - joueur_rect.width)
             elif min_overlap == overlap_right:  # Collision par la droite
                 j.setX(blocmouv.getRect().right)
-            
-            joueur_rect = j.getRect()  # Mise à jour           
+            joueur_rect = j.getRect()  # Mise à jour 
+
     if not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in dictDonnees["blocmouvs"]) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
@@ -88,26 +88,26 @@ def collisions(dictDonnees, j:Joueur):
             j.setCoyoteTimer(0)
             j.setFallState(True)
 
-def preparationLevel(zone:dict, level:int, souszone:int):
+def preparationZone(zone_collection:dict, zone:int, souszone:int):
     dictDonnees = {"blocs":[], "portes":[], "blocpics":[], "blocmouvs":[]}
-    map_tile = zone[level]
+    map_tile = zone_collection[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
                     case 1: dictDonnees["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case 2: dictDonnees["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}"))
+                    case 2: dictDonnees["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}{j}"))
                     case 3: dictDonnees["blocpics"].append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case 4: dictDonnees["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
     return dictDonnees
 
-def affichageLevel(dictDonnees, screen):
+def affichageZone(dictDonnees, screen):
     for objet in dictDonnees["blocs"]:
         py.draw.rect(screen,"brown",objet)
     for objet in dictDonnees["portes"]:
         py.draw.rect(screen,"green",objet)
     for objet in dictDonnees["blocpics"]:
         py.draw.rect(screen,"pink",objet)
-    for  objet in dictDonnees["blocmouvs"]:
+    for objet in dictDonnees["blocmouvs"]:
         py.draw.rect(screen, "blue", objet)
         objet.move()
 
