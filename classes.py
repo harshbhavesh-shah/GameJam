@@ -87,3 +87,34 @@ class Porte:
 
 class BlocPic(py.Rect):
     pass
+
+class BlocMouv:
+    def __init__(self, pos:tuple[int,int], x=0, y=5):
+        self.rect = py.Rect(pos,(TILE_SIZE, TILE_SIZE))
+        self.distxParc, self.distyParc = x*TILE_SIZE, y*TILE_SIZE
+        self.distxAParc, self.distyAParc = 0, 0
+        self.directionAbs, self.directionOrd = "droite", "haut"
+
+    def move(self):
+        if self.distxParc != 0:
+            if self.directionAbs == "droite":
+                self.rect.x += 2
+                self.distxAParc += 2
+                if self.distxAParc == self.distxParc:
+                    self.directionAbs = "gauche"
+            elif self.directionAbs == "gauche":
+                self.rect.x -= 2
+                self.distxAParc -= 2
+                if self.distxAParc == 0:
+                    self.directionAbs = "droite"
+        if self.distyParc != 0:
+            if self.directionOrd == "haut":
+                self.rect.y += 2
+                self.distyAParc += 2
+                if self.distyAParc == self.distyParc:
+                    self.directionOrd = "bas"
+            elif self.directionOrd == "bas":
+                self.rect.y -= 2
+                self.distyAParc -= 2
+                if self.distyAParc == 0:
+                    self.directionOrd = "haut"

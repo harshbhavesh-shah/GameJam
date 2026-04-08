@@ -8,7 +8,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
 joueur = Joueur((100,100))
-blocs, portes, blocpics = preparationLevel(hub[1])
+blocs, portes, blocpics, blocmouvs = preparationLevel(level1[1])
 
 running = True
 clock = py.time.Clock()
@@ -27,7 +27,7 @@ while running:
     collisions(blocs, blocpics, joueur)
     telePorte(portes, joueur, keys)
     
-    affichageLevel(blocs, portes, blocpics, screen)
+    affichageLevel(blocs, portes, blocpics, blocmouvs, screen)
     py.draw.rect(screen,"red",joueur.getRect())
     
 

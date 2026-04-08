@@ -53,7 +53,7 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
             
 
 def preparationLevel(lvl:int):
-    blocs, portes, blocpics = [], [], []
+    blocs, portes, blocpics, blocmouvs = [], [], [], []
     map_tile = lvl
     for i in range(len(map_tile)):
         for j in range(len(map_tile[i])):
@@ -61,15 +61,19 @@ def preparationLevel(lvl:int):
                 case 1: blocs.append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                 case 2: portes.append(Porte((j*TILE_SIZE,i*TILE_SIZE)))
                 case 3: blocpics.append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-    return blocs, portes, blocpics
+                case 4: blocmouvs.append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+    return blocs, portes, blocpics, blocmouvs
 
-def affichageLevel(blocs, portes, blocpics, screen):
+def affichageLevel(blocs, portes, blocpics, blocmouvs, screen):
     for objet in blocs:
         py.draw.rect(screen,"brown",objet)
     for objet in portes:
         py.draw.rect(screen,"green",objet)
     for objet in blocpics:
         py.draw.rect(screen,"pink",objet)
+    for  objet in blocmouvs:
+        py.draw.rect(screen, "blue", objet)
+        objet.move()
 
 def telePorte(portes:list[Porte], j:Joueur, keys):
     for porte in portes:
