@@ -78,10 +78,8 @@ class Joueur:
         """
         if keys[py.K_d] and self.rect.x + self.rect.width < SCREEN_WIDTH:
             self.rect.x += PLAYER_SPEED
-            if self.rect.x + self.rect.width >= SCREEN_WIDTH : self.rect.x = SCREEN_WIDTH - self.rect.width
         if keys[py.K_q] and self.rect.x > 0:
             self.rect.x -= PLAYER_SPEED
-            if self.rect.x <= 0 : self.rect.x = 0
         if keys[py.K_SPACE]:
             if not self.getFallState():
                 self.setFallState(False)
