@@ -10,6 +10,8 @@ class Joueur:
         self.coyoteTimer = 0
         self.dashState = (DASH_TIMER,"n",DASH_COOLDOWN)
 
+    # Coordonnées
+
     def setX(self,x):
         self.rect.x = x
 
@@ -28,9 +30,16 @@ class Joueur:
     def getXY(self):
         return (self.rect.x,self.rect.y)
     
+    # Rect
+    
+    def setRect(self,rect:py.Rect):
+        self.rect = rect
+
     def getRect(self):
         return self.rect
     
+    # Saut / Chute
+
     def setJumpTimer(self,val:int):
         self.jumpTimer = val
 
@@ -49,17 +58,22 @@ class Joueur:
     def getFallSpeed(self):
         return self.fallSpeed
     
-    def getCoyoteTimer(self):
-        return self.coyoteTimer
-    
+    # Coyote
+
     def setCoyoteTimer(self,val):
         self.coyoteTimer = val
+
+    def getCoyoteTimer(self):
+        return self.coyoteTimer
+
+    # Dash
+
+    def setDashState(self,state:tuple[int,str,int]):
+        self.dashState = state
 
     def getDashState(self):
         return self.dashState
     
-    def setDashState(self,state:tuple[int,str,int]):
-        self.dashState = state
     
     def dash(self):
         """

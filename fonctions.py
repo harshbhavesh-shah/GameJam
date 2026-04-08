@@ -5,21 +5,30 @@ from textures import *
 
 def keybinds(keys):
     """
-    Fonction qui gére toutes les racourcis clavier
+    Fonction qui gére tous les racourcis clavier (Esc,Tab...)
     """
     if keys[py.K_ESCAPE]:
         py.quit()
     if keys[py.K_TAB]:
         pass                                                  #Pour ouvrir l'inventaire
 
-def collisions(dictDonnees, j:Joueur):
+
+
+
+def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
+    """
+    Gère les collisions entre le Joueur (j) et l'envirronement (Blocs,Pics...). \n
+    Prends en paramètres : 
+        \n- objetsDict : dictionnaire des objets.
+        \n- j : le Joueur.
+    """
     joueur_rect = j.getRect()
     
     if j.rect.x + j.rect.width >= SCREEN_WIDTH : j.rect.x = SCREEN_WIDTH - j.rect.width
     if j.rect.x <= 0 : j.rect.x = 0
 
-    for bloc in dictDonnees["blocs"]:
-        if bloc.colliderect(joueur_rect) and isinstance(bloc,Bloc): # ISINSTANCE pour l'autocomplétion
+    for bloc in objetsDict["blocs"]:
+        if bloc.colliderect(joueur_rect): 
             # Calcul de l'overlap
             overlap_left = joueur_rect.right - bloc.left      # bloc à droite du joueur
             overlap_right = bloc.right - joueur_rect.left     # bloc à gauche du joueur
@@ -45,22 +54,22 @@ def collisions(dictDonnees, j:Joueur):
             joueur_rect = j.getRect()  # Mise à jour
     
     
-    for blocpic in dictDonnees["blocpics"]:
+    for blocpic in objetsDict["blocpics"]:
         if blocpic.colliderect(joueur_rect):
             py.time.wait(500)            
             joueur_rect = j.getRect()  # Mise à jour      
 
-    if not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in dictDonnees["blocs"]) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+    if not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in objetsDict["blocs"]) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
             j.setCoyoteTimer(0)
             j.setFallState(True) 
 
-    if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in dictDonnees["blocs"]) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
+    if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in objetsDict["blocs"]) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
         j.setDashState((0,"n",j.getDashState()[2]))  
     
-    for blocmouv in dictDonnees["blocmouvs"]:
+    for blocmouv in objetsDict["blocmouvs"]:
         if blocmouv.getRect().colliderect(joueur_rect):
             # Calcul de l'overlap
             overlap_left = joueur_rect.right - blocmouv.getRect().left      # bloc à droite du joueur
@@ -84,35 +93,65 @@ def collisions(dictDonnees, j:Joueur):
                 j.setX(blocmouv.getRect().right)
             joueur_rect = j.getRect()  # Mise à jour 
 
-    if not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in dictDonnees["blocmouvs"]) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+    if not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in objetsDict["blocmouvs"]) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
             j.setCoyoteTimer(0)
             j.setFallState(True)
 
-def preparationZone(zone_collection:dict, zone:int, souszone:int):
-    dictDonnees = {"blocs":[], "portes":[], "blocpics":[], "blocmouvs":[]}
+
+
+
+def preparationZone(zone_collection:dict[int,dict[int,list[list[int]]]], zone:int, souszone:int) -> dict[str,list[Bloc|BlocMouv]]:
+    """
+    Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
+    Prends en paramètres :
+        \n- zone_collection : un dictionnaire de zones (niveaux).
+        \n- zone : un entier représenant la zone parmis zone_collection, qui repertorie des sous zones.
+        \n- sous-zones : un entier représenant la sous_zone parmis zone.
+    où zone_collection[zone][souszone] est le tilemap (list[list[int]]) de la sous-zone en question.
+
+    La tile peut être de différents types :
+        0 - Rien, de l'air
+        1 - Bloc
+        2 - Porte
+        3 - Pics (tuent au toucher)
+        4 - Blocmouv (Plateformes mouvantes)
+      """
+    objetsDict = {"blocs":[], "portes":[], "blocpics":[], "blocmouvs":[]}
     map_tile = zone_collection[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
-                    case 1: dictDonnees["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case 2: dictDonnees["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}{j}"))
-                    case 3: dictDonnees["blocpics"].append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case 4: dictDonnees["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
-    return dictDonnees
+                    case 1: objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                    case 2: objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}{j}"))
+                    case 3: objetsDict["blocpics"].append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                    case 4: objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+    return objetsDict
 
-def affichageZone(dictDonnees, screen):
-    for objet in dictDonnees["blocs"]:
+
+
+
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv]], screen:py.Surface):
+    """
+    Affiche tous les objets du dictionnaire sur la surface screen. \n
+    Prends en paramètres : 
+        \n- objetsDict : dictionnaire associant chaque type d'objet à la liste des objets à ajouter.
+        \n- screen : la surface (pygame) sur laquelle on affiche les objets
+    """
+    for objet in objetsDict["blocs"]:
         py.draw.rect(screen,"brown",objet)
-    for objet in dictDonnees["portes"]:
+    for objet in objetsDict["portes"]:
         py.draw.rect(screen,"green",objet)
-    for objet in dictDonnees["blocpics"]:
+    for objet in objetsDict["blocpics"]:
         py.draw.rect(screen,"pink",objet)
-    for objet in dictDonnees["blocmouvs"]:
+    for objet in objetsDict["blocmouvs"]:
         py.draw.rect(screen, "blue", objet)
         objet.move()
+
+
+
 
 ### TEXTURES ###
 
