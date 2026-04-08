@@ -8,6 +8,7 @@ class Joueur:
         self.jumpTimer = MAX_JUMP_TIMER
         self.fallSpeed = MAX_FALL_SPEED
         self.coyoteTimer = 0
+        self.dashState = (DASH_TIMER,"n",DASH_COOLDOWN)
 
     def setX(self,x):
         self.rect.x = x
@@ -50,6 +51,23 @@ class Joueur:
     
     def setCoyoteTimer(self,val):
         self.coyoteTimer = val
+
+    def getDashState(self):
+        return self.dashState
+    
+    def setDashState(self,state:tuple[int,str,int]):
+        self.dashState = state
+    
+    def dash(self):
+        """
+        Effectue le dash en fonction de la direction est de la distance déjà parcourue
+        """
+        match self.getDashState()[1]:
+            case "g": self.rect.x  -= DASH_SPEED
+            case "d": self.rect.x  += DASH_SPEED
+            case "h": self.rect.y  -= DASH_SPEED
+            case "n": return
+        self.setDashState((self.getDashState()[0] +1,self.getDashState()[1],self.getDashState()[2]))
     
     def move(self, keys):
         """
@@ -67,11 +85,34 @@ class Joueur:
                 self.jumpTimer += 1
                 if self.jumpTimer >= MAX_JUMP_TIMER: self.setFallState(True)
 
-        elif self.jumpTimer > 0: self.setFallState(True)
+        # GRAVITÉ
+
+        elif self.jumpTimer > 0: self.setFallState(True) 
+        
+        if self.getDashState()[0] < DASH_TIMER and self.getDashState()[1] != "n": self.setFallState(False) # Si en dash : stop gravité
 
         if self.getFallState() : 
             self.fallSpeed += 1
             self.rect.y += min(MAX_FALL_SPEED,self.getFallSpeed())
+
+        # DASH
+
+        self.setDashState((self.getDashState()[0],self.getDashState()[1],max(self.getDashState()[2]-1,0))) # Cooldown Dash
+
+        if keys[py.K_a] and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0:
+            if self.getDashState()[1] == "n":  # Seulement initialiser si le dash n'a pas commencé
+                if keys[py.K_d]:
+                    self.setDashState((0,"d",DASH_COOLDOWN))
+                elif keys[py.K_q]:
+                    self.setDashState((0,"g",DASH_COOLDOWN))
+                elif keys[py.K_z]:
+                    self.setDashState((0,"h",DASH_COOLDOWN))
+        
+        if self.getDashState()[0] < DASH_TIMER and self.getDashState()[1] != "n":
+            self.dash()
+
+        
+
 
 
 class Bloc(py.Rect):

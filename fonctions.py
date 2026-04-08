@@ -37,6 +37,7 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
             elif min_overlap == overlap_right:  # Collision par la droite
                 j.setX(bloc.right)
             
+            j.setDashState((DASH_TIMER,"n",j.getDashState()[2]))
             joueur_rect = j.getRect()  # Mise à jour
     
     
@@ -49,7 +50,10 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
             j.setCoyoteTimer(0)
-            j.setFallState(True)  
+            j.setFallState(True) 
+
+    if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in blocs) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
+        j.setDashState((0,"n",j.getDashState()[2])) 
             
 
 def preparationLevel(lvl:int):
