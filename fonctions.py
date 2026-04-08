@@ -1,6 +1,7 @@
 import pygame as py
 from classes import *
 from levels import *
+from textures import *
 
 def keybinds(keys):
     """
@@ -110,3 +111,8 @@ def affichageLevel(dictDonnees, screen):
         py.draw.rect(screen, "blue", objet)
         objet.move()
 
+### TEXTURES ###
+
+def background(ecran:py.Surface,zone):
+    match zone:
+        case "foret": ecran.blits(((bg_foret_1,(0,0)),(bg_foret_2,(0,0)),(bg_foret_3,(0,0))))
