@@ -103,14 +103,13 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
 
 
 
-def preparationZone(zone_collection:dict[int,dict[int,list[list[int]]]], zone:int, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte]]:
+def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
     Prends en paramètres :
-        \n- zone_collection : un dictionnaire de zones (niveaux).
-        \n- zone : un entier représenant la zone parmis zone_collection, qui repertorie des sous zones.
-        \n- sous-zones : un entier représenant la sous_zone parmis zone.
-    où zone_collection[zone][souszone] est le tilemap (list[list[int]]) de la sous-zone en question.
+        \n- zone : une chaine représenant la zone parmis tileMaps, qui repertorie des sous zones.
+        \n- sous-zones : un entier représenant la sous-zone parmis zone.
+    où tileMaps[zone][souszone] est le tilemap (list[list[int]]) de la sous-zone en question.
 
     La tile peut être de différents types :
         0 - Rien, de l'air
@@ -120,7 +119,7 @@ def preparationZone(zone_collection:dict[int,dict[int,list[list[int]]]], zone:in
         4 - Blocmouv (Plateformes mouvantes)
       """
     objetsDict = {"blocs":[], "portes":[], "blocpics":[], "blocmouvs":[]}
-    map_tile = zone_collection[zone]
+    map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:

@@ -6,7 +6,7 @@ py.init()
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
-objetsDict = preparationZone(niveaux, 1, 1)
+objetsDict = preparationZone("hub", 1)
 
 running = True
 clock = py.time.Clock()
@@ -29,10 +29,11 @@ while running:
         for porte in objetsDict["portes"]:
             if porte.getRect().colliderect(joueur.getRect()):
                 destination_id = PORTES_CORRESPONDANCES[porte.getId()]
-                zone , souszone , y , x = int(destination_id.split('-')[0]) , int(destination_id.split('-')[1]) , int(destination_id.split('-')[2]) , int(destination_id.split('-')[3])
-                objetsDict = preparationZone(niveaux, zone, souszone)
+                zone , souszone , y , x = destination_id.split('-')[0] , int(destination_id.split('-')[1]) , int(destination_id.split('-')[2]) , int(destination_id.split('-')[3])
+                objetsDict = preparationZone( zone, souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setPorteCooldown(PORTE_COOLDOWN)
+                print(porte.getId())
                 break
                 
 
