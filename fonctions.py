@@ -52,7 +52,7 @@ def collisions(blocs:list[Bloc], blocpics:list[BlocPic], j:Joueur):
             j.setFallState(True)  
             
 
-def preparationlevel(lvl:int):
+def preparationLevel(lvl:int):
     blocs, portes, blocpics = [], [], []
     map_tile = lvl
     for i in range(len(map_tile)):
@@ -63,7 +63,7 @@ def preparationlevel(lvl:int):
                 case 3: blocpics.append(BlocPic((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
     return blocs, portes, blocpics
 
-def affichagelevel(blocs, portes, blocpics, screen):
+def affichageLevel(blocs, portes, blocpics, screen):
     for objet in blocs:
         py.draw.rect(screen,"brown",objet)
     for objet in portes:
@@ -71,7 +71,7 @@ def affichagelevel(blocs, portes, blocpics, screen):
     for objet in blocpics:
         py.draw.rect(screen,"pink",objet)
 
-def teleporte(portes:list[Porte], j:Joueur, keys):
+def telePorte(portes:list[Porte], j:Joueur, keys):
     for porte in portes:
         if porte.getRect().right - j.getRect().right <= 0 and porte.getRect().right - j.getRect().right >= -TILE_SIZE:
             if keys[py.K_e]:
