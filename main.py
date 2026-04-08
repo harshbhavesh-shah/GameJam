@@ -19,7 +19,7 @@ while running:
     keys = py.key.get_pressed()
     keybinds(keys)
     
-    screen.fill("cyan")
+    background(screen,"foret")
 
     # BOUCLE MAIN #
 

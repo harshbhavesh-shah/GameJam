@@ -1,6 +1,7 @@
 import pygame as py
 from classes import *
 from levels import *
+from textures import *
 
 def keybinds(keys):
     """
@@ -120,3 +121,10 @@ def telePorte(portes:list[Porte], j:Joueur, keys):
             if keys[py.K_e]:
                 py.quit()
 
+
+### TEXTURES ###
+
+def background(ecran:py.Surface,zone):
+    match zone:
+        case "foret":
+            ecran.blits(((bg_foret_1,(0,0)),(bg_foret_2,(0,0)),(bg_foret_3,(0,0))))
