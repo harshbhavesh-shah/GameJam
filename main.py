@@ -6,7 +6,7 @@ py.init()
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
-dictDonnees = preparationLevel(niveaux, 1, 1)
+dictDonnees = preparationLevel(niveaux, 2, 3)
 running = True
 clock = py.time.Clock()
 while running:
