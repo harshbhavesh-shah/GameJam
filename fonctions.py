@@ -2,6 +2,7 @@ import pygame as py
 from classes import *
 from levels import *
 from textures import *
+import time
 
 def keybinds(keys):
     """
@@ -142,7 +143,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]], screen:py.Surf
     for objet in objetsDict["blocs"]:
         screen.blit(sprite_bloc,objet.topleft)
     for objet in objetsDict["portes"]:
-        screen.blit(sprite_porte,objet.getRect().topleft)
+        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)],objet.getRect().topleft)
     for objet in objetsDict["piques"]:
         screen.blit(sprite_pique,objet.topleft)
     for objet in objetsDict["blocmouvs"]:

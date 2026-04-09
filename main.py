@@ -41,7 +41,6 @@ while running:
     py.draw.rect(screen,"red",joueur.getRect())
 
 
-
     py.display.flip()
     clock.tick(120)
     
