@@ -40,9 +40,9 @@ while running:
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
 
-
+    print(clock.get_fps())
     py.display.flip()
-    clock.tick(120)
+    clock.tick(60)
     
 
 
