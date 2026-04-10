@@ -41,7 +41,7 @@ while running:
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
         objetsDict , souszone = switchSousZone(souszone,joueur)
 
-    if joueur.getRect().y > SCREEN_HEIGHT: 
+    if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
 
     affichageZone(objetsDict, screen)
