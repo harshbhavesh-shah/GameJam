@@ -84,6 +84,22 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
 
 
 
+def switchSubZone(level:int,joueur:Joueur):
+    if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH:
+        zone, souszone = TABLEAUX_SUIVANT_CORRESPONDANCES[level].split('-')[0], int(TABLEAUX_SUIVANT_CORRESPONDANCES[level].split('-')[1])
+        level = int(TABLEAUX_SUIVANT_CORRESPONDANCES[level].split('-')[1])
+        objetsDict = preparationZone(zone,souszone)
+        joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+
+    if joueur.getRect().x < 0:
+        zone, souszone = TABLEAUX_PRECEDENT_CORRESPONDANCES[level].split('-')[0], int(TABLEAUX_PRECEDENT_CORRESPONDANCES[level].split('-')[1])
+        level = int(TABLEAUX_PRECEDENT_CORRESPONDANCES[level].split('-')[1])
+        objetsDict = preparationZone(zone,souszone)
+        joueur.setXY(objetsDict["end"][0].x,objetsDict["end"][0].y)
+    
+    return objetsDict , level
+
+
 
 def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte]]:
     """

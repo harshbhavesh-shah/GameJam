@@ -6,6 +6,7 @@ py.init()
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
+
 level = 1
 biome = "foret"
 objetsDict = preparationZone("hub", level)
@@ -37,22 +38,10 @@ while running:
                 joueur.setPorteCooldown(PORTE_COOLDOWN)
                 break
                 
+    if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
+        objetsDict , level = switchSubZone(level,joueur)
 
-    if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH:
-        destination_id = TABLEAUX_SUIVANT_CORRESPONDANCES
-        zone, souszone = destination_id[level].split('-')[0], int(destination_id[level].split('-')[1])
-        level = int(destination_id[level].split('-')[1])
-        objetsDict = preparationZone(zone,souszone)
-        joueur.setXY(objetsDict["spawn"][0].x*TILE_SIZE,objetsDict["spawn"][0].y*TILE_SIZE)
-
-    if joueur.getRect().x + joueur.getRect().width < 0:
-        destination_id = TABLEAUX_PRECEDENT_CORRESPONDANCES
-        zone, souszone = destination_id[level].split('-')[0], int(destination_id[level].split('-')[1])
-        level = int(destination_id[level].split('-')[1])
-        objetsDict = preparationZone(zone,souszone)
-        joueur.setXY(objetsDict["end"][0].x*TILE_SIZE,objetsDict["end"][0].y*TILE_SIZE)
-
-    if joueur.getRect().y > 720:
+    if joueur.getRect().y > SCREEN_HEIGHT: 
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
 
     affichageZone(objetsDict, screen)
