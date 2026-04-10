@@ -33,14 +33,12 @@ while running:
                 objetsDict = preparationZone( zone, souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setPorteCooldown(PORTE_COOLDOWN)
-                print(porte.getId())
                 break
                 
 
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
 
-    print(clock.get_fps())
     py.display.flip()
     clock.tick(60)
     
