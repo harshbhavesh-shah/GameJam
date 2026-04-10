@@ -7,9 +7,9 @@ py.init()
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
 
-level = 1
+souszone = 1
 biome = "foret"
-objetsDict = preparationZone("hub", level)
+objetsDict = preparationZone("hub", souszone)
 
 running = True
 clock = py.time.Clock()
@@ -39,7 +39,7 @@ while running:
                 break
                 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
-        objetsDict , level = switchSubZone(level,joueur)
+        objetsDict , souszone = switchSousZone(souszone,joueur)
 
     if joueur.getRect().y > SCREEN_HEIGHT: 
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
