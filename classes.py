@@ -205,3 +205,6 @@ class BlocMouv:
 
     def getRect(self):
         return self.rect
+    
+class Decoration(Bloc):
+    pass

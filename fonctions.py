@@ -100,7 +100,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "decorations":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -111,6 +111,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
+                    case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
     return objetsDict
 
 
@@ -123,15 +124,21 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique]], screen:p
         \n- objetsDict : dictionnaire associant chaque type d'objet à la liste des objets à ajouter.
         \n- screen : la surface (pygame) sur laquelle on affiche les objets
     """
-    for objet in objetsDict["blocs"]:
-        screen.blit(objet.getSprite().convert_alpha(),objet.topleft)
-    for objet in objetsDict["portes"]:
-        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),objet.getRect().topleft)
-    for objet in objetsDict["piques"]:
-        screen.blit(sprite_pique.convert_alpha(),objet.topleft)
-    for objet in objetsDict["blocmouvs"]:
-        py.draw.rect(screen, "blue", objet)
-        objet.move()
+    for bloc in objetsDict["blocs"]:
+        screen.blit(bloc.getSprite().convert_alpha(),bloc.topleft)
+
+    for porte in objetsDict["portes"]:
+        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.getRect().topleft)
+
+    for pique in objetsDict["piques"]:
+        screen.blit(sprite_pique.convert_alpha(),pique.topleft)
+
+    for deco in objetsDict["decorations"]:
+        screen.blit(deco.getSprite().convert_alpha(),deco.topleft)
+
+    for bmouv in objetsDict["blocmouvs"]:
+        py.draw.rect(screen, "blue", bmouv)
+        bmouv.move()
 
 
 
