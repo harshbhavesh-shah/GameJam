@@ -9,6 +9,7 @@ joueur = Joueur((100,100))
 level = 1
 biome = "foret"
 objetsDict = preparationZone("hub", level)
+print(objetsDict["end"])
 
 running = True
 clock = py.time.Clock()
@@ -39,20 +40,20 @@ while running:
                 
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH:
-        destination_id = TABLEAUX_SUIVANT_CORRESPONDANCES
-        zone, souszone = destination_id[level].split('-')[0], int(destination_id[level].split('-')[1])
-        level = int(destination_id[level].split('-')[1])
+        destination_s_id = TABLEAUX_SUIVANT_CORRESPONDANCES
+        zone, souszone = destination_s_id[level].split('-')[0], int(destination_s_id[level].split('-')[1])
+        level = int(destination_s_id[level].split('-')[1])
         objetsDict = preparationZone(zone,souszone)
-        joueur.setXY(objetsDict["spawn"][0].x*TILE_SIZE,objetsDict["spawn"][0].y*TILE_SIZE)
+        joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
 
     if joueur.getRect().x + joueur.getRect().width < 0:
-        destination_id = TABLEAUX_PRECEDENT_CORRESPONDANCES
-        zone, souszone = destination_id[level].split('-')[0], int(destination_id[level].split('-')[1])
-        level = int(destination_id[level].split('-')[1])
+        destination_p_id = TABLEAUX_PRECEDENT_CORRESPONDANCES
+        zone, souszone = destination_p_id[level].split('-')[0], int(destination_p_id[level].split('-')[1])
+        level = int(destination_p_id[level].split('-')[1])
         objetsDict = preparationZone(zone,souszone)
-        joueur.setXY(objetsDict["end"][0].x*TILE_SIZE,objetsDict["end"][0].y*TILE_SIZE)
+        joueur.setXY(objetsDict["end"][0].x,(objetsDict["end"][0].y+10))
 
-    if joueur.getRect().y > 720:
+    if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
 
     affichageZone(objetsDict, screen)
