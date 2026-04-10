@@ -99,9 +99,10 @@ class Joueur:
         """
         Fonction qui gére les déplacement (avec gravité) du joueur
         """
-        if keys[py.K_d] and self.rect.x + self.rect.width < SCREEN_WIDTH:
+        # DÉPLACEMENTS DE BASE
+        if (keys[py.K_d] or keys[py.K_RIGHT])   and self.rect.x + self.rect.width < SCREEN_WIDTH:
             self.rect.x += PLAYER_SPEED
-        if keys[py.K_q] and self.rect.x > 0:
+        if (keys[py.K_q] or keys[py.K_LEFT])   and self.rect.x > 0:
             self.rect.x -= PLAYER_SPEED
         if keys[py.K_SPACE]:
             if not self.getFallState():
@@ -126,14 +127,15 @@ class Joueur:
         self.setDashState((self.getDashState()[0],self.getDashState()[1],max(self.getDashState()[2]-1,0))) # Cooldown Dash
 
         if keys[py.K_LSHIFT] and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0:
-            if self.getDashState()[1] == "n":  # Seulement initialiser si le dash n'a pas commencé
+            if self.getDashState()[1] == "n" and  (keys[py.K_d] or keys[py.K_RIGHT]):  # Seulement initialiser si le dash n'a pas commencé
                 self.setFallSpeed(0)
-                if keys[py.K_d]:
-                    self.setDashState((0,"d",DASH_COOLDOWN))
-                elif keys[py.K_q]:
-                    self.setDashState((0,"g",DASH_COOLDOWN))
-                elif keys[py.K_z]:
-                    self.setDashState((0,"h",DASH_COOLDOWN))
+                self.setDashState((0,"d",DASH_COOLDOWN))
+            elif self.getDashState()[1] == "n" and  (keys[py.K_q] or keys[py.K_LEFT]):
+                self.setFallSpeed(0)
+                self.setDashState((0,"g",DASH_COOLDOWN))
+            elif self.getDashState()[1] == "n" and  (keys[py.K_z] or keys[py.K_UP]):
+                self.setFallSpeed(0)
+                self.setDashState((0,"h",DASH_COOLDOWN))
         
         if self.getDashState()[0] < DASH_TIMER and self.getDashState()[1] != "n":
             self.dash()
