@@ -145,7 +145,12 @@ class Joueur:
 
 
 class Bloc(py.Rect):
-    pass
+    def setSprite(self,sprite):
+        self.sprite = sprite
+        return self
+    
+    def getSprite(self) -> py.Surface:
+        return self.sprite
 
 class Spawn(py.Rect):
     pass

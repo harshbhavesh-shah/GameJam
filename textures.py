@@ -16,8 +16,22 @@ bg_foret_3 = py.transform.scale(bg_foret_3,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
 sprite_porte = py.image.load_animation("./assets/textures/autre/porte.gif")
 sprite_pique = py.image.load("./assets/textures/autre/pique.png")
-sprite_bloc = py.image.load("./assets/textures/autre/briqueTextureBloc.png")
+
+# BRIQUE #
+sprite_brique = py.image.load("./assets/textures/autre/brique/brique.png")
+sprite_brique_top = py.image.load("./assets/textures/autre/brique/brique_top.png")
+sprite_brique_left = py.image.load("./assets/textures/autre/brique/brique_left.png")
+sprite_brique_right = py.image.load("./assets/textures/autre/brique/brique_right.png")
+sprite_brique_topleft = py.image.load("./assets/textures/autre/brique/brique_topleft.png")
+sprite_brique_topright = py.image.load("./assets/textures/autre/brique/brique_topright.png")
+sprite_brique_topleft_corner = py.image.load("./assets/textures/autre/brique/brique_topleft_corner.png")
+sprite_brique_topright_corner = py.image.load("./assets/textures/autre/brique/brique_topright_corner.png")
+
+
+
+
+##### MISE A ECHELLE #####
 
 sprite_porte = [py.transform.scale(s[0],(2*TILE_SIZE,2*TILE_SIZE)) for s in sprite_porte]
 sprite_pique = py.transform.scale(sprite_pique,(TILE_SIZE,TILE_SIZE))
-sprite_bloc = py.transform.scale(sprite_bloc,(TILE_SIZE,TILE_SIZE))
+
