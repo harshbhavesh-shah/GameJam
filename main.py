@@ -7,6 +7,7 @@ py.init()
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
 level = 1
+biome = "foret"
 objetsDict = preparationZone("hub", level)
 
 running = True
@@ -18,7 +19,7 @@ while running:
     keys = py.key.get_pressed()
     keybinds(keys)
     
-    background(screen,"foret")
+    background(screen,biome)
 
     # BOUCLE MAIN #
 
@@ -38,12 +39,18 @@ while running:
                 
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH:
-        destination_id = TABLEAUX_CORRESPONDANCES
+        destination_id = TABLEAUX_SUIVANT_CORRESPONDANCES
         zone, souszone = destination_id[level].split('-')[0], int(destination_id[level].split('-')[1])
         level = int(destination_id[level].split('-')[1])
         objetsDict = preparationZone(zone,souszone)
         joueur.setXY(objetsDict["spawn"][0].x*TILE_SIZE,objetsDict["spawn"][0].y*TILE_SIZE)
-        pass
+
+    if joueur.getRect().x + joueur.getRect().width < 0:
+        destination_id = TABLEAUX_PRECEDENT_CORRESPONDANCES
+        zone, souszone = destination_id[level].split('-')[0], int(destination_id[level].split('-')[1])
+        level = int(destination_id[level].split('-')[1])
+        objetsDict = preparationZone(zone,souszone)
+        joueur.setXY(objetsDict["end"][0].x*TILE_SIZE,objetsDict["end"][0].y*TILE_SIZE)
 
     if joueur.getRect().y > 720:
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)

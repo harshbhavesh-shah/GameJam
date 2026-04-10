@@ -21,9 +21,16 @@ PORTES_CORRESPONDANCES = {
     "hub-4-14-23" : "hub-4-4-9"
 }
 
-TABLEAUX_CORRESPONDANCES = {
+TABLEAUX_SUIVANT_CORRESPONDANCES = {
     1 : "hub-2",
     2 : "hub-3",
     3 : "hub-4",
+    4 : "hub-4"
+}
+
+TABLEAUX_PRECEDENT_CORRESPONDANCES = {
+    1 : "hub-1",
+    2 : "hub-1",
+    3 : "hub-2",
     4 : "hub-4"
 }

@@ -155,6 +155,9 @@ class Bloc(py.Rect):
 class Spawn(py.Rect):
     pass
 
+class End(py.Rect):
+    pass
+
 class Porte:
     def __init__(self,pos:tuple[int,int], id: str):
         self.rect = py.Rect(pos,(2*TILE_SIZE,2*TILE_SIZE))
