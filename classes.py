@@ -102,7 +102,7 @@ class Joueur:
         # DÉPLACEMENTS DE BASE
         if (keys[py.K_d] or keys[py.K_RIGHT]):
             self.rect.x += PLAYER_SPEED
-        if (keys[py.K_q] or keys[py.K_LEFT])   and self.rect.x > 0:
+        if (keys[py.K_q] or keys[py.K_LEFT]):
             self.rect.x -= PLAYER_SPEED
         if keys[py.K_SPACE]:
             if not self.getFallState():

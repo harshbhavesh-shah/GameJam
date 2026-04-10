@@ -56,7 +56,6 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
     """
     joueur_rect = j.getRect()
     
-    if j.rect.x + j.rect.width >= SCREEN_WIDTH : j.rect.x = SCREEN_WIDTH - j.rect.width
     if j.rect.x <= 0 : j.rect.x = 0
 
     for bloc in objetsDict["blocs"]:

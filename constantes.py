@@ -20,3 +20,10 @@ PORTES_CORRESPONDANCES = {
     "hub-4-4-23" : "hub-4-14-23",
     "hub-4-14-23" : "hub-4-4-9"
 }
+
+TABLEAUX_CORRESPONDANCES = {
+    1 : "hub-2",
+    2 : "hub-3",
+    3 : "hub-4",
+    4 : "hub-4"
+}
