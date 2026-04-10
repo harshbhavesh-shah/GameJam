@@ -6,7 +6,7 @@ py.init()
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
-objetsDict = preparationZone("hub", 1)
+objetsDict = preparationZone("hub", 3)
 
 running = True
 clock = py.time.Clock()
