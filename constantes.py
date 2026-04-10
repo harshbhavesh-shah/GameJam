@@ -32,5 +32,5 @@ TABLEAUX_PRECEDENT_CORRESPONDANCES = {
     1 : "hub-1",
     2 : "hub-1",
     3 : "hub-2",
-    4 : "hub-4"
+    4 : "hub-3"
 }

@@ -6,6 +6,7 @@ py.init()
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
+
 level = 1
 biome = "foret"
 objetsDict = preparationZone("hub", level)
@@ -38,6 +39,8 @@ while running:
                 joueur.setPorteCooldown(PORTE_COOLDOWN)
                 break
                 
+    if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
+        objetsDict , level = switchSubZone(level,joueur)
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH:
         destination_s_id = TABLEAUX_SUIVANT_CORRESPONDANCES
