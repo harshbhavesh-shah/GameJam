@@ -36,6 +36,12 @@ while running:
                 break
                 
 
+    if joueur.getRect().x + joueur.getRect().width < SCREEN_WIDTH:
+        pass
+
+    if joueur.getRect().y > 720:
+        joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
+
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
 

@@ -100,7 +100,7 @@ class Joueur:
         Fonction qui gére les déplacement (avec gravité) du joueur
         """
         # DÉPLACEMENTS DE BASE
-        if (keys[py.K_d] or keys[py.K_RIGHT])   and self.rect.x + self.rect.width < SCREEN_WIDTH:
+        if (keys[py.K_d] or keys[py.K_RIGHT]):
             self.rect.x += PLAYER_SPEED
         if (keys[py.K_q] or keys[py.K_LEFT])   and self.rect.x > 0:
             self.rect.x -= PLAYER_SPEED
@@ -145,6 +145,9 @@ class Joueur:
 
 
 class Bloc(py.Rect):
+    pass
+
+class Spawn(py.Rect):
     pass
 
 class Porte:
