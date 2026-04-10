@@ -108,10 +108,14 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
-                    case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case "p": objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
-                    case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+                case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(map_tile[souszone],i,j)))
+
+                case "p": objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
+
+                case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+
+                case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+
     return objetsDict
 
 
@@ -125,7 +129,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique]], screen:p
         \n- screen : la surface (pygame) sur laquelle on affiche les objets
     """
     for objet in objetsDict["blocs"]:
-        screen.blit(sprite_bloc.convert_alpha(),objet.topleft)
+        screen.blit(objet.getSprite().convert_alpha(),objet.topleft)
     for objet in objetsDict["portes"]:
         screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),objet.getRect().topleft)
     for objet in objetsDict["piques"]:
@@ -142,3 +146,17 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique]], screen:p
 def background(ecran:py.Surface,zone):
     match zone:
         case "foret": ecran.blits(((bg_foret_1,(0,0)),(bg_foret_2,(0,0)),(bg_foret_3,(0,0))))
+
+
+def blocSprite(tileMap,i,j):
+    if tileMap[i-1][j] == "b" : # S'il y a un bloc au dessus
+        if tileMap[i][j-1] != "b" : return sprite_brique_left # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_right # S'il y'a rien à droite
+        else :  # S'il y'a un bloc à gauche ET à droite
+            if tileMap[i-1][j-1] != "b" : return sprite_brique_topleft_corner  # S'il y'a rien au-dessus à gauche
+            elif tileMap[i-1][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_topright_corner # S'il y'a rien au-dessus à droite
+            else: return sprite_brique
+    else :  # S'il y'a rien au-dessus
+        if tileMap[i][j-1] != "b" : return sprite_brique_topleft # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_topright # S'il y'a rien à droite
+        else : return sprite_brique_top

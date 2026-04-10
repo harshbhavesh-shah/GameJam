@@ -23,6 +23,7 @@ while running:
 
     joueur.move(keys)
     collisions(objetsDict, joueur)
+    print(joueur.getFallSpeed())
     
     joueur.setPorteCooldown(max(0,joueur.getPorteCooldown()-1))
     if keys[py.K_e] and joueur.getPorteCooldown() == 0:         # TéléPortation
