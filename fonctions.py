@@ -112,6 +112,19 @@ def switchSousZone(zone:str,souszone:int,joueur:Joueur,objetsDict:dict):
 
 
 
+def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],joueur:Joueur):
+    for porte in objetsDict["portes"]:
+            if porte.getRect().colliderect(joueur.getRect()):
+                destination_id = PORTES_CORRESPONDANCES[porte.getId()]
+                zone , souszone , y , x = destination_id.split('-')[0] , int(destination_id.split('-')[1]) , int(destination_id.split('-')[2]) , int(destination_id.split('-')[3])
+                objetsDict = preparationZone(zone,souszone)
+                joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
+                joueur.setPorteCooldown(PORTE_COOLDOWN)
+                break
+    return objetsDict
+
+
+
 def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.

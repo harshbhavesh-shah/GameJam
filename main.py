@@ -30,14 +30,7 @@ while running:
     
     joueur.setPorteCooldown(max(0,joueur.getPorteCooldown()-1))
     if keys[py.K_e] and joueur.getPorteCooldown() == 0:         # TéléPortation
-        for porte in objetsDict["portes"]:
-            if porte.getRect().colliderect(joueur.getRect()):
-                destination_id = PORTES_CORRESPONDANCES[porte.getId()]
-                zone , souszone , y , x = destination_id.split('-')[0] , int(destination_id.split('-')[1]) , int(destination_id.split('-')[2]) , int(destination_id.split('-')[3])
-                objetsDict = preparationZone(zone,souszone)
-                joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
-                joueur.setPorteCooldown(PORTE_COOLDOWN)
-                break
+        objetsDict = telePorte(objetsDict,joueur)
                 
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
