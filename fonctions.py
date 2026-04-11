@@ -84,17 +84,30 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
 
 
 
-def switchSousZone(level:int,joueur:Joueur):
+def switchSousZone(zone:str,souszone:int,joueur:Joueur,objetsDict:dict):
+    """
+    Téléporte le joueur à la prochaine sous-zone s'il sors de l'écran.
+    """
+    level = f"{zone}-{souszone}"
+
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH:
-        zone, souszone = TABLEAUX_SUIVANT_CORRESPONDANCES[level].split('-')[0], int(TABLEAUX_SUIVANT_CORRESPONDANCES[level].split('-')[1])
-        objetsDict = preparationZone(zone,souszone)
-        joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+        for source, dest in TABLEAUX_CORRESPONDANCES.items():
+            if source == level: 
+                zone, souszone = dest.split('-')[0] , int(dest.split('-')[1])
+                objetsDict = preparationZone(zone,souszone)
+                joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+                return objetsDict , souszone
+        joueur.setX(SCREEN_WIDTH-joueur.getRect().width)
 
     if joueur.getRect().x < 0:
-        zone, souszone = TABLEAUX_PRECEDENT_CORRESPONDANCES[level].split('-')[0], int(TABLEAUX_PRECEDENT_CORRESPONDANCES[level].split('-')[1])
-        objetsDict = preparationZone(zone,souszone)
-        joueur.setXY(objetsDict["end"][0].x,objetsDict["end"][0].y)
-    
+        for source, dest in TABLEAUX_CORRESPONDANCES.items():
+            if dest == level: 
+                zone, souszone = source.split('-')[0] , int(source.split('-')[1])
+                objetsDict = preparationZone(zone,souszone)
+                joueur.setXY(objetsDict["end"][0].x,objetsDict["end"][0].y)
+                return objetsDict , souszone
+        joueur.setX(0)
+        
     return objetsDict , souszone
 
 
