@@ -115,7 +115,9 @@ def switchSousZone(zone:str,souszone:int,joueur:Joueur,objetsDict:dict):
 def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],joueur:Joueur):
     for porte in objetsDict["portes"]:
             if porte.getRect().colliderect(joueur.getRect()):
-                destination_id = PORTES_CORRESPONDANCES[porte.getId()]
+                for source, dest in PORTES_CORRESPONDANCES.items():
+                    if source == porte.getId(): destination_id = dest
+                    if dest == porte.getId(): destination_id = source
                 zone , souszone , y , x = destination_id.split('-')[0] , int(destination_id.split('-')[1]) , int(destination_id.split('-')[2]) , int(destination_id.split('-')[3])
                 objetsDict = preparationZone(zone,souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)

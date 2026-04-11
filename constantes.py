@@ -14,16 +14,14 @@ PORTE_COOLDOWN = 10
 
 # Zone - Sous-Zone - Ordonnées - Abcisses
 PORTES_CORRESPONDANCES = {
-    "hub-3-15-31" : "hub-4-14-9",
-    "hub-4-14-9" : "hub-3-15-31",
-    "hub-4-4-9" : "hub-4-4-23",
-    "hub-4-4-23" : "hub-4-14-23",
-    "hub-4-14-23" : "hub-4-4-9"
+    "hub-5-14-9" : "hub-5-4-9",
+    "hub-5-14-23" : "hub-5-4-23",
 }
 
 
 TABLEAUX_CORRESPONDANCES = {
     "hub-1" : "hub-2",
     "hub-2" : "hub-3",
-    "hub-3" : "hub-4"
+    "hub-3" : "hub-4",
+    "hub-4" : "hub-5"
 }
