@@ -57,11 +57,12 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
 
     for bloc in objetsDict["blocs"]:
         if bloc.colliderect(joueur_rect): 
-            collisionsBlocJoueur(joueur_rect,bloc,j)
+            collisionsBlocJoueur(joueur_rect,bloc,j)    
     
     for blocpic in objetsDict["piques"]:
         if blocpic.colliderect(joueur_rect):
-            j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)       
+            j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+            py.time.wait(150)   
             joueur_rect = j.getRect()   #   TODO  
  
     # Bloc mouv
@@ -149,7 +150,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
             match map_tile[souszone][i][j]:
                     case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(map_tile[souszone],i,j)))
                     case "p": objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
-                    case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE-18,TILE_SIZE-20)))
+                    case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
