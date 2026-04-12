@@ -176,7 +176,7 @@ class Pique(py.Rect):
 
 class BlocMouv:
     def __init__(self, pos:tuple[int,int], x=0, y=5):
-        self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
+        self.rect = py.Rect(pos,(TILE_SIZE-18,TILE_SIZE-20))
         self.distxParc, self.distyParc = x*TILE_SIZE, y*TILE_SIZE
         self.distxAParc, self.distyAParc = 0, 0
         self.directionAbs, self.directionOrd = "droite", "haut"
