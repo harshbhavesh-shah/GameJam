@@ -9,7 +9,6 @@ joueur = Joueur((100,100))
 
 zone = "hub"
 souszone = 1
-biome = "foret"
 objetsDict = preparationZone(zone, souszone)
 
 running = True
@@ -21,7 +20,7 @@ while running:
     keys = py.key.get_pressed()
     keybinds(keys)
     
-    background(screen,biome)
+    
 
     # BOUCLE MAIN #
 
@@ -30,7 +29,7 @@ while running:
     
     joueur.setPorteCooldown(max(0,joueur.getPorteCooldown()-1))
     if keys[py.K_e] and joueur.getPorteCooldown() == 0:         # TéléPortation
-        objetsDict = telePorte(objetsDict,joueur)
+        objetsDict , zone = telePorte(objetsDict,joueur)
                 
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
@@ -39,6 +38,7 @@ while running:
     if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
 
+    background(screen,zone)
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
 

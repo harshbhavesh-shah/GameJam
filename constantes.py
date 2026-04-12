@@ -14,8 +14,10 @@ PORTE_COOLDOWN = 10
 
 # Zone - Sous-Zone - Ordonnées - Abcisses
 PORTES_CORRESPONDANCES = {
-    "hub-5-14-9" : "hub-5-4-9",
-    "hub-5-14-23" : "hub-5-4-23",
+    "hub-5-14-9" : "foret-1-16-2",
+    "hub-5-4-9" : "mer-1-16-2",
+    "hub-5-14-23" : "ville-1-16-2",
+    "hub-5-4-23" : "colline-1-16-2"
 }
 
 

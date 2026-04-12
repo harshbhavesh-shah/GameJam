@@ -43,7 +43,6 @@ def collisionsBlocJoueur(j_rect:py.Rect,b_rect:py.Rect,j:Joueur):
     elif min_overlap == overlap_right:  # Collision par la droite
         j.setX(b_rect.right)
     j.setDashState((DASH_TIMER,"n",j.getDashState()[2]))
-    joueur_rect = j.getRect()  # Mise à jour
 
 
 
@@ -78,9 +77,10 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
         else:
             j.setCoyoteTimer(0)
             j.setFallState(True)
+
+        if j.getDashState()[0] >= DASH_TIMER: j.setDashState((0,"n",j.getDashState()[2])) 
     
-    if any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in objetsDict["blocs"]) and j.getDashState()[0] >= DASH_TIMER:   # Reset dash
-        j.setDashState((0,"n",j.getDashState()[2])) 
+
 
 
 
@@ -123,7 +123,7 @@ def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],joueur:Joueur):
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setPorteCooldown(PORTE_COOLDOWN)
                 break
-    return objetsDict
+    return objetsDict , zone
 
 
 
@@ -190,6 +190,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique]], screen:p
 def background(ecran:py.Surface,zone):
     match zone:
         case "foret": ecran.blits(((bg_foret_1,(0,0)),(bg_foret_2,(0,0)),(bg_foret_3,(0,0))))
+        case _ : ecran.fill("darkblue")
 
 
 def blocSprite(tileMap,i,j):
