@@ -3,6 +3,10 @@ from fonctions import *
 
 
 py.init()
+py.joystick.init()
+
+try: controller = py.Joystick(0)
+except py.error: controller = None
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
@@ -20,15 +24,14 @@ while running:
     keys = py.key.get_pressed()
     keybinds(keys)
     
-    
 
     # BOUCLE MAIN #
 
-    joueur.move(keys)
+    joueur.move(keys,controller)
     collisions(objetsDict, joueur)
     
     joueur.setPorteCooldown(max(0,joueur.getPorteCooldown()-1))
-    if keys[py.K_e] and joueur.getPorteCooldown() == 0:         # TéléPortation
+    if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getPorteCooldown() == 0:         # TéléPortation
         objetsDict , zone = telePorte(objetsDict,joueur)
                 
 
