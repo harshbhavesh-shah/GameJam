@@ -176,8 +176,8 @@ class Pique(py.Rect):
     pass
 
 class BlocMouv:
-    def __init__(self, pos:tuple[int,int], x=0, y=5):
-        self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
+    def __init__(self, pos:tuple[int,int],width_height = (TILE_SIZE,TILE_SIZE), x=0, y=5):
+        self.rect = py.Rect(pos,width_height)
         self.distxParc, self.distyParc = x*TILE_SIZE, y*TILE_SIZE
         self.distxAParc, self.distyAParc = 0, 0
         self.directionAbs, self.directionOrd = "droite", "haut"
@@ -214,9 +214,9 @@ class Decoration(Bloc):
 
 
 class Ennemi(BlocMouv):
-    def setSprite(self,sprite):
-        self.sprite = sprite
+    def setType(self,type:str):
+        self.type = type
         return self
     
-    def getSprite(self) -> py.Surface:
-        return self.sprite
+    def getType(self):
+        return self.type

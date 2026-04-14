@@ -27,6 +27,10 @@ sprite_brique_topright = py.image.load("./assets/textures/autre/brique/brique_to
 sprite_brique_topleft_corner = py.image.load("./assets/textures/autre/brique/brique_topleft_corner.png")
 sprite_brique_topright_corner = py.image.load("./assets/textures/autre/brique/brique_topright_corner.png")
 
+### ENNEMIS ### 
+
+sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
+
 ### DÉCORATIONS ###
 
 sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")
@@ -36,5 +40,6 @@ sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")
 
 sprite_porte = [py.transform.scale(s[0],(2*TILE_SIZE,2*TILE_SIZE)) for s in sprite_porte]
 sprite_pique = py.transform.scale(sprite_pique,(TILE_SIZE,TILE_SIZE))
+sprite_requin = [py.transform.scale(s[0],(4*TILE_SIZE,2*TILE_SIZE)) for s in sprite_requin]
 sprite_lianes = [py.transform.scale(s[0],(TILE_SIZE,2*TILE_SIZE)) for s in sprite_lianes]
 

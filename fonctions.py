@@ -112,7 +112,7 @@ def switchSousZone(zone:str,souszone:int,joueur:Joueur,objetsDict:dict):
 
 
 
-def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],joueur:Joueur):
+def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueur:Joueur):
     for porte in objetsDict["portes"]:
             if porte.getRect().colliderect(joueur.getRect()):
                 for source, dest in PORTES_CORRESPONDANCES.items():
@@ -123,11 +123,11 @@ def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],joueur:Joueur):
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setPorteCooldown(PORTE_COOLDOWN)
                 break
-    return objetsDict , zone
+    return objetsDict , zone , souszone
 
 
 
-def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte]]:
+def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Ennemi]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
     Prends en paramètres :
@@ -142,7 +142,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "decorations":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "decorations":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -153,13 +153,14 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
+                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE),5,0).setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
     return objetsDict
 
 
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], screen:py.Surface):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -181,6 +182,11 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique]], screen:p
     for bmouv in objetsDict["blocmouvs"]:
         py.draw.rect(screen, "blue", bmouv)
         bmouv.move()
+    
+    for ennemi in objetsDict["ennemis"]:
+        match ennemi.getType():
+            case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),ennemi.getRect().topleft)
+        ennemi.move()
 
 
 

@@ -32,7 +32,7 @@ while running:
     
     joueur.setPorteCooldown(max(0,joueur.getPorteCooldown()-1))
     if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getPorteCooldown() == 0:         # TéléPortation
-        objetsDict , zone = telePorte(objetsDict,joueur)
+        objetsDict , zone , souszone = telePorte(objetsDict,zone,souszone,joueur)
                 
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
