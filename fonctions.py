@@ -57,11 +57,12 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
 
     for bloc in objetsDict["blocs"]:
         if bloc.colliderect(joueur_rect): 
-            collisionsBlocJoueur(joueur_rect,bloc,j)
+            collisionsBlocJoueur(joueur_rect,bloc,j)    
     
     for blocpic in objetsDict["piques"]:
         if blocpic.colliderect(joueur_rect):
-            py.time.wait(500)            
+            j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+            py.time.wait(150)   
             joueur_rect = j.getRect()   #   TODO  
  
     # Bloc mouv
