@@ -154,6 +154,7 @@ class Bloc(py.Rect):
     def getSprite(self) -> py.Surface:
         return self.sprite
 
+
 class Spawn(py.Rect):
     pass
 
@@ -210,3 +211,12 @@ class BlocMouv:
     
 class Decoration(Bloc):
     pass
+
+
+class Ennemi(BlocMouv):
+    def setSprite(self,sprite):
+        self.sprite = sprite
+        return self
+    
+    def getSprite(self) -> py.Surface:
+        return self.sprite
