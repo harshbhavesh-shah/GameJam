@@ -223,12 +223,25 @@ def blocSprite(tileMap,i,j):
 
 def menuPause(screen:py.Surface):
     """
-    Affichage du menu pause et gestion de ses fonctionnalités"""
+    Affichage du menu pause et gestion de ses fonctionnalités
+    """
     pause = True
     while pause:
         for event in py.event.get():
+            if event.type == py.QUIT:
+                py.quit()
             if event.type == py.KEYDOWN:
                 if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
                     pause = False
+
         py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300))
+        affichageTexte(screen,"PAUSE",(SCREEN_WIDTH//2-75,150),50)
         py.display.flip()
+
+
+def affichageTexte(screen:py.Surface, texte:str, pos:tuple[int,int]=(0,0), taille:int=30, couleur:tuple[int,int,int]=(0,0,0), police:str="Arial"):
+    """
+    Écris un texte sur la surface ``screen``, à la position ``pos``, de taille ``taille``, de couleur ``couleur`` avec la police ``police``.
+    """
+    font = py.font.SysFont(police, taille)
+    screen.blit(font.render(texte,None,couleur) , pos)
