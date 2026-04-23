@@ -21,8 +21,11 @@ while running:
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
+        if event.type == py.KEYDOWN:
+            if event.key == py.K_ESCAPE: menuPause(screen)
+            
+                
     keys = py.key.get_pressed()
-    keybinds(keys)
     
 
     # BOUCLE MAIN #

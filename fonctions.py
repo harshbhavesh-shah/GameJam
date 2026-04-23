@@ -4,16 +4,15 @@ from levels import *
 from textures import *
 import time
 
-def keybinds(keys):
+def keybinds(screen,keys):
     """
     Fonction qui gére tous les racourcis clavier (Esc,Tab...)
     """
     if keys[py.K_ESCAPE]:
-        py.quit()
-    if keys[py.K_TAB]:
-        pass                                                  #Pour ouvrir l'inventaire
+        menuPause(screen)
 
 
+### FONCTIONNEMENT DU JEU ###
 
 def collisionsBlocJoueur(j_rect:py.Rect,b_rect:py.Rect,j:Joueur):
     """
@@ -218,3 +217,18 @@ def blocSprite(tileMap,i,j):
         if tileMap[i][j-1] != "b" : return sprite_brique_topleft # S'il y'a rien à gauche
         elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_topright # S'il y'a rien à droite
         else : return sprite_brique_top
+
+
+### OPTIONS / MENUS ###
+
+def menuPause(screen:py.Surface):
+    """
+    Affichage du menu pause et gestion de ses fonctionnalités"""
+    pause = True
+    while pause:
+        for event in py.event.get():
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
+                    pause = False
+        py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300))
+        py.display.flip()

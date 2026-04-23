@@ -15,6 +15,7 @@ bg_foret_3 = py.transform.scale(bg_foret_3,(SCREEN_WIDTH,SCREEN_HEIGHT))
 ### OBJETS ###
 
 sprite_porte = py.image.load_animation("./assets/textures/autre/porte.gif")
+
 sprite_pique = py.image.load("./assets/textures/autre/pique.png")
 
 # BRIQUE #
