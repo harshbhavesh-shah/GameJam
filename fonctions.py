@@ -234,14 +234,34 @@ def menuPause(screen:py.Surface):
                 if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
                     pause = False
 
-        py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300))
-        affichageTexte(screen,"PAUSE",(SCREEN_WIDTH//2-75,150),50)
+        fond_pause = py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300))
+        affichageTexte(screen,"PAUSE",(fond_pause.centerx,fond_pause.top + 40),50)
+
+
+        bt_continuer = py.draw.rect(screen,"green",py.Rect(fond_pause.centerx-130,fond_pause.top+100,260,50))
+        bt_parametres = py.draw.rect(screen,"green",py.Rect(fond_pause.centerx-130,fond_pause.top+200,260,50))
+        bt_quitter = py.draw.rect(screen,"green",py.Rect(fond_pause.centerx-130,fond_pause.top+300,260,50))
+        affichageTexte(screen,"Continuer",bt_continuer.center)
+        affichageTexte(screen,"Paramètres",bt_parametres.center)
+        affichageTexte(screen,"Quitter",bt_quitter.center)
+
+        if py.mouse.get_just_pressed()[0]:
+            if bt_continuer.collidepoint(py.mouse.get_pos()): pause = False
+            if bt_parametres.collidepoint(py.mouse.get_pos()): print("Paramètres TODO") #TODO
+            if bt_quitter.collidepoint(py.mouse.get_pos()): py.quit()
+
         py.display.flip()
 
 
-def affichageTexte(screen:py.Surface, texte:str, pos:tuple[int,int]=(0,0), taille:int=30, couleur:tuple[int,int,int]=(0,0,0), police:str="Arial"):
+def affichageTexte(screen:py.Surface, 
+                   texte:str, 
+                   pos:tuple[int,int]=(0,0), 
+                   taille:int=30, 
+                   couleur:tuple[int,int,int]=(0,0,0), 
+                   police:str="Arial"):
     """
-    Écris un texte sur la surface ``screen``, à la position ``pos``, de taille ``taille``, de couleur ``couleur`` avec la police ``police``.
+    Écris un texte sur la surface ``screen``, à la position ``pos``, de taille ``taille``, de couleur ``couleur`` avec la police ``police``.\n
+    ``pos`` est le CENTRE du texte.
     """
-    font = py.font.SysFont(police, taille)
-    screen.blit(font.render(texte,None,couleur) , pos)
+    surface_texte = py.font.SysFont(police, taille).render(texte,None,couleur)
+    screen.blit(surface_texte , (pos[0] - surface_texte.get_width()//2, pos[1] - surface_texte.get_height()//2))
