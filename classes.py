@@ -1,6 +1,8 @@
 import pygame as py
 from constantes import *
 from manette import controllerState
+import json
+import os
 
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
@@ -220,3 +222,26 @@ class Ennemi(BlocMouv):
     
     def getType(self):
         return self.type
+
+
+
+
+class Settings:
+    def __init__(self,file:str="settings.json"):
+        self.file = file
+        self.data = self.load()
+    
+    def load(self):
+        if not os.path.exists(self.file):
+            return self.default()
+        with open(self.file, "r") as f:
+            return json.load(f)
+
+    def save(self):
+        with open(self.file, "w") as f:
+            json.dump(self.data, f, indent=4)
+
+    def default(self):
+        return {
+            "default": "settings",
+        }

@@ -1,6 +1,9 @@
 import pygame as py
 from fonctions import *
 
+param = Settings("settings.json")
+param.save()
+
 
 py.init()
 py.joystick.init()
