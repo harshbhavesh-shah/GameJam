@@ -128,9 +128,30 @@ def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueu
                 zone , souszone , y , x = destination_id.split('-')[0] , int(destination_id.split('-')[1]) , int(destination_id.split('-')[2]) , int(destination_id.split('-')[3])
                 objetsDict = preparationZone(zone,souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
-                joueur.setPorteCooldown(PORTE_COOLDOWN)
+                joueur.setInteractionCooldown(INTERACTION_COOLDOWN)
                 break
     return objetsDict , zone , souszone
+
+
+def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
+    index = 0
+    while True:
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                py.quit()
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
+                    menuPause(screen)
+                if event.key == py.K_e:
+                    index += 1
+        
+        if index == len(pnj.getTexte()) :
+            joueur.setInteractionCooldown(INTERACTION_COOLDOWN)
+            break
+        
+        zone_texte = py.draw.rect(screen,"gray50",py.Rect(50,SCREEN_HEIGHT-200,SCREEN_WIDTH-100,150))
+        affichageTexte(screen,pnj.getLine(index),zone_texte.center,50,"white")
+        py.display.flip()
 
 
 
@@ -149,7 +170,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "decorations":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -162,6 +183,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE),5,0).setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
+                    case "P": objetsDict["pnjs"].append(PNJ(((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)),f"{zone}-{souszone}"))
     return objetsDict
 
 
@@ -194,6 +216,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], s
         match ennemi.getType():
             case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),ennemi.getRect().topleft)
         ennemi.move()
+
+    for pnj in objetsDict["pnjs"]:
+        py.draw.rect(screen, "green", pnj.getRect())
 
 
 

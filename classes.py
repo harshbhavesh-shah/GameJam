@@ -12,7 +12,7 @@ class Joueur:
         self.fallSpeed = MAX_FALL_SPEED
         self.coyoteTimer = 0
         self.dashState = (DASH_TIMER,"n",DASH_COOLDOWN)
-        self.porteCooldown = 0
+        self.InteractionCooldown = 0
 
     # Coordonnées
 
@@ -72,11 +72,11 @@ class Joueur:
 
     # Porte Cooldown
 
-    def setPorteCooldown(self,val):
-        self.porteCooldown = val
+    def setInteractionCooldown(self,val):
+        self.InteractionCooldown = val
     
-    def getPorteCooldown(self):
-        return self.porteCooldown
+    def getInteractionCooldown(self):
+        return self.InteractionCooldown
 
     # Dash
 
@@ -224,17 +224,29 @@ class Ennemi(BlocMouv):
         return self.type
 
 class PNJ:
-    def __init__(self,file:str):
-        self.file = file
+    def __init__(self,rect:py.Rect,file:str):
+        self.rect = rect
+        self.file = f"assets/textes/{file}.txt"
         self.texte = []
         self.load(self.file)
 
-    def load(self,file):
+    def load(self,file:str=None):
+        if file is None:
+            file = self.file
         if not os.path.exists(file):
             self.texte = ["Texte par défaut"]
         else : 
             with open(file, "r") as f:
-                self.texte = [ligne for ligne in f.read()]
+                self.texte = f.readlines()
+    
+    def getLine(self,n):
+        return self.texte[n]
+    
+    def getTexte(self):
+        return self.texte
+    
+    def getRect(self):
+        return self.rect
     
 
 
@@ -256,5 +268,5 @@ class Settings:
 
     def default(self):
         return {
-            "default": "settings",
+            "volume": 0.5,
         }

@@ -36,9 +36,12 @@ while running:
     joueur.move(keys,controller)
     collisions(objetsDict, joueur)
     
-    joueur.setPorteCooldown(max(0,joueur.getPorteCooldown()-1))
-    if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getPorteCooldown() == 0:         # TéléPortation
+    joueur.setInteractionCooldown(max(0,joueur.getInteractionCooldown()-1))
+    if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getInteractionCooldown() == 0:         # INTERACTIONS
         objetsDict , zone , souszone = telePorte(objetsDict,zone,souszone,joueur)
+        for pnj in objetsDict["pnjs"]:
+            if joueur.getRect().colliderect(pnj.getRect()) :
+                discussion(screen,pnj,joueur)
                 
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
