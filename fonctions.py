@@ -257,7 +257,7 @@ def menuPause(screen:py.Surface):
 def affichageTexte(screen:py.Surface, 
                    texte:str, 
                    pos:tuple[int,int]=(0,0), 
-                   taille:int=30, 
+                   taille:int=30,
                    couleur:tuple[int,int,int]=(0,0,0), 
                    police:str="Arial"):
     """

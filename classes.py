@@ -223,6 +223,19 @@ class Ennemi(BlocMouv):
     def getType(self):
         return self.type
 
+class PNJ:
+    def __init__(self,file:str):
+        self.file = file
+        self.texte = []
+        self.load(self.file)
+
+    def load(self,file):
+        if not os.path.exists(file):
+            self.texte = ["Texte par défaut"]
+        else : 
+            with open(file, "r") as f:
+                self.texte = [ligne for ligne in f.read()]
+    
 
 
 
