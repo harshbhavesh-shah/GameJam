@@ -228,6 +228,7 @@ class PNJ:
         self.rect = rect
         self.file = f"assets/textes/{file}.txt"
         self.texte = []
+        self.nom = ""
         self.load(self.file)
 
     def load(self,file:str=None):
@@ -235,9 +236,12 @@ class PNJ:
             file = self.file
         if not os.path.exists(file):
             self.texte = ["Texte par défaut"]
+            self.nom = "John Doe"
         else : 
             with open(file, "r") as f:
-                self.texte = f.readlines()
+                tab = f.readlines()
+                self.texte = tab[1:]
+                self.nom = tab[0]
     
     def getLine(self,n):
         return self.texte[n]
@@ -247,6 +251,9 @@ class PNJ:
     
     def getRect(self):
         return self.rect
+
+    def getNom(self):
+        return self.nom
     
 
 
