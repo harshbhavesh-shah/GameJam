@@ -149,8 +149,15 @@ def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
             joueur.setInteractionCooldown(INTERACTION_COOLDOWN)
             break
         
-        zone_texte = py.draw.rect(screen,"gray50",py.Rect(50,SCREEN_HEIGHT-200,SCREEN_WIDTH-100,150))
-        affichageTexte(screen,pnj.getLine(index),zone_texte.center,50,"white")
+        # Bordure et remplissage
+        bordure_texte = py.draw.rect(screen,"black",py.Rect(50, SCREEN_HEIGHT - 200,  700, 150), border_radius=3)
+        py.draw.rect(screen,"gray70",py.Rect(bordure_texte.left + 3, bordure_texte.top + 3, bordure_texte.width - 6, bordure_texte.height - 6), border_radius=3)
+        bordure_nom = py.draw.rect(screen,"black",py.Rect(bordure_texte.left - 30, bordure_texte.top - 30, 100 , 50), border_radius=3)
+        py.draw.rect(screen,"gray80",py.Rect(bordure_nom.left + 3, bordure_nom.top + 3, bordure_nom.width - 6, bordure_nom.height - 6), border_radius=3)
+
+        affichageTexte(screen, pnj.getNom(), bordure_nom.center, 25, "black")
+        affichageTexte(screen, pnj.getLine(index), bordure_texte.center, 50, "black")
+        affichageTexte(screen, "Appuyez sur E", (bordure_texte.right - 45, bordure_texte.bottom - 15), 15, "black")
         py.display.flip()
 
 
