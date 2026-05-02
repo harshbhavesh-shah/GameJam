@@ -252,6 +252,7 @@ def blocSprite(tileMap,i,j):
         else : return sprite_brique_top
 
 
+
 ### OPTIONS / MENUS ###
 
 def menuPause(screen:py.Surface):
@@ -280,10 +281,33 @@ def menuPause(screen:py.Surface):
 
         if py.mouse.get_just_pressed()[0]:
             if bt_continuer.collidepoint(py.mouse.get_pos()): pause = False
-            if bt_parametres.collidepoint(py.mouse.get_pos()): print("Paramètres TODO") #TODO
+            if bt_parametres.collidepoint(py.mouse.get_pos()): menuParametres(screen)
             if bt_quitter.collidepoint(py.mouse.get_pos()): py.quit()
 
         py.display.flip()
+
+
+
+def menuParametres(screen:py.Surface):
+    """
+    Affichage du menu pause et gestion de ses fonctionnalités. Change le fichier ``settings.json`` en fonction.
+    """
+    inParam = True
+    while inParam:
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                py.quit()
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
+                    inParam = False
+
+        fond_param = py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-300,100,600,SCREEN_HEIGHT-200))
+        affichageTexte(screen,"PARAMETRES",(fond_param.centerx,fond_param.top + 40),50)
+
+
+
+        py.display.flip()
+
 
 
 def affichageTexte(screen:py.Surface, 
