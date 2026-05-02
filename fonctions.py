@@ -1,8 +1,9 @@
 import pygame as py
+import pygame_widgets as pw
+from pygame_widgets.slider import Slider
 from classes import *
 from levels import *
 from textures import *
-import json
 import time
 
 def keybinds(screen,keys):
@@ -293,6 +294,9 @@ def menuParametres(screen:py.Surface):
     """
     Affichage du menu pause et gestion de ses fonctionnalités. Change le fichier ``settings.json`` en fonction.
     """
+
+    slider_vol = Slider(screen, SCREEN_WIDTH//2 - 170, 200, 350, 10, max=100)
+
     inParam = True
     while inParam:
         for event in py.event.get():
@@ -307,7 +311,12 @@ def menuParametres(screen:py.Surface):
         affichageTexte(screen, "PARAMETRES", (fond_param.centerx, fond_param.top + 40), 50)
 
 
+        affichageTexte(screen, "Volume", (fond_param.left + 50, fond_param.top + 100), 30)
+        affichageTexte(screen, str(slider_vol.getValue()), (fond_param.right - 50, fond_param.top + 100), 30)
 
+
+
+        pw.update(py.event.get())
         py.display.flip()
 
 
