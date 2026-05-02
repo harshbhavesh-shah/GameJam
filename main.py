@@ -18,6 +18,9 @@ zone = "hub"
 souszone = 1
 objetsDict = preparationZone(zone, souszone)
 
+py.mixer_music.load("./assets/sons/DDD.mp3")
+py.mixer_music.play(-1)
+
 running = True
 clock = py.time.Clock()
 while running:
