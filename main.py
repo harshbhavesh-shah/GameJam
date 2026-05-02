@@ -28,7 +28,7 @@ while running:
         if event.type == py.QUIT:
             running = False
         if event.type == py.KEYDOWN:
-            if event.key == py.K_ESCAPE: menuPause(screen)
+            if event.key == py.K_ESCAPE: menuPause(screen,param)
             
                 
     keys = py.key.get_pressed()

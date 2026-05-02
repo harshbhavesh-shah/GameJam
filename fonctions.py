@@ -256,7 +256,7 @@ def blocSprite(tileMap,i,j):
 
 ### OPTIONS / MENUS ###
 
-def menuPause(screen:py.Surface):
+def menuPause(screen:py.Surface,parametres:Settings):
     """
     Affichage du menu pause et gestion de ses fonctionnalités
     """
@@ -283,14 +283,14 @@ def menuPause(screen:py.Surface):
 
         if py.mouse.get_just_pressed()[0]:
             if bt_continuer.collidepoint(py.mouse.get_pos()): pause = False
-            if bt_parametres.collidepoint(py.mouse.get_pos()): menuParametres(screen) ; pause = False
+            if bt_parametres.collidepoint(py.mouse.get_pos()): menuParametres(screen,parametres) ; pause = False
             if bt_quitter.collidepoint(py.mouse.get_pos()): py.quit()
 
         py.display.flip()
 
 
 
-def menuParametres(screen:py.Surface):
+def menuParametres(screen:py.Surface,parametres:Settings):
     """
     Affichage du menu pause et gestion de ses fonctionnalités. Change le fichier ``settings.json`` en fonction.
     """
@@ -315,6 +315,11 @@ def menuParametres(screen:py.Surface):
         affichageTexte(screen, str(slider_vol.getValue()), (fond_param.right - 50, fond_param.top + 100), 30)
 
 
+
+        bt_appliquer = py.draw.rect(screen,"green",py.Rect(fond_param.right - 180, fond_param.bottom - 80, 150, 50))
+        affichageTexte(screen,"Appliquer",bt_appliquer.center)
+
+        if py.mouse.get_just_pressed()[0] and bt_appliquer.collidepoint(py.mouse.get_pos()) : pass #TODO parametres.
 
         pw.update(py.event.get())
         py.display.flip()
