@@ -268,7 +268,8 @@ def menuPause(screen:py.Surface):
                 if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
                     pause = False
 
-        fond_pause = py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300), border_radius=3)
+        fond_pause = py.draw.rect(screen,"black",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300), border_radius=3)
+        py.draw.rect(screen,"gray",remplissageRect(fond_pause), border_radius=3)
         affichageTexte(screen,"PAUSE",(fond_pause.centerx,fond_pause.top + 40),50)
 
 
@@ -301,8 +302,9 @@ def menuParametres(screen:py.Surface):
                 if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
                     inParam = False
 
-        fond_param = py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-300,100,600,SCREEN_HEIGHT-200), border_radius=3)
-        affichageTexte(screen,"PARAMETRES",(fond_param.centerx,fond_param.top + 40),50)
+        fond_param = py.draw.rect(screen,"black",py.Rect(SCREEN_WIDTH//2-300,100,600,SCREEN_HEIGHT-200), border_radius=3)
+        py.draw.rect(screen, "gray", remplissageRect(fond_param), border_radius=3)
+        affichageTexte(screen, "PARAMETRES", (fond_param.centerx, fond_param.top + 40), 50)
 
 
 
@@ -322,3 +324,8 @@ def affichageTexte(screen:py.Surface,
     """
     surface_texte = py.font.SysFont(police, taille).render(texte,None,couleur)
     screen.blit(surface_texte , (pos[0] - surface_texte.get_width()//2, pos[1] - surface_texte.get_height()//2))
+
+
+def remplissageRect(contour:py.Rect,bordure:int=3):
+    """Renvoie la partie interne d'un rect de telle sorte que le rect donné en paramètre fasse office de countour au rect renvoyé, avec un épaisseur de taille ''bordure''"""
+    return py.Rect(contour.left + bordure, contour.top + bordure, contour.width - 2*bordure, contour.height - 2*bordure)
