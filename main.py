@@ -33,6 +33,7 @@ while running:
                 
     keys = py.key.get_pressed()
     
+    py.mixer_music.set_volume(param.getData()["volume"]/100)
 
     # BOUCLE MAIN #
 
