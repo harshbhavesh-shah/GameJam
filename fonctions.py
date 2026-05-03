@@ -1,8 +1,9 @@
 import pygame as py
+import pygame_widgets as pw
+from pygame_widgets.slider import Slider
 from classes import *
 from levels import *
 from textures import *
-import json
 import time
 
 def keybinds(screen,keys):
@@ -252,9 +253,10 @@ def blocSprite(tileMap,i,j):
         else : return sprite_brique_top
 
 
+
 ### OPTIONS / MENUS ###
 
-def menuPause(screen:py.Surface):
+def menuPause(screen:py.Surface,parametres:Settings):
     """
     Affichage du menu pause et gestion de ses fonctionnalités
     """
@@ -267,7 +269,8 @@ def menuPause(screen:py.Surface):
                 if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
                     pause = False
 
-        fond_pause = py.draw.rect(screen,"gray",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300))
+        fond_pause = py.draw.rect(screen,"black",py.Rect(SCREEN_WIDTH//2-150,150,300,SCREEN_HEIGHT-300), border_radius=3)
+        py.draw.rect(screen,"gray",remplissageRect(fond_pause), border_radius=3)
         affichageTexte(screen,"PAUSE",(fond_pause.centerx,fond_pause.top + 40),50)
 
 
@@ -280,10 +283,63 @@ def menuPause(screen:py.Surface):
 
         if py.mouse.get_just_pressed()[0]:
             if bt_continuer.collidepoint(py.mouse.get_pos()): pause = False
-            if bt_parametres.collidepoint(py.mouse.get_pos()): print("Paramètres TODO") #TODO
+            if bt_parametres.collidepoint(py.mouse.get_pos()): menuParametres(screen,parametres) ; pause = False
             if bt_quitter.collidepoint(py.mouse.get_pos()): py.quit()
 
         py.display.flip()
+
+
+
+def menuParametres(screen:py.Surface,parametres:Settings):
+    """
+    Affichage du menu pause et gestion de ses fonctionnalités. Change le fichier ``settings.json`` en fonction.
+    """
+
+    slider_vol = Slider(screen, SCREEN_WIDTH//2 - 170, 200, 350, 10, max=100)
+    slider_vol.setValue(parametres.getData()["volume"])
+
+    inParam = True
+    while inParam:
+        events = py.event.get()
+        for event in events:
+            if event.type == py.QUIT:
+                py.quit()
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_ESCAPE:  # KEYDOWN = appui unique, pas maintenu
+                    inParam = False
+
+        fond_param = py.draw.rect(screen,"black",py.Rect(SCREEN_WIDTH//2-300,100,600,SCREEN_HEIGHT-200), border_radius=3)
+        py.draw.rect(screen, "gray", remplissageRect(fond_param), border_radius=3)
+        affichageTexte(screen, "PARAMETRES", (fond_param.centerx, fond_param.top + 40), 50)
+
+
+        affichageTexte(screen, "Volume", (fond_param.left + 50, fond_param.top + 100), 30)
+        affichageTexte(screen, str(slider_vol.getValue()), (fond_param.right - 50, fond_param.top + 100), 30)
+        py.mixer_music.set_volume(slider_vol.getValue()/100)
+
+
+
+        bt_appliquer = py.draw.rect(screen,"green",py.Rect(fond_param.right - 180, fond_param.bottom - 80, 150, 50))
+        affichageTexte(screen,"Appliquer",bt_appliquer.center)
+
+        bt_defaut = py.draw.rect(screen,"green",py.Rect(fond_param.right - 480, fond_param.bottom - 80, 270, 50))
+        affichageTexte(screen,"Remmettre par défaut",bt_defaut.center)
+
+        if py.mouse.get_just_pressed()[0]:
+            if bt_appliquer.collidepoint(py.mouse.get_pos()) :
+                newSettingsDict = {"volume":slider_vol.getValue()}
+                parametres.updateData(newSettingsDict)
+                inParam = False
+            if bt_defaut.collidepoint(py.mouse.get_pos()) :
+                defaultSettings = parametres.default()
+                slider_vol.setValue(defaultSettings["volume"])
+
+
+
+        pw.update(events)
+        py.display.flip()
+
+
 
 
 def affichageTexte(screen:py.Surface, 
@@ -298,3 +354,8 @@ def affichageTexte(screen:py.Surface,
     """
     surface_texte = py.font.SysFont(police, taille).render(texte,None,couleur)
     screen.blit(surface_texte , (pos[0] - surface_texte.get_width()//2, pos[1] - surface_texte.get_height()//2))
+
+
+def remplissageRect(contour:py.Rect,bordure:int=3):
+    """Renvoie la partie interne d'un rect de telle sorte que le rect donné en paramètre fasse office de countour au rect renvoyé, avec un épaisseur de taille ''bordure''"""
+    return py.Rect(contour.left + bordure, contour.top + bordure, contour.width - 2*bordure, contour.height - 2*bordure)

@@ -18,6 +18,9 @@ zone = "hub"
 souszone = 1
 objetsDict = preparationZone(zone, souszone)
 
+py.mixer_music.load("./assets/sons/DDD.mp3")
+py.mixer_music.play(-1)
+
 running = True
 clock = py.time.Clock()
 while running:
@@ -25,11 +28,12 @@ while running:
         if event.type == py.QUIT:
             running = False
         if event.type == py.KEYDOWN:
-            if event.key == py.K_ESCAPE: menuPause(screen)
+            if event.key == py.K_ESCAPE: menuPause(screen,param)
             
                 
     keys = py.key.get_pressed()
     
+    py.mixer_music.set_volume(param.getData()["volume"]/100)
 
     # BOUCLE MAIN #
 
