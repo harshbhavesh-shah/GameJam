@@ -296,10 +296,12 @@ def menuParametres(screen:py.Surface,parametres:Settings):
     """
 
     slider_vol = Slider(screen, SCREEN_WIDTH//2 - 170, 200, 350, 10, max=100)
+    slider_vol.setValue(parametres.getData()["volume"])
 
     inParam = True
     while inParam:
-        for event in py.event.get():
+        events = py.event.get()
+        for event in events:
             if event.type == py.QUIT:
                 py.quit()
             if event.type == py.KEYDOWN:
@@ -319,10 +321,23 @@ def menuParametres(screen:py.Surface,parametres:Settings):
         bt_appliquer = py.draw.rect(screen,"green",py.Rect(fond_param.right - 180, fond_param.bottom - 80, 150, 50))
         affichageTexte(screen,"Appliquer",bt_appliquer.center)
 
-        if py.mouse.get_just_pressed()[0] and bt_appliquer.collidepoint(py.mouse.get_pos()) : pass #TODO parametres.
+        bt_defaut = py.draw.rect(screen,"green",py.Rect(fond_param.right - 480, fond_param.bottom - 80, 270, 50))
+        affichageTexte(screen,"Remmettre par défaut",bt_defaut.center)
 
-        pw.update(py.event.get())
+        if py.mouse.get_just_pressed()[0]:
+            if bt_appliquer.collidepoint(py.mouse.get_pos()) :
+                newSettingsDict = {"volume":slider_vol.getValue()}
+                parametres.updateData(newSettingsDict)
+                inParam = False
+            if bt_defaut.collidepoint(py.mouse.get_pos()) :
+                defaultSettings = parametres.default()
+                slider_vol.setValue(defaultSettings["volume"])
+
+
+
+        pw.update(events)
         py.display.flip()
+
 
 
 
