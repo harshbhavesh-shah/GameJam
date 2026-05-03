@@ -275,5 +275,12 @@ class Settings:
 
     def default(self):
         return {
-            "volume": 0.5,
+            "volume": 50,
         }
+    
+    def getData(self):
+        return self.data
+    
+    def updateData(self,dataDict:dict):
+        self.data = dataDict
+        self.save()
