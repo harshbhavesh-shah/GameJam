@@ -15,7 +15,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((100,100))
 
 zone = "hub"
-souszone = 1
+souszone = 5
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
@@ -37,7 +37,7 @@ while running:
 
     # BOUCLE MAIN #
 
-    joueur.move(keys,controller)
+    joueur.move(keys,controller,zone)
     collisions(objetsDict, joueur)
     
     joueur.setInteractionCooldown(max(0,joueur.getInteractionCooldown()-1))

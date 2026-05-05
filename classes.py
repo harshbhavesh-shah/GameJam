@@ -99,20 +99,23 @@ class Joueur:
         self.setDashState((self.getDashState()[0] +1,self.getDashState()[1],self.getDashState()[2]))
     
 
-    def move(self, keys,joystick):
+    def move(self, keys,joystick, zone:str):
         """
         Fonction qui gére les déplacement (avec gravité) du joueur
         """
         # DÉPLACEMENTS DE BASE
         if (keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")):
-            self.rect.x += PLAYER_SPEED
+            if zone == "mer": self.rect.x += PLAYER_SPEED_IN_WATER
+            else : self.rect.x += PLAYER_SPEED
         if (keys[py.K_q] or keys[py.K_LEFT] or controllerState(joystick,"gauche")):
-            self.rect.x -= PLAYER_SPEED
+            if zone == "mer": self.rect.x -= PLAYER_SPEED_IN_WATER
+            else : self.rect.x -= PLAYER_SPEED
         if keys[py.K_SPACE] or controllerState(joystick,"saut"):
             if not self.getFallState():
                 self.setFallState(False)
                 self.setFallSpeed(0)
-                self.rect.y -= (JUMP_SPEED - self.getJumpTimer())
+                if zone == "mer": self.rect.y -= (JUMP_SPEED_IN_WATER - self.getJumpTimer()//2)
+                else : self.rect.y -= (JUMP_SPEED - self.getJumpTimer())
                 self.jumpTimer += 1
                 if self.jumpTimer >= MAX_JUMP_TIMER: self.setFallState(True)
 
@@ -124,7 +127,8 @@ class Joueur:
 
         if self.getFallState() : 
             self.fallSpeed += 1
-            self.rect.y += min(MAX_FALL_SPEED,self.getFallSpeed())
+            if zone == "mer": self.rect.y += min(MAX_FALL_SPEED_IN_WATER,self.getFallSpeed())
+            else : self.rect.y += min(MAX_FALL_SPEED,self.getFallSpeed())
 
         # DASH
 
