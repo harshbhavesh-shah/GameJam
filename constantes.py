@@ -11,6 +11,16 @@ DASH_COOLDOWN = 40
 DASH_SPEED = 2*PLAYER_SPEED
 INTERACTION_COOLDOWN = 10
 
+# Environnement
+MAX_FALL_SPEED_IN_WATER = 10
+JUMP_SPEED_IN_WATER = 15
+PLAYER_SPEED_IN_WATER = 6
+
+VILLE_DPS = 1       # Dégats / Tick
+VILLE_HEAL = 2      # Heal / Tick
+
+
+# Manette
 CONTROLLER_DEADZONE = 0.2
 
 # Zone - Sous-Zone - Ordonnées - Abcisses
