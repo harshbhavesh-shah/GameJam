@@ -5,6 +5,7 @@ from classes import *
 from levels import *
 from textures import *
 import time
+import copy
 
 def keybinds(screen,keys):
     """
@@ -228,6 +229,33 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], s
     for pnj in objetsDict["pnjs"]:
         py.draw.rect(screen, "green", pnj.getRect())
 
+
+def degatsEnvironnementauxVille(j:Joueur,objets:dict):
+    """
+    Dans la zone ville, inflige des dégats si à découvert:\n
+    Crée un rect au dessus du joueur allant jusqu'en haut de l'écran 
+    et inflige des dégats si il ne détecte aucune collision (soigne sinon)
+    """
+    blocDetectionRect = py.Rect(j.getRect().centerx-10, j.getY()-SCREEN_HEIGHT, 20, SCREEN_HEIGHT)
+    
+    isColliding = False
+    for typeObjet in objets.keys():
+        for objet in objets[typeObjet]:
+
+            objetCopie = copy.copy(objet)
+
+            if isinstance(objet,(Porte,BlocMouv,PNJ)):
+                objetCopie = objet.getRect()
+            if blocDetectionRect.colliderect(objetCopie):    # Dérivés de py.rect
+                isColliding = True
+                
+        
+    print(isColliding)
+    if not isColliding:
+        j.setHp(j.getHp()-VILLE_DPS)
+    
+    else:
+        j.setHp(min(100,j.getHp()+VILLE_HEAL))
 
 
 

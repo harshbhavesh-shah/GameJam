@@ -13,6 +13,7 @@ class Joueur:
         self.coyoteTimer = 0
         self.dashState = (DASH_TIMER,"n",DASH_COOLDOWN)
         self.InteractionCooldown = 0
+        self.hp = 100
 
     # Coordonnées
 
@@ -147,6 +148,14 @@ class Joueur:
         
         if self.getDashState()[0] < DASH_TIMER and self.getDashState()[1] != "n":
             self.dash()
+
+
+    # HP (pour la ville)
+    def getHp(self):
+        return self.hp
+    
+    def setHp(self,hp):
+        self.hp = hp
 
         
 

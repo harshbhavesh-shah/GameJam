@@ -39,6 +39,11 @@ while running:
 
     joueur.move(keys,controller,zone)
     collisions(objetsDict, joueur)
+
+    if zone == 'ville':     # Dégats Ville
+        degatsEnvironnementauxVille(joueur,objetsDict)
+    
+    print(joueur.getHp())
     
     joueur.setInteractionCooldown(max(0,joueur.getInteractionCooldown()-1))
     if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getInteractionCooldown() == 0:         # INTERACTIONS
