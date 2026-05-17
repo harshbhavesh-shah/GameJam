@@ -54,9 +54,6 @@ while running:
         hpBar.hide()
         joueur.setHp(100)
     
-        
-
-    
 
     joueur.setInteractionCooldown(max(0,joueur.getInteractionCooldown()-1))
     if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getInteractionCooldown() == 0:         # INTERACTIONS
@@ -77,6 +74,9 @@ while running:
     background(screen,zone)
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
+
+    if zone == "colline":   # brouillard
+        screen.blit(sprite_brouillard)
 
     pw.update(events)
     py.display.flip()
