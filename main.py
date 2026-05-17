@@ -42,6 +42,9 @@ while running:
 
     if zone == 'ville':     # Dégats Ville
         degatsEnvironnementauxVille(joueur,objetsDict)
+        if joueur.getHp() <= 0:
+            joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
+            joueur.setHp(100)
     
     print(joueur.getHp())
     
@@ -56,7 +59,7 @@ while running:
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
         objetsDict , souszone = switchSousZone(zone,souszone,joueur,objetsDict)
 
-    if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:
+    if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:  # Tomber dans le vide
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
 
     background(screen,zone)

@@ -244,7 +244,9 @@ def degatsEnvironnementauxVille(j:Joueur,objets:dict):
 
             objetCopie = copy.copy(objet)
 
-            if isinstance(objet,(Porte,BlocMouv,PNJ)):
+            if isinstance(objet,(PNJ,Porte)):
+                continue
+            if isinstance(objet,(BlocMouv)):
                 objetCopie = objet.getRect()
             if blocDetectionRect.colliderect(objetCopie):    # Dérivés de py.rect
                 isColliding = True
