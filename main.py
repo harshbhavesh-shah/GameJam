@@ -21,6 +21,8 @@ objetsDict = preparationZone(zone, souszone)
 py.mixer_music.load("./assets/sons/DDD.mp3")
 py.mixer_music.play(-1)
 
+hpBar = ProgressBar(screen, 10, 10, 200, 20, lambda: 1 - joueur.getHp()/100, completedColour=(250, 10, 10), incompletedColour=(165, 120, 120))
+
 running = True
 clock = py.time.Clock()
 while running:
@@ -43,13 +45,17 @@ while running:
 
 
     if zone == 'ville':     # Dégats Ville
+        hpBar.show()
         degatsEnvironnementauxVille(joueur,objetsDict)
         if joueur.getHp() <= 0:
             joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
             joueur.setHp(100)
-        hpBar = ProgressBar(screen,10,10,200,20,lambda: joueur.getHp()/100,completedColour=(10,250,10),incompletedColour=(250,0,20))
+    else:
+        hpBar.hide()
+        joueur.setHp(100)
     
-    print(joueur.getHp())
+        
+
     
 
     joueur.setInteractionCooldown(max(0,joueur.getInteractionCooldown()-1))

@@ -253,8 +253,6 @@ def degatsEnvironnementauxVille(j:Joueur,objets:dict):
             if blocDetectionRect.colliderect(objetCopie):    # Dérivés de py.rect
                 isColliding = True
                 
-        
-    print(isColliding)
     if not isColliding:
         j.setHp(j.getHp()-VILLE_DPS)
     
