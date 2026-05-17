@@ -24,7 +24,8 @@ py.mixer_music.play(-1)
 running = True
 clock = py.time.Clock()
 while running:
-    for event in py.event.get():
+    events = py.event.get()
+    for event in events:
         if event.type == py.QUIT:
             running = False
         if event.type == py.KEYDOWN:
@@ -40,14 +41,17 @@ while running:
     joueur.move(keys,controller,zone)
     collisions(objetsDict, joueur)
 
+
     if zone == 'ville':     # Dégats Ville
         degatsEnvironnementauxVille(joueur,objetsDict)
         if joueur.getHp() <= 0:
             joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
             joueur.setHp(100)
+        hpBar = ProgressBar(screen,10,10,200,20,lambda: joueur.getHp()/100,completedColour=(10,250,10),incompletedColour=(250,0,20))
     
     print(joueur.getHp())
     
+
     joueur.setInteractionCooldown(max(0,joueur.getInteractionCooldown()-1))
     if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getInteractionCooldown() == 0:         # INTERACTIONS
         objetsDict , zone , souszone = telePorte(objetsDict,zone,souszone,joueur)
@@ -62,10 +66,13 @@ while running:
     if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:  # Tomber dans le vide
         joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
 
+
+
     background(screen,zone)
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
 
+    pw.update(events)
     py.display.flip()
     clock.tick(60)
     

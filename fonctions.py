@@ -1,6 +1,7 @@
 import pygame as py
 import pygame_widgets as pw
 from pygame_widgets.slider import Slider
+from pygame_widgets.progressbar import ProgressBar
 from classes import *
 from levels import *
 from textures import *
@@ -236,6 +237,7 @@ def degatsEnvironnementauxVille(j:Joueur,objets:dict):
     Crée un rect au dessus du joueur allant jusqu'en haut de l'écran 
     et inflige des dégats si il ne détecte aucune collision (soigne sinon)
     """
+
     blocDetectionRect = py.Rect(j.getRect().centerx-10, j.getY()-SCREEN_HEIGHT, 20, SCREEN_HEIGHT)
     
     isColliding = False
