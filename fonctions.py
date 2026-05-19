@@ -220,7 +220,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
     
     for ennemi in objetsDict["ennemis"]:
         match ennemi.getType():
-            case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE))) # Fix hitbox
+            case "requin" : 
+                if ennemi.getOrientation() == "e": screen.blit(py.transform.flip(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),1,0),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE)))
+                else : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE))) # Fix hitbox ^
         ennemi.move()
 
     for pnj in objetsDict["pnjs"]:

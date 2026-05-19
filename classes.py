@@ -204,6 +204,7 @@ class Pique(Tile):
 class BlocMouv(Tile):
     def setMouvement(self,mouvement:str):
         self.mouvement = mouvement.replace("a","a"*(TILE_SIZE//self.speed))
+        self.orientation = mouvement[0]
         self.indexMouvement = 0
         return self
     
@@ -213,6 +214,9 @@ class BlocMouv(Tile):
     def setSpeed(self,val:int):
         self.speed = val
         return self
+    
+    def getOrientation(self):
+        return self.orientation
     
     def move(self):
         match self.getMouvement()[self.indexMouvement]:
