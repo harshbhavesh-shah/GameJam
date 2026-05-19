@@ -59,7 +59,7 @@ while running:
     if (keys[py.K_e] or controllerState(controller,"interaction")) and joueur.getInteractionCooldown() == 0:         # INTERACTIONS
         objetsDict , zone , souszone = telePorte(objetsDict,zone,souszone,joueur)
         for pnj in objetsDict["pnjs"]:
-            if joueur.getRect().colliderect(pnj.getRect()) :
+            if joueur.getRect().colliderect(pnj) :
                 discussion(screen,pnj,joueur)
         for tortue in objetsDict["tortues"]:
             if joueur.getRect().colliderect(tortue) :

@@ -241,13 +241,13 @@ class Ennemi(BlocMouv):
         return self.type
 
 
-class PNJ:
-    def __init__(self,rect:py.Rect,file:str):
-        self.rect = rect
+class PNJ(Bloc):
+    def init_file(self,file:str):
         self.file = f"assets/textes/{file}.txt"
         self.texte = []
         self.nom = ""
         self.load(self.file)
+        return self
 
     def load(self,file:str=None):
         if file is None:
