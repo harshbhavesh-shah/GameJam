@@ -186,7 +186,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSpeed(2).setMouvement("naaaasaaaa"))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
-                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE)).setSpeed(2).setMouvement("oaaaaaeaaaaa").setType("requin"))
+                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE)).setSpeed(2).setMouvement("oaaaaaeaaaaa").setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                     case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).init_file(f"{zone}-{souszone}"))
                     case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
@@ -220,7 +220,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
     
     for ennemi in objetsDict["ennemis"]:
         match ennemi.getType():
-            case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),ennemi.topleft)
+            case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE))) # Fix hitbox
         ennemi.move()
 
     for pnj in objetsDict["pnjs"]:
