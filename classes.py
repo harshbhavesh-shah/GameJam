@@ -96,6 +96,8 @@ class Joueur:
             case "g": self.rect.x  -= DASH_SPEED
             case "d": self.rect.x  += DASH_SPEED
             case "h": self.rect.y  -= DASH_SPEED
+            case "hg": self.rect.y  -= DASH_SPEED//1.41 ; self.rect.x  -= DASH_SPEED//1.41
+            case "hd": self.rect.y  -= DASH_SPEED//1.41 ; self.rect.x  += DASH_SPEED//1.41
             case "n": return
         self.setDashState((self.getDashState()[0] +1,self.getDashState()[1],self.getDashState()[2]))
     
@@ -135,15 +137,21 @@ class Joueur:
 
         self.setDashState((self.getDashState()[0],self.getDashState()[1],max(self.getDashState()[2]-1,0))) # Cooldown Dash
 
-        if (keys[py.K_LSHIFT] or controllerState(joystick,"dash")) and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0:
-            if self.getDashState()[1] == "n" and  (keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")):  # Seulement initialiser si le dash n'a pas commencé
-                self.setFallSpeed(0)
+        if (keys[py.K_LSHIFT] or controllerState(joystick,"dash")) and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0: # Seulement initialiser si le dash n'a pas commencé
+            if self.getDashState()[1] == "n" and  ((keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")) and (keys[py.K_z] or keys[py.K_UP] or controllerState(joystick,"haut"))):  
+                self.setFallSpeed(0)    # HAUT DROITE
+                self.setDashState((0,"hd",DASH_COOLDOWN))
+            elif self.getDashState()[1] == "n" and  ((keys[py.K_q] or keys[py.K_LEFT] or controllerState(joystick,"gauche")) and (keys[py.K_z] or keys[py.K_UP] or controllerState(joystick,"haut"))):  
+                self.setFallSpeed(0)    # HAUT GAUCHE
+                self.setDashState((0,"hg",DASH_COOLDOWN))
+            elif self.getDashState()[1] == "n" and  (keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")):  
+                self.setFallSpeed(0)    # DROITE
                 self.setDashState((0,"d",DASH_COOLDOWN))
             elif self.getDashState()[1] == "n" and  (keys[py.K_q] or keys[py.K_LEFT] or controllerState(joystick,"gauche")):
-                self.setFallSpeed(0)
+                self.setFallSpeed(0)    # GAUCHE
                 self.setDashState((0,"g",DASH_COOLDOWN))
             elif self.getDashState()[1] == "n" and  (keys[py.K_z] or keys[py.K_UP] or controllerState(joystick,"haut")):
-                self.setFallSpeed(0)
+                self.setFallSpeed(0)    # HAUT
                 self.setDashState((0,"h",DASH_COOLDOWN))
         
         if self.getDashState()[0] < DASH_TIMER and self.getDashState()[1] != "n":

@@ -231,7 +231,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], s
         py.draw.rect(screen, "green", pnj.getRect())
 
 
-def degatsEnvironnementauxVille(j:Joueur,objets:dict):
+def degatsEnvironnementauxColline(j:Joueur,objets:dict):
     """
     Dans la zone ville, inflige des dégats si à découvert:\n
     Crée un rect au dessus du joueur allant jusqu'en haut de l'écran 

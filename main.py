@@ -44,9 +44,9 @@ while running:
     collisions(objetsDict, joueur)
 
 
-    if zone == 'ville':     # Dégats Ville
+    if zone == 'colline':     # Dégats Ville
         hpBar.show()
-        degatsEnvironnementauxVille(joueur,objetsDict)
+        degatsEnvironnementauxColline(joueur,objetsDict)
         if joueur.getHp() <= 0:
             joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
             joueur.setHp(100)
@@ -75,7 +75,7 @@ while running:
     affichageZone(objetsDict, screen)
     py.draw.rect(screen,"red",joueur.getRect())
 
-    if zone == "colline":   # brouillard
+    if zone == "ville":   # brouillard
         screen.blit(sprite_brouillard)
 
     pw.update(events)
