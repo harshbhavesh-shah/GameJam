@@ -61,6 +61,10 @@ while running:
         for pnj in objetsDict["pnjs"]:
             if joueur.getRect().colliderect(pnj.getRect()) :
                 discussion(screen,pnj,joueur)
+        for tortue in objetsDict["tortues"]:
+            if joueur.getRect().colliderect(tortue) :
+                tortue.setEstSauvee(True)
+                tortue.setSprite(sprite_tortue_sauvee)
                 
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 

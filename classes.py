@@ -277,6 +277,19 @@ class PNJ:
         return self.nom
     
 
+class Tortue(py.Rect):
+    def setSprite(self,sprite):
+        self.sprite = sprite
+        return self
+    
+    def getSprite(self) -> py.Surface:
+        return self.sprite
+    
+    def setEstSauvee(self,etat:bool=True):
+        self.estSauvee = etat
+
+    def getEstSauvee(self):
+        return self.estSauvee
 
 
 class Settings:

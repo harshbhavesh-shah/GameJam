@@ -165,7 +165,7 @@ def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
 
 
 
-def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Ennemi]]:
+def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
     Prends en paramètres :
@@ -180,7 +180,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "tortues":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -194,12 +194,13 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE),5,0).setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                     case "P": objetsDict["pnjs"].append(PNJ(((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)),f"{zone}-{souszone}"))
+                    case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
     return objetsDict
 
 
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue]], screen:py.Surface):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -229,6 +230,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], s
 
     for pnj in objetsDict["pnjs"]:
         py.draw.rect(screen, "green", pnj.getRect())
+
+    for tortue in objetsDict["tortues"]:
+        screen.blit(tortue.getSprite(),tortue)
 
 
 def degatsEnvironnementauxColline(j:Joueur,objets:dict):
