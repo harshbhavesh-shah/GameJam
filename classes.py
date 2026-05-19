@@ -169,7 +169,7 @@ class Joueur:
 
 
 
-class Bloc(py.Rect):
+class Tile(py.Rect):
     def setSprite(self,sprite):
         self.sprite = sprite
         return self
@@ -178,27 +178,30 @@ class Bloc(py.Rect):
         return self.sprite
 
 
-class Spawn(py.Rect):
+class Bloc(Tile):
     pass
 
-class End(py.Rect):
+class Spawn(Tile):
     pass
 
-class Porte:
-    def __init__(self,pos:tuple[int,int], id: str):
-        self.rect = py.Rect(pos,(2*TILE_SIZE,2*TILE_SIZE))
+class End(Tile):
+    pass
+
+
+class Porte(Tile):
+    def setId(self,id):
         self.id = id
-
-    def getRect(self):
-        return self.rect
+        return self
     
     def getId(self):
         return self.id
 
-class Pique(py.Rect):
+
+class Pique(Tile):
     pass
 
-class BlocMouv(Bloc):
+
+class BlocMouv(Tile):
     def setMouvement(self,mouvement:str):
         self.mouvement = mouvement.replace("a","a"*(TILE_SIZE//self.speed))
         self.indexMouvement = 0
@@ -228,7 +231,7 @@ class BlocMouv(Bloc):
     
     
     
-class Decoration(Bloc):
+class Decoration(Tile):
     pass
 
 
@@ -241,7 +244,7 @@ class Ennemi(BlocMouv):
         return self.type
 
 
-class PNJ(Bloc):
+class PNJ(Tile):
     def init_file(self,file:str):
         self.file = f"assets/textes/{file}.txt"
         self.texte = []
@@ -274,14 +277,7 @@ class PNJ(Bloc):
         return self.nom
     
 
-class Tortue(py.Rect):
-    def setSprite(self,sprite):
-        self.sprite = sprite
-        return self
-    
-    def getSprite(self) -> py.Surface:
-        return self.sprite
-    
+class Tortue(Tile):    
     def setEstSauvee(self,etat:bool=True):
         self.estSauvee = etat
 

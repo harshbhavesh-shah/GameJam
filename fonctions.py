@@ -119,7 +119,7 @@ def switchSousZone(zone:str,souszone:int,joueur:Joueur,objetsDict:dict):
 
 def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueur:Joueur):
     for porte in objetsDict["portes"]:
-            if porte.getRect().colliderect(joueur.getRect()):
+            if porte.colliderect(joueur.getRect()):
                 for source, dest in PORTES_CORRESPONDANCES.items():
                     if source == porte.getId(): destination_id = dest
                     if dest == porte.getId(): destination_id = source
@@ -181,7 +181,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
                     case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(map_tile[souszone],i,j)))
-                    case "p": objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
+                    case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}"))
                     case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSpeed(2).setMouvement("naaaasaaaa"))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
@@ -206,7 +206,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(bloc.getSprite().convert_alpha(),bloc.topleft)
 
     for porte in objetsDict["portes"]:
-        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.getRect().topleft)
+        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.topleft)
 
     for pique in objetsDict["piques"]:
         screen.blit(sprite_pique.convert_alpha(),pique.topleft)
