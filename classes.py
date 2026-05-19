@@ -169,7 +169,7 @@ class Joueur:
 
 
 
-class Bloc(py.Rect):
+class Tile(py.Rect):
     def setSprite(self,sprite):
         self.sprite = sprite
         return self
@@ -178,61 +178,64 @@ class Bloc(py.Rect):
         return self.sprite
 
 
-class Spawn(py.Rect):
+class Bloc(Tile):
     pass
 
-class End(py.Rect):
+class Spawn(Tile):
     pass
 
-class Porte:
-    def __init__(self,pos:tuple[int,int], id: str):
-        self.rect = py.Rect(pos,(2*TILE_SIZE,2*TILE_SIZE))
+class End(Tile):
+    pass
+
+
+class Porte(Tile):
+    def setId(self,id):
         self.id = id
-
-    def getRect(self):
-        return self.rect
+        return self
     
     def getId(self):
         return self.id
 
-class Pique(py.Rect):
+
+class Pique(Tile):
     pass
 
-class BlocMouv:
-    def __init__(self, pos:tuple[int,int],width_height = (TILE_SIZE,TILE_SIZE), x=0, y=5):
-        self.rect = py.Rect(pos,width_height)
-        self.distxParc, self.distyParc = x*TILE_SIZE, y*TILE_SIZE
-        self.distxAParc, self.distyAParc = 0, 0
-        self.directionAbs, self.directionOrd = "droite", "haut"
 
-    def move(self):
-        if self.distxParc != 0:
-            if self.directionAbs == "droite":
-                self.rect.x += 2
-                self.distxAParc += 2
-                if self.distxAParc == self.distxParc:
-                    self.directionAbs = "gauche"
-            elif self.directionAbs == "gauche":
-                self.rect.x -= 2
-                self.distxAParc -= 2
-                if self.distxAParc == 0:
-                    self.directionAbs = "droite"
-        if self.distyParc != 0:
-            if self.directionOrd == "haut":
-                self.rect.y += 2
-                self.distyAParc += 2
-                if self.distyAParc == self.distyParc:
-                    self.directionOrd = "bas"
-            elif self.directionOrd == "bas":
-                self.rect.y -= 2
-                self.distyAParc -= 2
-                if self.distyAParc == 0:
-                    self.directionOrd = "haut"
-
-    def getRect(self):
-        return self.rect
+class BlocMouv(Tile):
+    def setMouvement(self,mouvement:str):
+        self.mouvement = mouvement.replace("a","a"*(TILE_SIZE//self.speed))
+        self.orientation = mouvement[0]
+        self.indexMouvement = 0
+        return self
     
-class Decoration(Bloc):
+    def getMouvement(self):
+        return self.mouvement
+    
+    def setSpeed(self,val:int):
+        self.speed = val
+        return self
+    
+    def getOrientation(self):
+        return self.orientation
+    
+    def move(self):
+        match self.getMouvement()[self.indexMouvement]:
+            case "n" : self.orientation = "n"
+            case "e" : self.orientation = "e"
+            case "s" : self.orientation = "s"
+            case "o" : self.orientation = "o"
+            case "a" :
+                match self.orientation:
+                    case "n" : self.y -= self.speed
+                    case "e" : self.x += self.speed
+                    case "s" : self.y += self.speed
+                    case "o" : self.x -= self.speed
+        self.indexMouvement = (self.indexMouvement + 1) % len(self.getMouvement())
+    
+    
+    
+    
+class Decoration(Tile):
     pass
 
 
@@ -244,13 +247,14 @@ class Ennemi(BlocMouv):
     def getType(self):
         return self.type
 
-class PNJ:
-    def __init__(self,rect:py.Rect,file:str):
-        self.rect = rect
+
+class PNJ(Tile):
+    def init_file(self,file:str):
         self.file = f"assets/textes/{file}.txt"
         self.texte = []
         self.nom = ""
         self.load(self.file)
+        return self
 
     def load(self,file:str=None):
         if file is None:
@@ -276,6 +280,14 @@ class PNJ:
     def getNom(self):
         return self.nom
     
+
+class Tortue(Tile):    
+    def setEstSauvee(self,etat:bool=True):
+        self.estSauvee = etat
+
+    def getEstSauvee(self):
+        return self.estSauvee
+
 
 
 
