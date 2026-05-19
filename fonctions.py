@@ -69,19 +69,19 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
             joueur_rect = j.getRect()   #   TODO  
     
     for ennemi in objetsDict["ennemis"]:
-        if ennemi.getRect().colliderect(joueur_rect):
+        if ennemi.colliderect(joueur_rect):
             j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
             py.time.wait(150)   
             joueur_rect = j.getRect()
  
     # Bloc mouv
     for blocmouv in objetsDict["blocmouvs"]:
-        if blocmouv.getRect().colliderect(joueur_rect):
-            collisionsBlocJoueur(joueur_rect,blocmouv.getRect(),j)
+        if blocmouv.colliderect(joueur_rect):
+            collisionsBlocJoueur(joueur_rect,blocmouv,j)
 
     # Coyote et dash
     if (not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in objetsDict["blocs"]) 
-        or not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in objetsDict["blocmouvs"])) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+        or not any(blocmouv.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in objetsDict["blocmouvs"])) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
@@ -188,10 +188,10 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(map_tile[souszone],i,j)))
                     case "p": objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
                     case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSpeed(2).setMouvement("naaaasaaaa"))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
-                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE),5,0).setType("requin"))
+                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE)).setSpeed(2).setMouvement("oaaaaaeaaaaa").setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                     case "P": objetsDict["pnjs"].append(PNJ(((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)),f"{zone}-{souszone}"))
                     case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
@@ -225,7 +225,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
     
     for ennemi in objetsDict["ennemis"]:
         match ennemi.getType():
-            case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),ennemi.getRect().topleft)
+            case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),ennemi.topleft)
         ennemi.move()
 
     for pnj in objetsDict["pnjs"]:
@@ -252,8 +252,6 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
 
             if isinstance(objet,(PNJ,Porte)):
                 continue
-            if isinstance(objet,(BlocMouv)):
-                objetCopie = objet.getRect()
             if blocDetectionRect.colliderect(objetCopie):    # Dérivés de py.rect
                 isColliding = True
                 

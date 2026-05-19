@@ -198,39 +198,35 @@ class Porte:
 class Pique(py.Rect):
     pass
 
-class BlocMouv:
-    def __init__(self, pos:tuple[int,int],width_height = (TILE_SIZE,TILE_SIZE), x=0, y=5):
-        self.rect = py.Rect(pos,width_height)
-        self.distxParc, self.distyParc = x*TILE_SIZE, y*TILE_SIZE
-        self.distxAParc, self.distyAParc = 0, 0
-        self.directionAbs, self.directionOrd = "droite", "haut"
-
+class BlocMouv(Bloc):
+    def setMouvement(self,mouvement:str):
+        self.mouvement = mouvement.replace("a","a"*(TILE_SIZE//self.speed))
+        self.indexMouvement = 0
+        return self
+    
+    def getMouvement(self):
+        return self.mouvement
+    
+    def setSpeed(self,val:int):
+        self.speed = val
+        return self
+    
     def move(self):
-        if self.distxParc != 0:
-            if self.directionAbs == "droite":
-                self.rect.x += 2
-                self.distxAParc += 2
-                if self.distxAParc == self.distxParc:
-                    self.directionAbs = "gauche"
-            elif self.directionAbs == "gauche":
-                self.rect.x -= 2
-                self.distxAParc -= 2
-                if self.distxAParc == 0:
-                    self.directionAbs = "droite"
-        if self.distyParc != 0:
-            if self.directionOrd == "haut":
-                self.rect.y += 2
-                self.distyAParc += 2
-                if self.distyAParc == self.distyParc:
-                    self.directionOrd = "bas"
-            elif self.directionOrd == "bas":
-                self.rect.y -= 2
-                self.distyAParc -= 2
-                if self.distyAParc == 0:
-                    self.directionOrd = "haut"
-
-    def getRect(self):
-        return self.rect
+        match self.getMouvement()[self.indexMouvement]:
+            case "n" : self.orientation = "n"
+            case "e" : self.orientation = "e"
+            case "s" : self.orientation = "s"
+            case "o" : self.orientation = "o"
+            case "a" :
+                match self.orientation:
+                    case "n" : self.y -= self.speed
+                    case "e" : self.x += self.speed
+                    case "s" : self.y += self.speed
+                    case "o" : self.x -= self.speed
+        self.indexMouvement = (self.indexMouvement + 1) % len(self.getMouvement())
+    
+    
+    
     
 class Decoration(Bloc):
     pass
@@ -243,6 +239,7 @@ class Ennemi(BlocMouv):
     
     def getType(self):
         return self.type
+
 
 class PNJ:
     def __init__(self,rect:py.Rect,file:str):
@@ -290,6 +287,8 @@ class Tortue(py.Rect):
 
     def getEstSauvee(self):
         return self.estSauvee
+
+
 
 
 class Settings:
