@@ -58,7 +58,7 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
     """
     joueur_rect = j.getRect()
 
-    for bloc in objetsDict["blocs"]:
+    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"]:
         if bloc.colliderect(joueur_rect): 
             collisionsBlocJoueur(joueur_rect,bloc,j)    
     
@@ -66,18 +66,13 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
         if blocpic.colliderect(joueur_rect):
             j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
             py.time.wait(150)   
-            joueur_rect = j.getRect()   #   TODO  
+            joueur_rect = j.getRect()  
     
     for ennemi in objetsDict["ennemis"]:
         if ennemi.colliderect(joueur_rect):
             j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
             py.time.wait(150)   
             joueur_rect = j.getRect()
- 
-    # Bloc mouv
-    for blocmouv in objetsDict["blocmouvs"]:
-        if blocmouv.colliderect(joueur_rect):
-            collisionsBlocJoueur(joueur_rect,blocmouv,j)
 
     # Coyote et dash
     if (not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in objetsDict["blocs"]) 
