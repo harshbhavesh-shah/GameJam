@@ -35,7 +35,7 @@ sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
 ### DÉCORATIONS ###
 
 sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")
-sprite_brouillard = py.image.load("./assets/textures/colline/brouillard.png")
+sprite_brouillard = py.image.load("./assets/textures/ville/brouillard.png")
 
 
 ##### MISE A ECHELLE #####
