@@ -49,7 +49,7 @@ def collisionsBlocJoueur(j_rect:py.Rect,b_rect:py.Rect,j:Joueur):
 
 
 
-def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
+def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur, zone_souszone:tuple):
     """
     Gère les collisions entre le Joueur (j) et l'envirronement (Blocs,Pics...). \n
     Prends en paramètres : 
@@ -66,15 +66,13 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
 
     for blocpic in objetsDict["piques"]:
         if blocpic.colliderect(joueur_rect):
-            j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
             py.time.wait(150)   
-            joueur_rect = j.getRect()  
+            objetsDict.update(dead(zone_souszone[0], zone_souszone[1], j, objetsDict))
     
     for ennemi in objetsDict["ennemis"]:
         if ennemi.colliderect(joueur_rect):
-            j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
             py.time.wait(150)   
-            joueur_rect = j.getRect()
+            objetsDict.update(dead(zone_souszone[0], zone_souszone[1], j, objetsDict))
 
     # Coyote et dash
     if (not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in objetsDict["blocs"]) 
@@ -269,7 +267,10 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
     else:
         j.setHp(min(100,j.getHp()+VILLE_HEAL))
 
-
+def dead(zone, souszone, joueur:Joueur, objetsDict:dict):    #Permet de recharger entièrement la page si le joueur meurt
+    objetsDict = preparationZone(zone, souszone)
+    joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+    return objetsDict
 
 ### TEXTURES ###
 

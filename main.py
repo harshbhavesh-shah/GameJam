@@ -41,7 +41,7 @@ while running:
     # BOUCLE MAIN #
 
     joueur.move(keys,controller,zone)
-    collisions(objetsDict, joueur)
+    collisions(objetsDict, joueur, (zone, souszone))
 
 
     if zone == 'colline':     # Dégats Ville
@@ -71,7 +71,7 @@ while running:
         objetsDict , souszone = switchSousZone(zone,souszone,joueur,objetsDict)
 
     if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:  # Tomber dans le vide
-        joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
+        objetsDict = dead(zone, souszone, joueur, objetsDict)
 
 
 
