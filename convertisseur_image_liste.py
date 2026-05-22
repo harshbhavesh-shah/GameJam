@@ -1,6 +1,6 @@
 from PIL import Image
 
-image = Image.open("CHEMIN--DE--L-IMAGE.png")
+image = Image.open("CHEMIN_DE_L'IMAGE.png")
 result = []
 
 for ligne in range(36):
@@ -22,6 +22,8 @@ for ligne in range(36):
             case (255, 174, 201):   result[ligne].append("T")   # Rose saumon : blocTombant
             
 
-
+file = open("convertisseur_output.txt","w")
             
-print(str(result).replace("'","\"").replace(", ",",").replace("],[","],\n["))
+file.write(str(result).replace("'","\"").replace(", ",",").replace("],[","],\n["))
+
+file.close()
