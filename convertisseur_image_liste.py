@@ -1,11 +1,11 @@
 from PIL import Image
 
-image = Image.open("C:\\Applis\\n1.png")
+image = Image.open("CHEMIN--DE--L-IMAGE.png")
 result = []
 
-for ligne in range(18):
+for ligne in range(36):
     result.append([])
-    for colonne in range(32):
+    for colonne in range(64):
         match image.getpixel((colonne,ligne))[:-1]:
             case (255, 255, 255):   result[ligne].append(" ")   # Blanc : vide
             case (0, 0, 0):         result[ligne].append("b")   # Noir : bloc
@@ -19,9 +19,9 @@ for ligne in range(18):
             case (255, 127, 39):    result[ligne].append("P")   # Orange : PNJs
             case (181, 230, 29):    result[ligne].append("t")   # Vert clair : tortue
             case (185, 122, 87):    result[ligne].append("A")   # Brun : arbre
+            case (255, 174, 201):   result[ligne].append("T")   # Rose saumon : blocTombant
             
 
 
             
 print(str(result).replace("'","\"").replace(", ",",").replace("],[","],\n["))
-
