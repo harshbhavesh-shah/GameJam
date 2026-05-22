@@ -117,8 +117,8 @@ class Joueur:
             if not self.getFallState():
                 self.setFallState(False)
                 self.setFallSpeed(0)
-                if zone == "mer": self.rect.y -= (JUMP_SPEED_IN_WATER - self.getJumpTimer()//2)
-                else : self.rect.y -= (JUMP_SPEED - self.getJumpTimer())
+                if zone == "mer": self.rect.y -= (JUMP_SPEED_IN_WATER - self.getJumpTimer()//4)
+                else : self.rect.y -= (JUMP_SPEED - self.getJumpTimer()//2)
                 self.jumpTimer += 1
                 if self.jumpTimer >= MAX_JUMP_TIMER: self.setFallState(True)
 

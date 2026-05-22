@@ -40,6 +40,17 @@ sprite_brouillard = py.image.load("./assets/textures/ville/brouillard.png")
 
 ##### MISE A ECHELLE #####
 
+sprite_brique = py.transform.scale(sprite_brique,(TILE_SIZE,TILE_SIZE))
+sprite_brique_top = py.transform.scale(sprite_brique_top,(TILE_SIZE,TILE_SIZE))
+sprite_brique_left = py.transform.scale(sprite_brique_left,(TILE_SIZE,TILE_SIZE))
+sprite_brique_right = py.transform.scale(sprite_brique_right,(TILE_SIZE,TILE_SIZE))
+sprite_brique_topleft = py.transform.scale(sprite_brique_topleft,(TILE_SIZE,TILE_SIZE))
+sprite_brique_topright = py.transform.scale(sprite_brique_topright,(TILE_SIZE,TILE_SIZE))
+sprite_brique_topleft_corner = py.transform.scale(sprite_brique_topleft_corner,(TILE_SIZE,TILE_SIZE))
+sprite_brique_topright_corner = py.transform.scale(sprite_brique_topright_corner,(TILE_SIZE,TILE_SIZE))
+
+
+
 sprite_porte = [py.transform.scale(s[0],(2*TILE_SIZE,2*TILE_SIZE)) for s in sprite_porte]
 sprite_pique = py.transform.scale(sprite_pique,(TILE_SIZE,TILE_SIZE))
 sprite_requin = [py.transform.scale(s[0],(4*TILE_SIZE,2*TILE_SIZE)) for s in sprite_requin]
