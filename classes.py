@@ -215,6 +215,9 @@ class BlocMouv(Tile):
         self.speed = val
         return self
     
+    def getSpeed(self):
+        return self.speed
+    
     def getOrientation(self):
         return self.orientation
     
@@ -279,6 +282,40 @@ class PNJ(Tile):
 
     def getNom(self):
         return self.nom
+    
+
+class BlocTombant(BlocMouv):
+    def activeDelay(self):
+        self.actif = True
+        
+    def init(self):
+        self.actif = False
+        self.compteur = 0
+        return self
+    
+    def getCompteur(self):
+        return self.compteur
+    
+    def incrCompteur(self):
+        self.compteur += 1
+
+    def getActif(self):
+        return self.actif
+    
+    def saveState(self):
+        self.savedState = [self.x,self.y,self.width,self.height,self.getSpeed(),self.getMouvement()]
+        return self
+    
+    def loadSavedState(self):
+        self.x = self.savedState[0]
+        self.y = self.savedState[1]
+        self.width = self.savedState[2]
+        self.height = self.savedState[3]
+        self.setSpeed(self.savedState[4])
+        self.setMouvement(self.savedState[5])
+        self.init()
+        self.saveState()
+        return self
     
 
 class Tortue(Tile):    
