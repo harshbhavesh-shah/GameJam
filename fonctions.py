@@ -58,10 +58,12 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
     """
     joueur_rect = j.getRect()
 
-    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"]:
+    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"]:
         if bloc.colliderect(joueur_rect): 
-            collisionsBlocJoueur(joueur_rect,bloc,j)    
-    
+            collisionsBlocJoueur(joueur_rect,bloc,j)
+            if isinstance(bloc,BlocTombant): bloc.activeDelay()
+
+
     for blocpic in objetsDict["piques"]:
         if blocpic.colliderect(joueur_rect):
             j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
@@ -160,7 +162,7 @@ def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
 
 
 
-def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue]]:
+def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue|BlocTombant]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
     Prends en paramètres :
@@ -175,7 +177,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "tortues":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "tortues":[] , "bloctombants":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -190,12 +192,13 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                     case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).init_file(f"{zone}-{souszone}"))
                     case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
+                    case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
     return objetsDict
 
 
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue|BlocTombant]], screen:py.Surface):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -230,6 +233,14 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
 
     for tortue in objetsDict["tortues"]:
         screen.blit(tortue.getSprite(),tortue)
+
+    for btombant in objetsDict["bloctombants"]:
+        py.draw.rect(screen, "orange", btombant)
+        if btombant.getActif(): btombant.incrCompteur()
+        if btombant.getCompteur() >= BTOMBANT_DELAY:
+            btombant.move()
+        if btombant.getCompteur() >= BTOMBANT_RESPAWN_TIMER:
+            btombant.loadSavedState()
 
 
 def degatsEnvironnementauxColline(j:Joueur,objets:dict):
