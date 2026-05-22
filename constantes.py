@@ -29,7 +29,7 @@ CONTROLLER_DEADZONE = 0.2
 # Zone - Sous-Zone - Ordonnées - Abcisses
 PORTES_CORRESPONDANCES = {
     "hub-5-30-15" : "foret-1-16-2",
-    "hub-5-31-53" : "mer-1-13-6",
+    "hub-5-31-53" : "mer-1-22-17",
     "hub-5-9-14" : "ville-1-25-3",
     "hub-5-12-50" : "colline-1-25-3"
 }
