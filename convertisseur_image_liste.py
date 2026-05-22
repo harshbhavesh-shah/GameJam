@@ -1,0 +1,27 @@
+from PIL import Image
+
+image = Image.open("CHEMIN--DE--L-IMAGE.png")
+result = []
+
+for ligne in range(18):
+    result.append([])
+    for colonne in range(32):
+        match image.getpixel((colonne,ligne))[:-1]:
+            case (255, 255, 255):   result[ligne].append(" ")   # Blanc : vide
+            case (0, 0, 0):         result[ligne].append("b")   # Noir : bloc
+            case (237, 28, 36):     result[ligne].append("s")   # Rouge : pique
+            case (153, 217, 234):   result[ligne].append("p")   # Turquoise clair : porte
+            case (63, 72, 204):     result[ligne].append("m")   # Bleu indigo : blocMouv
+            case (195, 195, 195):   result[ligne].append("S")   # Gris clair : spawn
+            case (127, 127, 127):   result[ligne].append("E")   # Gris : end
+            case (200, 191, 231):   result[ligne].append("r")   # Lavande : requin
+            case (34, 177, 76):     result[ligne].append("l")   # Vert : lianes
+            case (255, 127, 39):    result[ligne].append("P")   # Orange : PNJs
+            case (181, 230, 29):    result[ligne].append("t")   # Vert clair : tortue
+            case (185, 122, 87):    result[ligne].append("A")   # Brun : arbre
+            
+
+
+            
+print(str(result).replace("'","\"").replace(", ",",").replace("],[","],\n["))
+

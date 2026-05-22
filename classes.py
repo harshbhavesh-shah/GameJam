@@ -13,6 +13,7 @@ class Joueur:
         self.coyoteTimer = 0
         self.dashState = (DASH_TIMER,"n",DASH_COOLDOWN)
         self.InteractionCooldown = 0
+        self.hp = 100
 
     # Coordonnées
 
@@ -95,24 +96,29 @@ class Joueur:
             case "g": self.rect.x  -= DASH_SPEED
             case "d": self.rect.x  += DASH_SPEED
             case "h": self.rect.y  -= DASH_SPEED
+            case "hg": self.rect.y  -= DASH_SPEED//1.41 ; self.rect.x  -= DASH_SPEED//1.41
+            case "hd": self.rect.y  -= DASH_SPEED//1.41 ; self.rect.x  += DASH_SPEED//1.41
             case "n": return
         self.setDashState((self.getDashState()[0] +1,self.getDashState()[1],self.getDashState()[2]))
     
 
-    def move(self, keys,joystick):
+    def move(self, keys,joystick, zone:str):
         """
         Fonction qui gére les déplacement (avec gravité) du joueur
         """
         # DÉPLACEMENTS DE BASE
         if (keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")):
-            self.rect.x += PLAYER_SPEED
+            if zone == "mer": self.rect.x += PLAYER_SPEED_IN_WATER
+            else : self.rect.x += PLAYER_SPEED
         if (keys[py.K_q] or keys[py.K_LEFT] or controllerState(joystick,"gauche")):
-            self.rect.x -= PLAYER_SPEED
+            if zone == "mer": self.rect.x -= PLAYER_SPEED_IN_WATER
+            else : self.rect.x -= PLAYER_SPEED
         if keys[py.K_SPACE] or controllerState(joystick,"saut"):
             if not self.getFallState():
                 self.setFallState(False)
                 self.setFallSpeed(0)
-                self.rect.y -= (JUMP_SPEED - self.getJumpTimer())
+                if zone == "mer": self.rect.y -= (JUMP_SPEED_IN_WATER - self.getJumpTimer()//2)
+                else : self.rect.y -= (JUMP_SPEED - self.getJumpTimer())
                 self.jumpTimer += 1
                 if self.jumpTimer >= MAX_JUMP_TIMER: self.setFallState(True)
 
@@ -124,31 +130,46 @@ class Joueur:
 
         if self.getFallState() : 
             self.fallSpeed += 1
-            self.rect.y += min(MAX_FALL_SPEED,self.getFallSpeed())
+            if zone == "mer": self.rect.y += min(MAX_FALL_SPEED_IN_WATER,self.getFallSpeed())
+            else : self.rect.y += min(MAX_FALL_SPEED,self.getFallSpeed())
 
         # DASH
 
         self.setDashState((self.getDashState()[0],self.getDashState()[1],max(self.getDashState()[2]-1,0))) # Cooldown Dash
 
-        if (keys[py.K_LSHIFT] or controllerState(joystick,"dash")) and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0:
-            if self.getDashState()[1] == "n" and  (keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")):  # Seulement initialiser si le dash n'a pas commencé
-                self.setFallSpeed(0)
+        if (keys[py.K_LSHIFT] or controllerState(joystick,"dash")) and self.getDashState()[0] < DASH_TIMER and self.getDashState()[2] == 0: # Seulement initialiser si le dash n'a pas commencé
+            if self.getDashState()[1] == "n" and  ((keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")) and (keys[py.K_z] or keys[py.K_UP] or controllerState(joystick,"haut"))):  
+                self.setFallSpeed(0)    # HAUT DROITE
+                self.setDashState((0,"hd",DASH_COOLDOWN))
+            elif self.getDashState()[1] == "n" and  ((keys[py.K_q] or keys[py.K_LEFT] or controllerState(joystick,"gauche")) and (keys[py.K_z] or keys[py.K_UP] or controllerState(joystick,"haut"))):  
+                self.setFallSpeed(0)    # HAUT GAUCHE
+                self.setDashState((0,"hg",DASH_COOLDOWN))
+            elif self.getDashState()[1] == "n" and  (keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")):  
+                self.setFallSpeed(0)    # DROITE
                 self.setDashState((0,"d",DASH_COOLDOWN))
             elif self.getDashState()[1] == "n" and  (keys[py.K_q] or keys[py.K_LEFT] or controllerState(joystick,"gauche")):
-                self.setFallSpeed(0)
+                self.setFallSpeed(0)    # GAUCHE
                 self.setDashState((0,"g",DASH_COOLDOWN))
             elif self.getDashState()[1] == "n" and  (keys[py.K_z] or keys[py.K_UP] or controllerState(joystick,"haut")):
-                self.setFallSpeed(0)
+                self.setFallSpeed(0)    # HAUT
                 self.setDashState((0,"h",DASH_COOLDOWN))
         
         if self.getDashState()[0] < DASH_TIMER and self.getDashState()[1] != "n":
             self.dash()
 
+
+    # HP (pour la ville)
+    def getHp(self):
+        return self.hp
+    
+    def setHp(self,hp):
+        self.hp = hp
+
         
 
 
 
-class Bloc(py.Rect):
+class Tile(py.Rect):
     def setSprite(self,sprite):
         self.sprite = sprite
         return self
@@ -157,61 +178,67 @@ class Bloc(py.Rect):
         return self.sprite
 
 
-class Spawn(py.Rect):
+class Bloc(Tile):
     pass
 
-class End(py.Rect):
+class Spawn(Tile):
     pass
 
-class Porte:
-    def __init__(self,pos:tuple[int,int], id: str):
-        self.rect = py.Rect(pos,(2*TILE_SIZE,2*TILE_SIZE))
+class End(Tile):
+    pass
+
+
+class Porte(Tile):
+    def setId(self,id):
         self.id = id
-
-    def getRect(self):
-        return self.rect
+        return self
     
     def getId(self):
         return self.id
 
-class Pique(py.Rect):
+
+class Pique(Tile):
     pass
 
-class BlocMouv:
-    def __init__(self, pos:tuple[int,int],width_height = (TILE_SIZE,TILE_SIZE), x=0, y=5):
-        self.rect = py.Rect(pos,width_height)
-        self.distxParc, self.distyParc = x*TILE_SIZE, y*TILE_SIZE
-        self.distxAParc, self.distyAParc = 0, 0
-        self.directionAbs, self.directionOrd = "droite", "haut"
 
-    def move(self):
-        if self.distxParc != 0:
-            if self.directionAbs == "droite":
-                self.rect.x += 2
-                self.distxAParc += 2
-                if self.distxAParc == self.distxParc:
-                    self.directionAbs = "gauche"
-            elif self.directionAbs == "gauche":
-                self.rect.x -= 2
-                self.distxAParc -= 2
-                if self.distxAParc == 0:
-                    self.directionAbs = "droite"
-        if self.distyParc != 0:
-            if self.directionOrd == "haut":
-                self.rect.y += 2
-                self.distyAParc += 2
-                if self.distyAParc == self.distyParc:
-                    self.directionOrd = "bas"
-            elif self.directionOrd == "bas":
-                self.rect.y -= 2
-                self.distyAParc -= 2
-                if self.distyAParc == 0:
-                    self.directionOrd = "haut"
-
-    def getRect(self):
-        return self.rect
+class BlocMouv(Tile):
+    def setMouvement(self,mouvement:str):
+        self.mouvement = mouvement.replace("a","a"*(TILE_SIZE//self.speed))
+        self.orientation = mouvement[0]
+        self.indexMouvement = 0
+        return self
     
-class Decoration(Bloc):
+    def getMouvement(self):
+        return self.mouvement
+    
+    def setSpeed(self,val:int):
+        self.speed = val
+        return self
+    
+    def getSpeed(self):
+        return self.speed
+    
+    def getOrientation(self):
+        return self.orientation
+    
+    def move(self):
+        match self.getMouvement()[self.indexMouvement]:
+            case "n" : self.orientation = "n"
+            case "e" : self.orientation = "e"
+            case "s" : self.orientation = "s"
+            case "o" : self.orientation = "o"
+            case "a" :
+                match self.orientation:
+                    case "n" : self.y -= self.speed
+                    case "e" : self.x += self.speed
+                    case "s" : self.y += self.speed
+                    case "o" : self.x -= self.speed
+        self.indexMouvement = (self.indexMouvement + 1) % len(self.getMouvement())
+    
+    
+    
+    
+class Decoration(Tile):
     pass
 
 
@@ -223,13 +250,14 @@ class Ennemi(BlocMouv):
     def getType(self):
         return self.type
 
-class PNJ:
-    def __init__(self,rect:py.Rect,file:str):
-        self.rect = rect
+
+class PNJ(Tile):
+    def init_file(self,file:str):
         self.file = f"assets/textes/{file}.txt"
         self.texte = []
         self.nom = ""
         self.load(self.file)
+        return self
 
     def load(self,file:str=None):
         if file is None:
@@ -255,6 +283,48 @@ class PNJ:
     def getNom(self):
         return self.nom
     
+
+class BlocTombant(BlocMouv):
+    def activeDelay(self):
+        self.actif = True
+        
+    def init(self):
+        self.actif = False
+        self.compteur = 0
+        return self
+    
+    def getCompteur(self):
+        return self.compteur
+    
+    def incrCompteur(self):
+        self.compteur += 1
+
+    def getActif(self):
+        return self.actif
+    
+    def saveState(self):
+        self.savedState = [self.x,self.y,self.width,self.height,self.getSpeed(),self.getMouvement()]
+        return self
+    
+    def loadSavedState(self):
+        self.x = self.savedState[0]
+        self.y = self.savedState[1]
+        self.width = self.savedState[2]
+        self.height = self.savedState[3]
+        self.setSpeed(self.savedState[4])
+        self.setMouvement(self.savedState[5])
+        self.init()
+        self.saveState()
+        return self
+    
+
+class Tortue(Tile):    
+    def setEstSauvee(self,etat:bool=True):
+        self.estSauvee = etat
+
+    def getEstSauvee(self):
+        return self.estSauvee
+
 
 
 

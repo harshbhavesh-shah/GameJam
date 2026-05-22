@@ -1,10 +1,12 @@
 import pygame as py
 import pygame_widgets as pw
 from pygame_widgets.slider import Slider
+from pygame_widgets.progressbar import ProgressBar
 from classes import *
 from levels import *
 from textures import *
 import time
+import copy
 
 def keybinds(screen,keys):
     """
@@ -56,30 +58,27 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur):
     """
     joueur_rect = j.getRect()
 
-    for bloc in objetsDict["blocs"]:
+    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"]:
         if bloc.colliderect(joueur_rect): 
-            collisionsBlocJoueur(joueur_rect,bloc,j)    
-    
+            collisionsBlocJoueur(joueur_rect,bloc,j)
+            if isinstance(bloc,BlocTombant): bloc.activeDelay()
+
+
     for blocpic in objetsDict["piques"]:
         if blocpic.colliderect(joueur_rect):
             j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
             py.time.wait(150)   
-            joueur_rect = j.getRect()   #   TODO  
+            joueur_rect = j.getRect()  
     
     for ennemi in objetsDict["ennemis"]:
-        if ennemi.getRect().colliderect(joueur_rect):
+        if ennemi.colliderect(joueur_rect):
             j.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
             py.time.wait(150)   
             joueur_rect = j.getRect()
- 
-    # Bloc mouv
-    for blocmouv in objetsDict["blocmouvs"]:
-        if blocmouv.getRect().colliderect(joueur_rect):
-            collisionsBlocJoueur(joueur_rect,blocmouv.getRect(),j)
 
     # Coyote et dash
     if (not any(bloc.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for bloc in objetsDict["blocs"]) 
-        or not any(blocmouv.getRect().colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in objetsDict["blocmouvs"])) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
+        or not any(blocmouv.colliderect(py.Rect(joueur_rect.topleft,(joueur_rect.width,joueur_rect.height+1))) for blocmouv in objetsDict["blocmouvs"])) and j.getJumpTimer() == 0: # Si il n'y a rien sous le joueur -> chute
         if j.getCoyoteTimer() < COYOTE_JUMP_TIME:
             j.setCoyoteTimer(j.getCoyoteTimer()+1)
         else:
@@ -122,7 +121,7 @@ def switchSousZone(zone:str,souszone:int,joueur:Joueur,objetsDict:dict):
 
 def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueur:Joueur):
     for porte in objetsDict["portes"]:
-            if porte.getRect().colliderect(joueur.getRect()):
+            if porte.colliderect(joueur.getRect()):
                 for source, dest in PORTES_CORRESPONDANCES.items():
                     if source == porte.getId(): destination_id = dest
                     if dest == porte.getId(): destination_id = source
@@ -163,7 +162,7 @@ def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
 
 
 
-def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Ennemi]]:
+def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue|BlocTombant]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
     Prends en paramètres :
@@ -178,26 +177,28 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "tortues":[] , "bloctombants":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
                     case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(map_tile[souszone],i,j)))
-                    case "p": objetsDict["portes"].append(Porte(((j-1)*TILE_SIZE,(i-1)*TILE_SIZE), f"{zone}-{souszone}-{i}-{j}"))
+                    case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}"))
                     case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE)))
+                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSpeed(2).setMouvement("naaaasaaaa"))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
-                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE),5,0).setType("requin"))
+                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE)).setSpeed(2).setMouvement("oaaaaaeaaaaa").setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
-                    case "P": objetsDict["pnjs"].append(PNJ(((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)),f"{zone}-{souszone}"))
+                    case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).init_file(f"{zone}-{souszone}"))
+                    case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
+                    case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
     return objetsDict
 
 
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue|BlocTombant]], screen:py.Surface):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -208,7 +209,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], s
         screen.blit(bloc.getSprite().convert_alpha(),bloc.topleft)
 
     for porte in objetsDict["portes"]:
-        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.getRect().topleft)
+        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.topleft)
 
     for pique in objetsDict["piques"]:
         screen.blit(sprite_pique.convert_alpha(),pique.topleft)
@@ -222,12 +223,51 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], s
     
     for ennemi in objetsDict["ennemis"]:
         match ennemi.getType():
-            case "requin" : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),ennemi.getRect().topleft)
+            case "requin" : 
+                if ennemi.getOrientation() == "e": screen.blit(py.transform.flip(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),1,0),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE)))
+                else : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE))) # Fix hitbox ^
         ennemi.move()
 
     for pnj in objetsDict["pnjs"]:
-        py.draw.rect(screen, "green", pnj.getRect())
+        py.draw.rect(screen, "green", pnj)
 
+    for tortue in objetsDict["tortues"]:
+        screen.blit(tortue.getSprite(),tortue)
+
+    for btombant in objetsDict["bloctombants"]:
+        py.draw.rect(screen, "orange", btombant)
+        if btombant.getActif(): btombant.incrCompteur()
+        if btombant.getCompteur() >= BTOMBANT_DELAY:
+            btombant.move()
+        if btombant.getCompteur() >= BTOMBANT_RESPAWN_TIMER:
+            btombant.loadSavedState()
+
+
+def degatsEnvironnementauxColline(j:Joueur,objets:dict):
+    """
+    Dans la zone ville, inflige des dégats si à découvert:\n
+    Crée un rect au dessus du joueur allant jusqu'en haut de l'écran 
+    et inflige des dégats si il ne détecte aucune collision (soigne sinon)
+    """
+
+    blocDetectionRect = py.Rect(j.getRect().centerx-10, j.getY()-SCREEN_HEIGHT, 20, SCREEN_HEIGHT)
+    
+    isColliding = False
+    for typeObjet in objets.keys():
+        for objet in objets[typeObjet]:
+
+            objetCopie = copy.copy(objet)
+
+            if isinstance(objet,(PNJ,Porte)):
+                continue
+            if blocDetectionRect.colliderect(objetCopie):    # Dérivés de py.rect
+                isColliding = True
+                
+    if not isColliding:
+        j.setHp(j.getHp()-VILLE_DPS)
+    
+    else:
+        j.setHp(min(100,j.getHp()+VILLE_HEAL))
 
 
 
@@ -235,7 +275,7 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi]], s
 
 def background(ecran:py.Surface,zone):
     match zone:
-        case "foret": ecran.blits(((bg_foret_1,(0,0)),(bg_foret_2,(0,0)),(bg_foret_3,(0,0))))
+        case "foret": ecran.blit(bg_foret)
         case _ : ecran.fill("darkblue")
 
 
