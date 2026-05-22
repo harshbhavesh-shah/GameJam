@@ -1,6 +1,6 @@
 from PIL import Image
 
-image = Image.open("CHEMIN--DE--L-IMAGE.png")
+image = Image.open("C:\\Applis\\n1.png")
 result = []
 
 for ligne in range(18):
