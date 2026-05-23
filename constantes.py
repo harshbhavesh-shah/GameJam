@@ -45,35 +45,7 @@ TABLEAUX_CORRESPONDANCES = {
 
 
 MOUVEMENTS_BLOCMOUVS = {
-    "hub-5-22-23" : "naaaasaaaa",
-    "hub-5-22-24" : "naaaasaaaa",
-    "hub-5-22-25" : "naaaasaaaa",
-    "hub-5-22-26" : "naaaasaaaa",
-    "hub-5-22-27" : "naaaasaaaa",
-    "hub-5-22-28" : "naaaasaaaa",
-    "hub-5-22-29" : "naaaasaaaa",
-    "hub-5-23-24" : "naaaasaaaa",
-    "hub-5-23-25" : "naaaasaaaa",
-    "hub-5-23-26" : "naaaasaaaa",
-    "hub-5-23-27" : "naaaasaaaa",
-    "hub-5-23-28" : "naaaasaaaa",
-    "hub-5-24-25" : "naaaasaaaa",
-    "hub-5-24-26" : "naaaasaaaa",
-    "hub-5-24-27" : "naaaasaaaa",
-
-    "hub-5-15-25" : "naaaasaaaa",
-    "hub-5-15-26" : "naaaasaaaa",
-    "hub-5-15-27" : "naaaasaaaa",
-    "hub-5-15-28" : "naaaasaaaa",
-    "hub-5-16-26" : "naaaasaaaa",
-    "hub-5-16-27" : "naaaasaaaa",
-
-    "hub-5-18-32" : "naaaasaaaa",
-    "hub-5-18-33" : "naaaasaaaa",
-    "hub-5-18-34" : "naaaasaaaa",
-    "hub-5-18-35" : "naaaasaaaa",
-    "hub-5-19-33" : "naaaasaaaa",
-    "hub-5-19-34" : "naaaasaaaa",
-
-
+    "hub-5-22-23" : ("naaaasaaaa",1),
+    "hub-5-15-25" : ("naaaasaaaa",1),
+    "hub-5-18-32" : ("naaaasaaaa",1)
 }
