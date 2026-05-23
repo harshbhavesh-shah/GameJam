@@ -183,7 +183,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(map_tile[souszone],i,j)))
                     case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}"))
                     case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSpeed(1).setMouvement(MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{i}-{j}"]))
+                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE)).setSpeed(2).setMouvement("oaaaaaeaaaaa").setType("requin"))
@@ -191,6 +191,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).init_file(f"{zone}-{souszone}"))
                     case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
+    groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     return objetsDict
 
 
@@ -267,10 +268,53 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
     else:
         j.setHp(min(100,j.getHp()+VILLE_HEAL))
 
+
 def dead(zone, souszone, joueur:Joueur, objetsDict:dict):    #Permet de recharger entièrement la page si le joueur meurt
     objetsDict = preparationZone(zone, souszone)
     joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
     return objetsDict
+
+
+def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
+    if not liste:
+        return
+
+    blocs_par_position = {(bloc.x, bloc.y): bloc for bloc in liste}
+    vus = []
+
+    for bloc in liste:
+        position = (bloc.x, bloc.y)
+        if position in vus:
+            continue
+
+        groupe = []
+        pile = [position]
+
+        while pile:
+            x, y = pile.pop()
+            if (x, y) in vus or (x, y) not in blocs_par_position:
+                continue
+
+            vus.append((x, y))
+            groupe.append(blocs_par_position[(x, y)])
+
+            for voisin in ((x - TILE_SIZE, y), (x + TILE_SIZE, y), (x, y - TILE_SIZE), (x, y + TILE_SIZE)):
+                if voisin not in vus and voisin in blocs_par_position:
+                    pile.append(voisin)
+
+        mouvement = None
+        speed = None
+
+        for bloc_du_groupe in groupe:
+            if MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"]:
+                mouvement = MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][0]
+                speed =  MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][1]
+                break
+
+        for bloc_du_groupe in groupe:
+            bloc_du_groupe.setSpeed(speed)
+            bloc_du_groupe.setMouvement(mouvement)
+
 
 ### TEXTURES ###
 
