@@ -40,12 +40,15 @@ TABLEAUX_CORRESPONDANCES = {
     "hub-2" : "hub-3",
     "hub-3" : "hub-4",
     "hub-4" : "hub-5",
-    "mer-1" : "mer-2"
+    "mer-1" : "mer-2",
+    "mer-2" : "mer-3",
+    "mer-3" : "mer-4"
 }
 
 
 MOUVEMENTS_BLOCMOUVS = {
     "hub-5-22-23" : ("naaaasaaaa",1),
     "hub-5-15-25" : ("naaaasaaaa",1),
-    "hub-5-18-32" : ("naaaasaaaa",1)
+    "hub-5-18-32" : ("naaaasaaaa",1),
+    "mer-3-26-31" : ("naaaaaaaasaaaaaaaa",1)
 }
