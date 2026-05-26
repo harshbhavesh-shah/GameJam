@@ -324,12 +324,20 @@ class BlocTombant(BlocMouv):
         return self.label
     
 
-class Tortue(Tile):    
-    def setEstSauvee(self,etat:bool=True):
-        self.estSauvee = etat
+class Levier(Tile):    
+    def setEstActif(self,etat:bool=True):
+        self.estActif = etat
+        return self
 
-    def getEstSauvee(self):
-        return self.estSauvee
+    def getEstActif(self):
+        return self.estActif
+
+    def setActifSprite(self,sprite):
+        self.actifSprite = sprite
+        return self
+
+    def getActifSprite(self):
+        return self.actifSprite
 
 
 
