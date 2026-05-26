@@ -15,7 +15,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((200,300))
 
 zone = "mer"
-souszone = 4
+souszone = 1
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
@@ -61,14 +61,18 @@ while running:
         for pnj in objetsDict["pnjs"]:
             if joueur.getRect().colliderect(pnj) :
                 discussion(screen,pnj,joueur)
-        for tortue in objetsDict["tortues"]:
-            if joueur.getRect().colliderect(tortue) :
-                tortue.setEstSauvee(True)
-                tortue.setSprite(sprite_tortue_sauvee)
+        for levier in objetsDict["leviers"]:
+            if joueur.getRect().colliderect(levier) :
+                levier.setEstActif(True)
+                levier.setSprite(levier.getActifSprite())
                 
 
-    if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0: 
-        objetsDict , souszone = switchSousZone(zone,souszone,joueur,objetsDict)
+    if (joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0):
+        if all(elt.getEstActif() for elt in objetsDict["leviers"]): 
+            objetsDict , souszone = switchSousZone(zone,souszone,joueur,objetsDict)
+        else: 
+            joueur.setX(SCREEN_WIDTH-joueur.getRect().width)
+
 
     if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:  # Tomber dans le vide
         objetsDict = dead(zone, souszone, joueur, objetsDict)
