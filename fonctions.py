@@ -61,7 +61,9 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur, zone_souszone
     for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"]:
         if bloc.colliderect(joueur_rect): 
             collisionsBlocJoueur(joueur_rect,bloc,j)
-            if isinstance(bloc,BlocTombant): bloc.activeDelay()
+            if isinstance(bloc,BlocTombant): 
+                for blocT in objetsDict["bloctombants"]:
+                    if blocT.getLabel() == bloc.getLabel() : blocT.activeDelay()
 
 
     for blocpic in objetsDict["piques"]:
@@ -192,6 +194,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
+    groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
     return objetsDict
 
 
@@ -302,18 +305,26 @@ def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
                 if voisin not in vus and voisin in blocs_par_position:
                     pile.append(voisin)
 
-        mouvement = None
-        speed = None
 
-        for bloc_du_groupe in groupe:
-            if MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"]:
-                mouvement = MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][0]
-                speed =  MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][1]
-                break
+        if isinstance(bloc,BlocTombant):
+            for bloc_du_groupe in groupe:
+                bloc_du_groupe.setLabel(f"{zone}-{souszone}-{bloc.y//TILE_SIZE}-{bloc.x//TILE_SIZE}")
 
-        for bloc_du_groupe in groupe:
-            bloc_du_groupe.setSpeed(speed)
-            bloc_du_groupe.setMouvement(mouvement)
+        elif isinstance(bloc,BlocMouv):
+            mouvement = None
+            speed = None
+
+            for bloc_du_groupe in groupe:
+                if MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"]:
+                    mouvement = MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][0]
+                    speed =  MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][1]
+                    break
+
+            for bloc_du_groupe in groupe:
+                bloc_du_groupe.setSpeed(speed)
+                bloc_du_groupe.setMouvement(mouvement)
+        
+        
 
 
 ### TEXTURES ###
