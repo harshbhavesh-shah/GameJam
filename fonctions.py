@@ -150,14 +150,14 @@ def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
             break
         
         # Bordure et remplissage
-        bordure_texte = py.draw.rect(screen,"black",py.Rect(50, SCREEN_HEIGHT - 200,  700, 150), border_radius=3)
-        py.draw.rect(screen,"gray70",py.Rect(bordure_texte.left + 3, bordure_texte.top + 3, bordure_texte.width - 6, bordure_texte.height - 6), border_radius=3)
-        bordure_nom = py.draw.rect(screen,"black",py.Rect(bordure_texte.left - 30, bordure_texte.top - 30, 100 , 50), border_radius=3)
-        py.draw.rect(screen,"gray80",py.Rect(bordure_nom.left + 3, bordure_nom.top + 3, bordure_nom.width - 6, bordure_nom.height - 6), border_radius=3)
+        bordure_texte = py.draw.rect(screen,"black",py.Rect(50, SCREEN_HEIGHT - 200, TEXT_BOX_WIDTH, 150), border_radius=3)
+        py.draw.rect(screen,"gray70",remplissageRect(bordure_texte,3), border_radius=3)
+        bordure_nom = py.draw.rect(screen,"black",py.Rect(bordure_texte.left - 30, bordure_texte.top - 30, NAME_BOX_WIDTH , 50), border_radius=3)
+        py.draw.rect(screen,"gray80",remplissageRect(bordure_nom,3), border_radius=3)
 
-        affichageTexte(screen, pnj.getNom(), bordure_nom.center, 25, "black")
-        affichageTexte(screen, pnj.getLine(index), bordure_texte.center, 50, "black")
-        affichageTexte(screen, "Appuyez sur E", (bordure_texte.right - 45, bordure_texte.bottom - 15), 15, "black")
+        affichageTexte(screen, pnj.getNom(), bordure_nom,py.font.SysFont("Arial",25), 25, "black")
+        affichageTexte(screen, pnj.getLine(index), bordure_texte, py.font.SysFont("Arial",50), 50, "black")
+        affichageTexte(screen, "Appuyez sur E", py.Rect(bordure_texte.right - 100, bordure_texte.bottom - 40, 200, 20), py.font.SysFont("Arial",15), 15, "black")
         py.display.flip()
 
 
@@ -440,16 +440,37 @@ def menuParametres(screen:py.Surface,parametres:Settings):
 
 def affichageTexte(screen:py.Surface, 
                    texte:str, 
-                   pos:tuple[int,int]=(0,0), 
+                   rect:py.Rect,
+                   police,
                    taille:int=30,
-                   couleur:tuple[int,int,int]=(0,0,0), 
-                   police:str="Arial"):
+                   couleur:tuple[int,int,int]=(0,0,0)):
     """
-    Écris un texte sur la surface ``screen``, à la position ``pos``, de taille ``taille``, de couleur ``couleur`` avec la police ``police``.\n
-    ``pos`` est le CENTRE du texte.
+    Écris un texte sur une surface avec une police et une couleur donnée.\n
+    Il faut également donner le rect dans lequel est écrit le texte pour le retour a la ligne.\n
+    SOURCE : https://www.pygame.org/wiki/TextWrap
     """
-    surface_texte = py.font.SysFont(police, taille).render(texte,None,couleur)
-    screen.blit(surface_texte , (pos[0] - surface_texte.get_width()//2, pos[1] - surface_texte.get_height()//2))
+
+    rect = py.Rect(rect.left + TEXT_BOX_MARGIN, rect.top + 2 * TEXT_BOX_MARGIN, rect.width - TEXT_BOX_MARGIN , rect.height - TEXT_BOX_MARGIN)
+    y = rect.top
+    lineSpacing = -2
+
+    while texte:
+        i = 1
+
+        while police.size(texte[:i])[0] < rect.width and i < len(texte):
+            i += 1
+
+        # if we've wrapped the text, then adjust the wrap to the last word      
+        if i < len(texte): 
+            i = texte.rfind(" ", 0, i) + 1
+
+        image = police.render(texte[:i], 1, couleur)
+        screen.blit(image, (rect.left, y))
+        y += taille + lineSpacing
+
+        # remove the text we just blitted
+        texte = texte[i:]
+
 
 
 def remplissageRect(contour:py.Rect,bordure:int=3):
