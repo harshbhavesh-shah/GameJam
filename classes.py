@@ -317,6 +317,12 @@ class BlocTombant(BlocMouv):
         self.saveState()
         return self
     
+    def setLabel(self,label:str):
+        self.label = label
+
+    def getLabel(self):
+        return self.label
+    
 
 class Tortue(Tile):    
     def setEstSauvee(self,etat:bool=True):

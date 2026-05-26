@@ -29,7 +29,7 @@ CONTROLLER_DEADZONE = 0.2
 # Zone - Sous-Zone - Ordonnées - Abcisses
 PORTES_CORRESPONDANCES = {
     "hub-5-30-15" : "foret-1-16-2",
-    "hub-5-31-53" : "mer-1-13-6",
+    "hub-5-31-53" : "mer-1-22-17",
     "hub-5-9-14" : "ville-1-25-3",
     "hub-5-12-50" : "colline-1-25-3"
 }
@@ -42,7 +42,9 @@ TABLEAUX_CORRESPONDANCES = {
     "hub-4" : "hub-5",
     "foret-1" : "foret-2",
     "foret-2" : "foret-3",
-    "mer-1" : "mer-2"
+    "mer-1" : "mer-2",
+    "mer-2" : "mer-3",
+    "mer-3" : "mer-4"
 }
 
 
@@ -115,4 +117,8 @@ MOUVEMENTS_BLOCMOUVS = {
     "foret-3-26-7" : "eaaaaaaaaaaoaaaaaaaaaa",
     "foret-3-26-8" : "eaaaaaaaaaaoaaaaaaaaaa",
 
+    "hub-5-22-23" : ("naaaasaaaa",1),
+    "hub-5-15-25" : ("naaaasaaaa",1),
+    "hub-5-18-32" : ("naaaasaaaa",1),
+    "mer-3-26-31" : ("naaaaaaaasaaaaaaaa",1)
 }
