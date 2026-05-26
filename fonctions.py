@@ -61,7 +61,9 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur, zone_souszone
     for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"]:
         if bloc.colliderect(joueur_rect): 
             collisionsBlocJoueur(joueur_rect,bloc,j)
-            if isinstance(bloc,BlocTombant): bloc.activeDelay()
+            if isinstance(bloc,BlocTombant): 
+                for blocT in objetsDict["bloctombants"]:
+                    if blocT.getLabel() == bloc.getLabel() : blocT.activeDelay()
 
 
     for blocpic in objetsDict["piques"]:
@@ -148,13 +150,13 @@ def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
             break
         
         # Bordure et remplissage
-        bordure_texte = py.draw.rect(screen,"black",py.Rect(50, SCREEN_HEIGHT - 200,  700, 150), border_radius=3)
-        py.draw.rect(screen,"gray70",py.Rect(bordure_texte.left + 3, bordure_texte.top + 3, bordure_texte.width - 6, bordure_texte.height - 6), border_radius=3)
-        bordure_nom = py.draw.rect(screen,"black",py.Rect(bordure_texte.left - 30, bordure_texte.top - 30, 100 , 50), border_radius=3)
-        py.draw.rect(screen,"gray80",py.Rect(bordure_nom.left + 3, bordure_nom.top + 3, bordure_nom.width - 6, bordure_nom.height - 6), border_radius=3)
+        bordure_texte = py.draw.rect(screen,"black",py.Rect(50, SCREEN_HEIGHT - 200, TEXT_BOX_WIDTH, 150), border_radius=3)
+        py.draw.rect(screen,"gray70",remplissageRect(bordure_texte,3), border_radius=3)
+        bordure_nom = py.draw.rect(screen,"black",py.Rect(bordure_texte.left - 30, bordure_texte.top - 30, NAME_BOX_WIDTH , 50), border_radius=3)
+        py.draw.rect(screen,"gray80",remplissageRect(bordure_nom,3), border_radius=3)
 
         affichageTexte(screen, pnj.getNom(), bordure_nom.center, 25, "black")
-        affichageTexte(screen, pnj.getLine(index), bordure_texte.center, 50, "black")
+        affichageTexteWrap(screen, pnj.getLine(index), bordure_texte, py.font.SysFont("Arial",50), 50, "black")
         affichageTexte(screen, "Appuyez sur E", (bordure_texte.right - 45, bordure_texte.bottom - 15), 15, "black")
         py.display.flip()
 
@@ -192,6 +194,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
+    groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
     return objetsDict
 
 
@@ -303,18 +306,26 @@ def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
                 if voisin not in vus and voisin in blocs_par_position:
                     pile.append(voisin)
 
-        mouvement = None
-        speed = None
 
-        for bloc_du_groupe in groupe:
-            if MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"]:
-                mouvement = MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][0]
-                speed =  MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][1]
-                break
+        if isinstance(bloc,BlocTombant):
+            for bloc_du_groupe in groupe:
+                bloc_du_groupe.setLabel(f"{zone}-{souszone}-{bloc.y//TILE_SIZE}-{bloc.x//TILE_SIZE}")
 
-        for bloc_du_groupe in groupe:
-            bloc_du_groupe.setSpeed(speed)
-            bloc_du_groupe.setMouvement(mouvement)
+        elif isinstance(bloc,BlocMouv):
+            mouvement = None
+            speed = None
+
+            for bloc_du_groupe in groupe:
+                if MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"]:
+                    mouvement = MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][0]
+                    speed =  MOUVEMENTS_BLOCMOUVS[f"{zone}-{souszone}-{bloc_du_groupe.y//TILE_SIZE}-{bloc_du_groupe.x//TILE_SIZE}"][1]
+                    break
+
+            for bloc_du_groupe in groupe:
+                bloc_du_groupe.setSpeed(speed)
+                bloc_du_groupe.setMouvement(mouvement)
+        
+        
 
 
 ### TEXTURES ###
@@ -427,7 +438,6 @@ def menuParametres(screen:py.Surface,parametres:Settings):
 
 
 
-
 def affichageTexte(screen:py.Surface, 
                    texte:str, 
                    pos:tuple[int,int]=(0,0), 
@@ -440,6 +450,41 @@ def affichageTexte(screen:py.Surface,
     """
     surface_texte = py.font.SysFont(police, taille).render(texte,None,couleur)
     screen.blit(surface_texte , (pos[0] - surface_texte.get_width()//2, pos[1] - surface_texte.get_height()//2))
+
+
+def affichageTexteWrap(screen:py.Surface, 
+                   texte:str, 
+                   rect:py.Rect,
+                   police,
+                   taille:int=30,
+                   couleur:tuple[int,int,int]=(0,0,0)):
+    """
+    Écris un texte sur une surface avec une police et une couleur donnée.\n
+    Il faut également donner le rect dans lequel est écrit le texte pour le retour a la ligne.\n
+    SOURCE : https://www.pygame.org/wiki/TextWrap
+    """
+
+    rect = py.Rect(rect.left + TEXT_BOX_MARGIN, rect.top + 2 * TEXT_BOX_MARGIN, rect.width - TEXT_BOX_MARGIN , rect.height - TEXT_BOX_MARGIN)
+    y = rect.top
+    lineSpacing = -2
+
+    while texte:
+        i = 1
+
+        while police.size(texte[:i])[0] < rect.width and i < len(texte):
+            i += 1
+
+        # if we've wrapped the text, then adjust the wrap to the last word      
+        if i < len(texte): 
+            i = texte.rfind(" ", 0, i) + 1
+
+        image = police.render(texte[:i], 1, couleur)
+        screen.blit(image, (rect.left, y))
+        y += taille + lineSpacing
+
+        # remove the text we just blitted
+        texte = texte[i:]
+
 
 
 def remplissageRect(contour:py.Rect,bordure:int=3):
