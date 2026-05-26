@@ -162,7 +162,7 @@ def discussion(screen:py.Surface,pnj:PNJ,joueur:Joueur):
 
 
 
-def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue|BlocTombant]]:
+def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant]]:
     """
     Renvoie un dictionnaire associant chaque type d'objet à la liste des objets à ajouter dans une sous-zone.
     Prends en paramètres :
@@ -177,7 +177,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "tortues":[] , "bloctombants":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "leviers":[] , "bloctombants":[]}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -191,7 +191,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE+1)).setSpeed(1).setMouvement("oaaaaaaaaaaeaaaaaaaaaa").setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                     case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(SPRITES_PNJS[f"{zone}-{souszone}"]).init_file(f"{zone}-{souszone}"))
-                    case "t": objetsDict["tortues"].append(Tortue(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique))
+                    case "t": objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
@@ -200,7 +200,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
 
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Tortue|BlocTombant]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant]], screen:py.Surface):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -234,8 +234,8 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         try: screen.blit(pnj.getSprite(),pnj)
         except: py.draw.rect(screen, "green", pnj)
 
-    for tortue in objetsDict["tortues"]:
-        screen.blit(tortue.getSprite(),tortue)
+    for levier in objetsDict["leviers"]:
+        screen.blit(levier.getSprite(),levier)
 
     for btombant in objetsDict["bloctombants"]:
         py.draw.rect(screen, "orange", btombant)
