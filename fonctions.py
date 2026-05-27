@@ -5,6 +5,7 @@ from pygame_widgets.progressbar import ProgressBar
 from classes import *
 from levels import *
 from textures import *
+from random import *
 import time
 import copy
 
@@ -193,6 +194,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(SPRITES_PNJS[f"{zone}-{souszone}"]).init_file(f"{zone}-{souszone}"))
                     case "t": objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
+                    case "F": objetsDict["bosssoleil"].append(BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
     return objetsDict
@@ -324,9 +326,19 @@ def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
                 bloc_du_groupe.setSpeed(speed)
                 bloc_du_groupe.setMouvement(mouvement)
         
-        
+def presenceSoleil(objetsDict:dict):
+    if all(elt.getEstActif() for elt in objetsDict["leviers"]):
+        objetsDict["bosssoleil"].setDeactif()
+        return False
+    return False
 
-
+def actifFire(objetsDict:dict):
+    if presenceSoleil(objetsDict):
+        for soleil in objetsDict["bosssoleil"]:
+            if SPAWN_FIRE_TREE_COOLDOWN >= soleil.getcompteur(): soleil.incrCompteur()
+    else:
+        objetsDict.update(objetsDict.popitem("bosssoilei"))
+    
 ### TEXTURES ###
 
 def background(ecran:py.Surface,zone):

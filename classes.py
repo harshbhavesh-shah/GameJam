@@ -340,6 +340,29 @@ class Levier(Tile):
         return self.actifSprite
 
 
+class BossSoleil(Ennemi):
+    def setDeactif(self):
+        self.actif = False
+
+    def setActif(self):
+        self.actif = True
+
+    def init(self):
+        self.actif = True
+        self.compteur = 0
+        return self
+    
+    def getCompteur(self):
+        return self.compteur
+    
+    def incrCompteur(self):
+        self.compteur += 1
+
+    def getActif(self):
+        return self.actif
+    
+    
+
 
 
 class Settings:
