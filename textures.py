@@ -41,7 +41,8 @@ sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
 sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")
 sprite_brouillard = py.image.load("./assets/textures/ville/brouillard.png")
 sprite_maison1 = py.image.load("./assets/textures/ville/maison1.png")
-
+sprite_maison2 = py.image.load("./assets/textures/ville/maison2.png")
+sprite_maison = [sprite_maison1,sprite_maison2]
 
 
 ##### MISE A ECHELLE #####
