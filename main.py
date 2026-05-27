@@ -15,7 +15,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((200,300))
 
 zone = "mer"
-souszone = 1
+souszone = 3
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
@@ -80,7 +80,7 @@ while running:
 
 
     background(screen,zone)
-    affichageZone(objetsDict, screen)
+    affichageZone(objetsDict, screen, zone)
     py.draw.rect(screen,"red",joueur.getRect())
 
     if zone == "ville":   # brouillard

@@ -200,7 +200,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
 
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant]], screen:py.Surface, zone:str):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -220,7 +220,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(deco.getSprite().convert_alpha(),deco.topleft)
 
     for bmouv in objetsDict["blocmouvs"]:
-        py.draw.rect(screen, "blue", bmouv)
+        match zone:
+            case "mer" : screen.blit(sprite_poissons_blocmouvs[int(10*time.time())%len(sprite_poissons_blocmouvs)].convert_alpha(),bmouv.topleft)
+            case _ : py.draw.rect(screen, "blue", bmouv)
         bmouv.move()
     
     for ennemi in objetsDict["ennemis"]:
