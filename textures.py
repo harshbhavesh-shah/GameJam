@@ -34,6 +34,10 @@ sprite_brique_topright_corner = py.image.load("./assets/textures/autre/brique/br
 
 sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
 
+### BOSS ###
+
+sprite_boss_sun = py.image.load_animation("./assets/")
+
 ### DÉCORATIONS ###
 
 sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")

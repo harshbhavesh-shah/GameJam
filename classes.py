@@ -341,11 +341,9 @@ class Levier(Tile):
 
 
 class BossSoleil(Ennemi):
-    def setDeactif(self):
-        self.actif = False
-
-    def setActif(self):
-        self.actif = True
+    def setEstActif(self,etat:bool=True):
+        self.estActif = etat
+        return self
 
     def init(self):
         self.actif = True
