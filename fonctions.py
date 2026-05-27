@@ -233,7 +233,8 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         ennemi.move()
 
     for pnj in objetsDict["pnjs"]:
-        py.draw.rect(screen, "green", pnj)
+        try: screen.blit(pnj.getSprite(),pnj)
+        except: py.draw.rect(screen, "green", pnj)
 
     for levier in objetsDict["leviers"]:
         screen.blit(levier.getSprite(),levier)
