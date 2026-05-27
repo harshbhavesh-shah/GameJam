@@ -67,11 +67,13 @@ while running:
                 levier.setSprite(levier.getActifSprite())
                 
 
-    if (joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH  or  joueur.getRect().x < 0):
+    if (joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH):
         if all(elt.getEstActif() for elt in objetsDict["leviers"]): 
             objetsDict , souszone = switchSousZone(zone,souszone,joueur,objetsDict)
         else: 
             joueur.setX(SCREEN_WIDTH-joueur.getRect().width)
+    elif joueur.getRect().x < 0:
+        objetsDict , souszone = switchSousZone(zone,souszone,joueur,objetsDict)
 
 
     if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:  # Tomber dans le vide
