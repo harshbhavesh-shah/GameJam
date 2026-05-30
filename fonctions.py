@@ -221,7 +221,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
 
     for bmouv in objetsDict["blocmouvs"]:
         match zone:
-            case "mer" : screen.blit(sprite_poissons_blocmouvs[int(10*time.time())%len(sprite_poissons_blocmouvs)].convert_alpha(),bmouv.topleft)
+            case "mer" : # 0: tl, 1: tr, 2: bl, 3: br
+                sprite_index = ((bmouv.default_pos[1] // TILE_SIZE) % 2 * 2 + (bmouv.default_pos[0] // TILE_SIZE) % 2) * 2 + int(10 * time.time()) %2 # Magie noire
+                screen.blit(sprite_poissons_blocmouvs[sprite_index].convert_alpha(),bmouv.topleft)
             case _ : py.draw.rect(screen, "blue", bmouv)
         bmouv.move()
     

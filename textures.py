@@ -20,7 +20,10 @@ sprite_panneau_metal = py.image.load("./assets/textures/autre/panneau_metal.png"
 sprite_tortue_plastique = py.image.load("./assets/textures/mer/tortuePlastique1.png")
 sprite_tortue_sauvee = py.image.load("./assets/textures/mer/tortuePlastique2.png")
 
-sprite_poissons_blocmouvs = py.image.load_animation("./assets/textures/mer/poissons.gif")
+sprite_poissons_tl = py.image.load_animation("./assets/textures/mer/poissons_tl.gif")
+sprite_poissons_tr = py.image.load_animation("./assets/textures/mer/poissons_tr.gif")
+sprite_poissons_bl = py.image.load_animation("./assets/textures/mer/poissons_bl.gif")
+sprite_poissons_br = py.image.load_animation("./assets/textures/mer/poissons_br.gif")
 
 # BRIQUE #
 sprite_brique = py.image.load("./assets/textures/autre/brique/brique.png")
@@ -59,7 +62,7 @@ sprite_porte = [py.transform.scale(s[0],(2*TILE_SIZE,2*TILE_SIZE)) for s in spri
 sprite_pique = py.transform.scale(sprite_pique,(TILE_SIZE,TILE_SIZE))
 sprite_requin = [py.transform.scale(s[0],(4*TILE_SIZE,2*TILE_SIZE)) for s in sprite_requin]
 sprite_lianes = [py.transform.scale(s[0],(TILE_SIZE,2*TILE_SIZE)) for s in sprite_lianes]
-sprite_poissons_blocmouvs = [py.transform.scale(s[0],(TILE_SIZE,TILE_SIZE)) for s in sprite_poissons_blocmouvs]
+sprite_poissons_blocmouvs = [py.transform.scale(s[0],(TILE_SIZE,TILE_SIZE)) for s in sprite_poissons_tl + sprite_poissons_tr + sprite_poissons_bl + sprite_poissons_br]
 
 sprite_tortue_plastique = py.transform.scale(sprite_tortue_plastique,(4*TILE_SIZE,2*TILE_SIZE))
 sprite_tortue_sauvee = py.transform.scale(sprite_tortue_sauvee,(4*TILE_SIZE,2*TILE_SIZE))
