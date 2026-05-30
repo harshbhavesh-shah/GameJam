@@ -190,7 +190,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE+1)).setSpeed(1).setMouvement("oaaaaaaaaaaeaaaaaaaaaa").setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
-                    case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(SPRITES_PNJS[f"{zone}-{souszone}"]).init_file(f"{zone}-{souszone}"))
+                    case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).init_file(f"{zone}-{souszone}"))
                     case "t": objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
@@ -351,6 +351,20 @@ def blocSprite(tileMap,i,j):
         elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_topright # S'il y'a rien à droite
         else : return sprite_brique_top
 
+
+def anim_perso(j:Joueur):
+    if j.getDir() == 'n' : return sprite_base       # Spawn
+    
+    elif j.getJumpTimer() != 0 :                      # Saut
+        if j.getDir() == 'd' : return sprite_saut     # droite
+        else : return py.transform.flip(sprite_saut,1,0)    # gauche
+    
+    elif j.isWalking:   # Marche
+        if j.getDir() == 'd' : return sprite_marche[int(10*time.time()) % len(sprite_marche)]     # droite
+        else : return py.transform.flip(sprite_marche[int(10*time.time()) % len(sprite_marche)],1,0)    # gauche
+
+    elif j.getDir() == 'd' : return sprite_idle
+    else : return py.transform.flip(sprite_idle,1,0)
 
 
 ### OPTIONS / MENUS ###

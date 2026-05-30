@@ -6,7 +6,7 @@ import os
 
 class Joueur:
     def __init__(self,pos:tuple[int,int]):
-        self.rect = py.Rect(pos,(TILE_SIZE,TILE_SIZE))
+        self.rect = py.Rect(pos,(20,27))
         self.fallState = True
         self.jumpTimer = MAX_JUMP_TIMER
         self.fallSpeed = MAX_FALL_SPEED
@@ -14,6 +14,8 @@ class Joueur:
         self.dashState = (DASH_TIMER,"n",DASH_COOLDOWN)
         self.InteractionCooldown = 0
         self.hp = 100
+        self.dir = 'n'
+        self.isWalking = True
 
     # Coordonnées
 
@@ -101,18 +103,31 @@ class Joueur:
             case "n": return
         self.setDashState((self.getDashState()[0] +1,self.getDashState()[1],self.getDashState()[2]))
     
+    # Autre 
+
+    def setDir(self,dir):
+        self.dir = dir
+    
+    def getDir(self):
+        return self.dir
 
     def move(self, keys,joystick, zone:str):
         """
         Fonction qui gére les déplacement (avec gravité) du joueur
         """
         # DÉPLACEMENTS DE BASE
+        self.isWalking = False
+
         if (keys[py.K_d] or keys[py.K_RIGHT] or controllerState(joystick,"droite")):
+            self.setDir('d') ; self.isWalking = True
             if zone == "mer": self.rect.x += PLAYER_SPEED_IN_WATER
             else : self.rect.x += PLAYER_SPEED
+
         if (keys[py.K_q] or keys[py.K_LEFT] or controllerState(joystick,"gauche")):
+            self.setDir('g') ; self.isWalking = True
             if zone == "mer": self.rect.x -= PLAYER_SPEED_IN_WATER
             else : self.rect.x -= PLAYER_SPEED
+
         if keys[py.K_SPACE] or controllerState(joystick,"saut"):
             if not self.getFallState():
                 self.setFallState(False)

@@ -8,6 +8,13 @@ bg_foret = py.image.load("./assets/textures/foret/background/bg_vert.png")
 bg_foret = py.transform.scale(bg_foret,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
+### PERSO PRINCIPAL ###
+
+sprite_idle = py.image.load("./assets/textures/autre/personnage/pose_attente.png")
+sprite_saut = py.image.load("./assets/textures/autre/personnage/saut.png")
+sprite_base = py.image.load("./assets/textures/autre/personnage/regard_face.png")
+sprite_marche = py.image.load_animation("./assets/textures/autre/personnage/marche.gif")
+sprite_marche = [s[0] for s in sprite_marche]
 
 ### OBJETS ###
 
