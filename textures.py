@@ -8,6 +8,13 @@ bg_foret = py.image.load("./assets/textures/foret/background/bg_vert.png")
 bg_foret = py.transform.scale(bg_foret,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
+### PERSO PRINCIPAL ###
+
+sprite_idle = py.image.load("./assets/textures/autre/personnage/pose_attente.png")
+sprite_saut = py.image.load("./assets/textures/autre/personnage/saut.png")
+sprite_base = py.image.load("./assets/textures/autre/personnage/regard_face.png")
+sprite_marche = py.image.load_animation("./assets/textures/autre/personnage/marche.gif")
+sprite_marche = [s[0] for s in sprite_marche]
 
 ### OBJETS ###
 
@@ -25,15 +32,30 @@ sprite_poissons_tr = py.image.load_animation("./assets/textures/mer/poissons_tr.
 sprite_poissons_bl = py.image.load_animation("./assets/textures/mer/poissons_bl.gif")
 sprite_poissons_br = py.image.load_animation("./assets/textures/mer/poissons_br.gif")
 
-# BRIQUE #
-sprite_brique = py.image.load("./assets/textures/autre/brique/brique.png")
-sprite_brique_top = py.image.load("./assets/textures/autre/brique/brique_top.png")
-sprite_brique_left = py.image.load("./assets/textures/autre/brique/brique_left.png")
-sprite_brique_right = py.image.load("./assets/textures/autre/brique/brique_right.png")
-sprite_brique_topleft = py.image.load("./assets/textures/autre/brique/brique_topleft.png")
-sprite_brique_topright = py.image.load("./assets/textures/autre/brique/brique_topright.png")
-sprite_brique_topleft_corner = py.image.load("./assets/textures/autre/brique/brique_topleft_corner.png")
-sprite_brique_topright_corner = py.image.load("./assets/textures/autre/brique/brique_topright_corner.png")
+# BLOCS #
+base_tiles = {
+    "base" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique.png"),(TILE_SIZE,TILE_SIZE)),
+    "sol" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_top.png"),(TILE_SIZE,TILE_SIZE)),
+    "droite" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_right.png"),(TILE_SIZE,TILE_SIZE)),
+    "angle_exte_droite" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topright.png"),(TILE_SIZE,TILE_SIZE)),
+    "angle_inte_droite" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topright_corner.png"),(TILE_SIZE,TILE_SIZE)),
+    "gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_left.png"),(TILE_SIZE,TILE_SIZE)),
+    "angle_exte_gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topleft.png"),(TILE_SIZE,TILE_SIZE)),
+    "angle_inte_gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topleft_corner.png"),(TILE_SIZE,TILE_SIZE))
+}
+
+
+tileset_mer = py.image.load("./assets/textures/mer/blocTileset.png")
+mer_tiles = {
+    "base" : tileset_mer.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_mer.subsurface(py.Rect(20,40,20,20)),
+    "droite" : tileset_mer.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_mer.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_mer.subsurface(py.Rect(0,40,20,20)),
+    "gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,40,20,20)),1,0)
+}
 
 ### ENNEMIS ### 
 
@@ -46,17 +68,6 @@ sprite_brouillard = py.image.load("./assets/textures/ville/brouillard.png")
 
 
 ##### MISE A ECHELLE #####
-
-sprite_brique = py.transform.scale(sprite_brique,(TILE_SIZE,TILE_SIZE))
-sprite_brique_top = py.transform.scale(sprite_brique_top,(TILE_SIZE,TILE_SIZE))
-sprite_brique_left = py.transform.scale(sprite_brique_left,(TILE_SIZE,TILE_SIZE))
-sprite_brique_right = py.transform.scale(sprite_brique_right,(TILE_SIZE,TILE_SIZE))
-sprite_brique_topleft = py.transform.scale(sprite_brique_topleft,(TILE_SIZE,TILE_SIZE))
-sprite_brique_topright = py.transform.scale(sprite_brique_topright,(TILE_SIZE,TILE_SIZE))
-sprite_brique_topleft_corner = py.transform.scale(sprite_brique_topleft_corner,(TILE_SIZE,TILE_SIZE))
-sprite_brique_topright_corner = py.transform.scale(sprite_brique_topright_corner,(TILE_SIZE,TILE_SIZE))
-
-
 
 sprite_porte = [py.transform.scale(s[0],(2*TILE_SIZE,2*TILE_SIZE)) for s in sprite_porte]
 sprite_pique = py.transform.scale(sprite_pique,(TILE_SIZE,TILE_SIZE))
