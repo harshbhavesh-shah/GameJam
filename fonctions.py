@@ -182,7 +182,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
-                    case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(map_tile[souszone],i,j)))
+                    case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j)))
                     case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}"))
                     case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                     case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
@@ -277,7 +277,7 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
 
 def dead(zone, souszone, joueur:Joueur, objetsDict:dict):    #Permet de recharger entièrement la page si le joueur meurt
     objetsDict = preparationZone(zone, souszone)
-    joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+    joueur.setXY(objetsDict["spawn"][0].right-joueur.getRect().width, objetsDict["spawn"][0].bottom-joueur.getRect().height)
     return objetsDict
 
 
@@ -338,18 +338,24 @@ def background(ecran:py.Surface,zone):
         case _ : ecran.fill("darkblue")
 
 
-def blocSprite(tileMap,i,j):
+def blocSprite(zone,souszone,i,j):
+    tileMap = tileMaps[zone][souszone]
+
+    match zone:
+        case "mer": sprites = mer_tiles
+        case _ : sprites = base_tiles
+
     if tileMap[i-1][j] == "b" : # S'il y a un bloc au dessus
-        if tileMap[i][j-1] != "b" : return sprite_brique_left # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_right # S'il y'a rien à droite
+        if tileMap[i][j-1] != "b" : return sprites["gauche"] # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprites["droite"] # S'il y'a rien à droite
         else :  # S'il y'a un bloc à gauche ET à droite
-            if tileMap[i-1][j-1] != "b" : return sprite_brique_topleft_corner  # S'il y'a rien au-dessus à gauche
-            elif tileMap[i-1][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_topright_corner # S'il y'a rien au-dessus à droite
-            else: return sprite_brique
+            if tileMap[i-1][j-1] != "b" : return sprites["angle_inte_gauche"]  # S'il y'a rien au-dessus à gauche
+            elif tileMap[i-1][(j+1)%len(tileMap[i])] != "b" : return sprites["angle_inte_droite"] # S'il y'a rien au-dessus à droite
+            else: return sprites["base"]
     else :  # S'il y'a rien au-dessus
-        if tileMap[i][j-1] != "b" : return sprite_brique_topleft # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprite_brique_topright # S'il y'a rien à droite
-        else : return sprite_brique_top
+        if tileMap[i][j-1] != "b" : return sprites["angle_exte_gauche"] # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprites["angle_exte_droite"] # S'il y'a rien à droite
+        else : return sprites["sol"]
 
 
 def anim_perso(j:Joueur):
