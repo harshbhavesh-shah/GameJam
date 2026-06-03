@@ -337,6 +337,7 @@ def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
 def background(ecran:py.Surface,zone):
     match zone:
         case "foret": ecran.blit(bg_foret)
+        case "mer" : ecran.blit(bg_mer)
         case _ : ecran.fill("darkblue")
 
 

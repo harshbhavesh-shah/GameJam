@@ -4,9 +4,10 @@ from constantes import *
 ### BACKGROUND ###
 
 bg_foret = py.image.load("./assets/textures/foret/background/bg_vert.png")
-
 bg_foret = py.transform.scale(bg_foret,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
+bg_mer = py.image.load("./assets/textures/mer/background.png")
+bg_mer = py.transform.scale(bg_mer,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
 ### PERSO PRINCIPAL ###
 
