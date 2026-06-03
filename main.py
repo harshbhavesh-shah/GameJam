@@ -14,7 +14,7 @@ except py.error: controller = None
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((200,400))
 
-zone = "hub"
+zone = "mer"
 souszone = 1
 objetsDict = preparationZone(zone, souszone)
 
