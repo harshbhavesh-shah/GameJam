@@ -52,7 +52,8 @@ TABLEAUX_CORRESPONDANCES = {
     "mer-1" : "mer-2",
     "mer-2" : "mer-3",
     "mer-3" : "mer-4",
-    "mer-4" : "mer-5"
+    "mer-4" : "mer-5",
+    "mer-5" : "mer-6"
 }
 
 
@@ -65,4 +66,7 @@ MOUVEMENTS_BLOCMOUVS = {
     "mer-3-26-31" : ("naaaaaaaasaaaaaaaa",1),
     "mer-5-24-15" :("naaaaaaaaaaasaaaaaaaaaaa",1),
     "mer-5-14-44" :("saaaaaaaaaanaaaaaaaaaaasa",1),
+    "mer-6-10-20" : ("saaaaaaanaaaaaaa",1),
+    "mer-6-10-40" : ("saaaaaaanaaaaaaa",1),
+    "mer-6-26-30" : ("naaaaaaasaaaaaaa",1)
 }

@@ -12,10 +12,10 @@ try: controller = py.Joystick(0)
 except py.error: controller = None
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-joueur = Joueur((200,400))
+joueur = Joueur((300,400))
 
 zone = "mer"
-souszone = 5
+souszone = 6
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
