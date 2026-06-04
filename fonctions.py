@@ -193,6 +193,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).init_file(f"{zone}-{souszone}"))
                     case "t": objetsDict["leviers"].append(Levier(((j-3)*TILE_SIZE,(i-1)*TILE_SIZE), (4*TILE_SIZE,2*TILE_SIZE+1)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
+                    case "a": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)))
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
     return objetsDict
@@ -217,7 +218,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(sprite_pique.convert_alpha(),pique.topleft)
 
     for deco in objetsDict["decorations"]:
-        screen.blit(deco.getSprite().convert_alpha(),deco.topleft)
+        match zone:
+            case "mer" : screen.blit(sprite_algues[(deco.left//TILE_SIZE + int(5*time.time())) %len(sprite_algues)], deco.topleft)
+            case _ : screen.blit(deco.getSprite().convert_alpha(),deco.topleft) 
 
     for bmouv in objetsDict["blocmouvs"]:
         match zone:

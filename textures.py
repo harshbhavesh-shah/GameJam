@@ -66,6 +66,7 @@ sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
 
 sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")
 sprite_brouillard = py.image.load("./assets/textures/ville/brouillard.png")
+sprite_algues = py.image.load_animation("./assets/textures/mer/algues.gif")
 
 
 ##### MISE A ECHELLE #####
@@ -79,7 +80,7 @@ sprite_poissons_blocmouvs = [py.transform.scale(s[0],(TILE_SIZE,TILE_SIZE)) for 
 sprite_tortue_plastique = py.transform.scale(sprite_tortue_plastique,(4*TILE_SIZE,2*TILE_SIZE))
 sprite_tortue_sauvee = py.transform.scale(sprite_tortue_sauvee,(4*TILE_SIZE,2*TILE_SIZE))
 
-
+sprite_algues = [py.transform.scale(s[0],(TILE_SIZE,2*TILE_SIZE)) for s in sprite_algues]
 #### DICTIONNAIRES D'ACCES ####
 
 SPRITES_PNJS = {
