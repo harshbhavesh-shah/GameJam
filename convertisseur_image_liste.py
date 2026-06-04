@@ -21,6 +21,7 @@ for ligne in range(36):
             case (185, 122, 87):    result[ligne].append("A")   # Brun : arbre
             case (255, 174, 201):   result[ligne].append("T")   # Rose saumon : blocTombant
             case (163, 73, 164):    result[ligne].append("f")   # Violet : branchenflame
+            case (112, 146, 190):   result[ligne].append("B")   # Bleu gris : deuxième type de bloc
             
 
 file = open("convertisseur_output.txt","w")

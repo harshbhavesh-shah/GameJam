@@ -15,7 +15,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((200,300))
 
 zone = "foret"
-souszone = 1
+souszone = 4
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
@@ -42,6 +42,7 @@ while running:
 
     joueur.move(keys,controller,zone)
     collisions(objetsDict, joueur, (zone, souszone))
+    objetsDict.update(actifFire(objetsDict))
 
 
     if zone == 'colline':     # Dégats Ville
