@@ -12,10 +12,10 @@ try: controller = py.Joystick(0)
 except py.error: controller = None
 
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-joueur = Joueur((200,300))
+joueur = Joueur((200,400))
 
-zone = "foret"
-souszone = 4
+zone = "hub"
+souszone = 1
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
@@ -81,8 +81,8 @@ while running:
 
 
     background(screen,zone)
-    affichageZone(objetsDict, screen)
-    py.draw.rect(screen,"red",joueur.getRect())
+    affichageZone(objetsDict, screen, zone)
+    screen.blit(anim_perso(joueur),joueur.getXY())
 
     if zone == "ville":   # brouillard
         screen.blit(sprite_brouillard)
