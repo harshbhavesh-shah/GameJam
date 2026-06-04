@@ -5,6 +5,7 @@ from pygame_widgets.progressbar import ProgressBar
 from classes import *
 from levels import *
 from textures import *
+from random import *
 import time
 import copy
 
@@ -177,7 +178,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "leviers":[] , "bloctombants":[]}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "leviers":[] , "bloctombants":[], "bosssoleil":None}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -190,17 +191,38 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                     case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE+1)).setSpeed(1).setMouvement("oaaaaaaaaaaeaaaaaaaaaa").setType("requin"))
                     case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
-                    case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).init_file(f"{zone}-{souszone}"))
-                    case "t": objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
+                    case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(SPRITES_PNJS[f"{zone}-{souszone}"]).init_file(f"{zone}-{souszone}"))
+                    case "t": objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(levierZone(zone)).setEstActif(False).setActifSprite(levierZoneActif(zone)))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
+                    case "F": objetsDict["bosssoleil"] = BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init()
+                    
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
     return objetsDict
 
 
+def levierZone(zone:str):
+    """
+    Déside de la texture des leviers désactiver en fonctions des mondes
+    Prends en paramètres :
+        \n- zone : une chaine représenant la zone parmis tileMaps, qui repertorie des sous zones.
+    """
+    match zone:
+        case "foret" : return sprite_branche_en_feu
+        case "mer" : return sprite_tortue_plastique
+
+def levierZoneActif(zone:str):
+    """
+    Déside de la texture des leviers activer en fonctions des mondes
+    Prends en paramètres :
+        \n- zone : une chaine représenant la zone parmis tileMaps, qui repertorie des sous zones.
+    """
+    match zone:
+        case "foret" : return sprite_branche_eteint
+        case "mer" : return sprite_tortue_sauvee
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant]], screen:py.Surface, zone:str):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant|BossSoleil]], screen:py.Surface):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -231,6 +253,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
                 if ennemi.getOrientation() == "e": screen.blit(py.transform.flip(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),1,0),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE)))
                 else : screen.blit(sprite_requin[int(10*time.time())%len(sprite_requin)].convert_alpha(),(ennemi.left-(0.5*TILE_SIZE),ennemi.top-(0.5*TILE_SIZE))) # Fix hitbox ^
         ennemi.move()
+    
+    if objetsDict["bosssoleil"] is not None:
+        screen.blit(sprite_boss_sun[int(10*time.time())%len(sprite_boss_sun)].convert_alpha(),objetsDict["bosssoleil"].topleft)
 
     for pnj in objetsDict["pnjs"]:
         try: screen.blit(pnj.getSprite(),pnj)
@@ -327,9 +352,30 @@ def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
                 bloc_du_groupe.setSpeed(speed)
                 bloc_du_groupe.setMouvement(mouvement)
         
-        
+def presenceSoleil(objetsDict:dict):
+    if (all(elt.getEstActif() == True for elt in objetsDict["leviers"]) and (objetsDict["bosssoleil"] is not None)):
+        objetsDict["bosssoleil"] = None
+        return False
+    return True
 
-
+def actifFire(objetsDict:dict):
+    if objetsDict["bosssoleil"] is not None:
+        if presenceSoleil(objetsDict):
+            if SPAWN_FIRE_TREE_COOLDOWN > objetsDict["bosssoleil"].getCompteur(): objetsDict["bosssoleil"].incrCompteur()
+            else:
+                if objetsDict.get("leviers"):
+                    enFeu = []
+                    for j in objetsDict["leviers"]:
+                        if j.getEstActif() == True:
+                            enFeu.append(j)
+                    i = randint(0, len(enFeu) - 1)
+                    lev = objetsDict["leviers"][i]
+                    lev.setEstActif(False)
+                    lev.setSprite(levierZone("foret"))
+                    objetsDict["leviers"][i].update(lev)
+                objetsDict["bosssoleil"].resetCompteur()
+    return objetsDict
+    
 ### TEXTURES ###
 
 def background(ecran:py.Surface,zone):

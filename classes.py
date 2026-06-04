@@ -339,7 +339,7 @@ class BlocTombant(BlocMouv):
         return self.label
     
 
-class Levier(Tile):    
+class Levier(Tile):  
     def setEstActif(self,etat:bool=True):
         self.estActif = etat
         return self
@@ -354,6 +354,31 @@ class Levier(Tile):
     def getActifSprite(self):
         return self.actifSprite
 
+
+class BossSoleil(Ennemi):
+    def setEstActif(self,etat:bool=True):
+        self.estActif = etat
+        self.compteur = 0
+        return self
+
+    def init(self):
+        self.actif = True
+        self.compteur = 0
+        return self
+    
+    def getCompteur(self):
+        return self.compteur
+    
+    def incrCompteur(self):
+        self.compteur += 1
+
+    def resetCompteur(self):
+        self.compteur = 0
+
+    def getActif(self):
+        return self.actif
+    
+    
 
 
 

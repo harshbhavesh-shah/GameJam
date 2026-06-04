@@ -27,6 +27,8 @@ sprite_panneau_metal = py.image.load("./assets/textures/autre/panneau_metal.png"
 sprite_tortue_plastique = py.image.load("./assets/textures/mer/tortuePlastique1.png")
 sprite_tortue_sauvee = py.image.load("./assets/textures/mer/tortuePlastique2.png")
 
+sprite_branche_eteint = py.image.load("./assets/textures/foret/spriteBrancheNoFeu.png")
+sprite_branche_en_feu = py.image.load("./assets/textures/foret/spriteBrancheFeu.png")
 sprite_poissons_blocmouvs = py.image.load_animation("./assets/textures/mer/poissons.gif")
 
 # BLOCS #
@@ -58,6 +60,10 @@ mer_tiles = {
 
 sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
 
+### BOSS ###
+
+sprite_boss_sun = py.image.load_animation("./assets/textures/foret/boss_soleil.gif")
+
 ### DÉCORATIONS ###
 
 sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")
@@ -72,9 +78,13 @@ sprite_requin = [py.transform.scale(s[0],(4*TILE_SIZE,2*TILE_SIZE)) for s in spr
 sprite_lianes = [py.transform.scale(s[0],(TILE_SIZE,2*TILE_SIZE)) for s in sprite_lianes]
 sprite_poissons_blocmouvs = [py.transform.scale(s[0],(TILE_SIZE,TILE_SIZE)) for s in sprite_poissons_blocmouvs]
 
-sprite_tortue_plastique = py.transform.scale(sprite_tortue_plastique,(4*TILE_SIZE,2*TILE_SIZE))
-sprite_tortue_sauvee = py.transform.scale(sprite_tortue_sauvee,(4*TILE_SIZE,2*TILE_SIZE))
+sprite_boss_sun = [py.transform.scale(s[0],(8*TILE_SIZE,8*TILE_SIZE)) for s in sprite_boss_sun]
 
+sprite_tortue_plastique = py.transform.scale(sprite_tortue_plastique,(2*TILE_SIZE,TILE_SIZE))
+sprite_tortue_sauvee = py.transform.scale(sprite_tortue_sauvee,(2*TILE_SIZE,TILE_SIZE))
+sprite_branche_eteint = py.transform.scale(sprite_branche_eteint, (2*TILE_SIZE, TILE_SIZE))
+sprite_branche_en_feu = py.transform.scale(sprite_branche_en_feu, (2*TILE_SIZE, TILE_SIZE))
+    
 
 #### DICTIONNAIRES D'ACCES ####
 

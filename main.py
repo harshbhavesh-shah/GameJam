@@ -42,6 +42,7 @@ while running:
 
     joueur.move(keys,controller,zone)
     collisions(objetsDict, joueur, (zone, souszone))
+    objetsDict.update(actifFire(objetsDict))
 
 
     if zone == 'colline':     # Dégats Ville

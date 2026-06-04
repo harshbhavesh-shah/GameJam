@@ -9,9 +9,10 @@ MAX_FALL_SPEED = 30
 MAX_JUMP_TIMER = 20
 COYOTE_JUMP_TIME = 7
 DASH_TIMER = 5
-DASH_COOLDOWN = 40
+DASH_COOLDOWN = 1
 DASH_SPEED = 2*PLAYER_SPEED
 INTERACTION_COOLDOWN = 10
+
 
 # Environnement
 MAX_FALL_SPEED_IN_WATER = 10
@@ -24,6 +25,8 @@ VILLE_HEAL = 2      # Heal / Tick
 BTOMBANT_SPEED = 3
 BTOMBANT_DELAY = 20
 BTOMBANT_RESPAWN_TIMER = 500
+
+SPAWN_FIRE_TREE_COOLDOWN = 600
 
 # Manette
 CONTROLLER_DEADZONE = 0.2
@@ -49,6 +52,8 @@ TABLEAUX_CORRESPONDANCES = {
     "hub-4" : "hub-5",
     "foret-1" : "foret-2",
     "foret-2" : "foret-3",
+    "foret-3" : "foret-4",
+    "foret-4" : "foret-5",
     "mer-1" : "mer-2",
     "mer-2" : "mer-3",
     "mer-3" : "mer-4"
@@ -61,5 +66,6 @@ MOUVEMENTS_BLOCMOUVS = {
     "hub-5-18-32" : ("naaaasaaaa",1),
     "foret-2-15-39" : ("saanaa",1),
     "foret-3-23-6" : ("eaaaaaaaaaaoaaaaaaaaaa",1),
+    "foret-4-14-2" : ("naaaasaaaa",1),
     "mer-3-26-31" : ("naaaaaaaasaaaaaaaa",1)
 }
