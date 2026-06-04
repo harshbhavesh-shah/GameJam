@@ -44,6 +44,19 @@ base_tiles = {
 }
 
 
+tileset_dirt = py.image.load("./assets/textures/foret/blocTileset.png")
+dirt_tiles = {
+    "base" : tileset_dirt.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_dirt.subsurface(py.Rect(20,40,20,20)),
+    "droite" : tileset_dirt.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_dirt.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_dirt.subsurface(py.Rect(0,40,20,20)),
+    "gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,40,20,20)),1,0)
+}
+
+
 tileset_mer = py.image.load("./assets/textures/mer/blocTileset.png")
 mer_tiles = {
     "base" : tileset_mer.subsurface(py.Rect(20,0,20,20)),
