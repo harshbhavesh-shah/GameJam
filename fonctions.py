@@ -59,7 +59,7 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur, zone_souszone
     """
     joueur_rect = j.getRect()
 
-    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"]:
+    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"] + objetsDict["blocsecond"]:
         if bloc.colliderect(joueur_rect): 
             collisionsBlocJoueur(joueur_rect,bloc,j)
             if isinstance(bloc,BlocTombant): 
@@ -178,7 +178,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "leviers":[] , "bloctombants":[], "bosssoleil":None}
+    objetsDict = {"blocs":[], "blocsecond":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "leviers":[] , "bloctombants":[], "bosssoleil":None}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
@@ -195,6 +195,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                     case "t": objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(levierZone(zone)).setEstActif(False).setActifSprite(levierZoneActif(zone)))
                     case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
                     case "F": objetsDict["bosssoleil"] = BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init()
+                    case "B": objetsDict["blocsecond"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSpriteSecond(zone,souszone,i,j)))
                     
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
@@ -222,7 +223,7 @@ def levierZoneActif(zone:str):
         case "mer" : return sprite_tortue_sauvee
 
 
-def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant|BossSoleil]], screen:py.Surface):
+def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant|BossSoleil]], screen:py.Surface, zone):
     """
     Affiche tous les objets du dictionnaire sur la surface screen. \n
     Prends en paramètres : 
@@ -231,6 +232,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
     """
     for bloc in objetsDict["blocs"]:
         screen.blit(bloc.getSprite().convert_alpha(),bloc.topleft)
+
+    for blocsecond in objetsDict["blocsecond"]:
+        screen.blit(blocsecond.getSprite().convert_alpha(),blocsecond.topleft)
 
     for porte in objetsDict["portes"]:
         screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.topleft)
@@ -403,6 +407,24 @@ def blocSprite(zone,souszone,i,j):
         elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprites["angle_exte_droite"] # S'il y'a rien à droite
         else : return sprites["sol"]
 
+def blocSpriteSecond(zone,souszone,i,j):
+    tileMap = tileMaps[zone][souszone]
+
+    match zone:
+        case "foret" : sprites = dirt_tiles
+        case _ : sprites = base_tiles
+
+    if tileMap[i-1][j] == "B" : # S'il y a un bloc au dessus
+        if tileMap[i][j-1] != "B" : return sprites["gauche"] # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != "B" : return sprites["droite"] # S'il y'a rien à droite
+        else :  # S'il y'a un bloc à gauche ET à droite
+            if tileMap[i-1][j-1] != "B" : return sprites["angle_inte_gauche"]  # S'il y'a rien au-dessus à gauche
+            elif tileMap[i-1][(j+1)%len(tileMap[i])] != "B" : return sprites["angle_inte_droite"] # S'il y'a rien au-dessus à droite
+            else: return sprites["base"]
+    else :  # S'il y'a rien au-dessus
+        if tileMap[i][j-1] != "B" : return sprites["angle_exte_gauche"] # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != "B" : return sprites["angle_exte_droite"] # S'il y'a rien à droite
+        else : return sprites["sol"]
 
 def anim_perso(j:Joueur):
     if j.getDir() == 'n' : return sprite_base       # Spawn
