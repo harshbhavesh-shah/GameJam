@@ -33,7 +33,7 @@ TEXT_BOX_WIDTH = SCREEN_WIDTH - 100
 NAME_BOX_WIDTH = 150
 TEXT_BOX_MARGIN = 7
 
-# Zone - Sous-Zone - Ordonnées - Abcisses
+# Zone - Sous-Zone - y - x
 PORTES_CORRESPONDANCES = {
     "hub-5-30-15" : "foret-1-16-2",
     "hub-5-31-53" : "mer-1-22-17",
@@ -51,7 +51,8 @@ TABLEAUX_CORRESPONDANCES = {
     "foret-2" : "foret-3",
     "mer-1" : "mer-2",
     "mer-2" : "mer-3",
-    "mer-3" : "mer-4"
+    "mer-3" : "mer-4",
+    "mer-4" : "mer-5"
 }
 
 
@@ -61,5 +62,7 @@ MOUVEMENTS_BLOCMOUVS = {
     "hub-5-18-32" : ("naaaasaaaa",1),
     "foret-2-15-39" : ("saanaa",1),
     "foret-3-23-6" : ("eaaaaaaaaaaoaaaaaaaaaa",1),
-    "mer-3-26-31" : ("naaaaaaaasaaaaaaaa",1)
+    "mer-3-26-31" : ("naaaaaaaasaaaaaaaa",1),
+    "mer-5-24-15" :("naaaaaaaaaaasaaaaaaaaaaa",1),
+    "mer-5-14-44" :("saaaaaaaaaanaaaaaaaaaaasa",1),
 }
