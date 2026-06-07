@@ -59,7 +59,7 @@ def collisions(objetsDict:dict[str,list[Bloc|BlocMouv]], j:Joueur, zone_souszone
     """
     joueur_rect = j.getRect()
 
-    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"] + objetsDict["blocsecond"]:
+    for bloc in objetsDict["blocs"] + objetsDict["blocmouvs"] + objetsDict["bloctombants"]:
         if bloc.colliderect(joueur_rect): 
             collisionsBlocJoueur(joueur_rect,bloc,j)
             if isinstance(bloc,BlocTombant): 
@@ -178,49 +178,48 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
         3 - Pics (tuent au toucher)
         4 - Blocmouv (Plateformes mouvantes)
       """
-    objetsDict = {"blocs":[], "blocsecond":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "leviers":[] , "bloctombants":[], "bosssoleil":None}
+    objetsDict = {"blocs":[], "portes":[], "piques":[], "blocmouvs":[], "spawn":[], "end":[], "ennemis":[], "pnjs": [], "decorations":[], "leviers":[] , "bloctombants":[], "bosssoleil":None}
     map_tile = tileMaps[zone]
     for i in range(len(map_tile[souszone])):
         for j in range(len(map_tile[souszone][i])):
             match map_tile[souszone][i][j]:
-                    case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j)))
-                    case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}"))
-                    case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
-                    case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
-                    case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
-                    case "r": objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE+1)).setSpeed(1).setMouvement("oaaaaaaaaaaeaaaaaaaaaa").setType("requin"))
-                    case "l": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
-                    case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(SPRITES_PNJS[f"{zone}-{souszone}"]).init_file(f"{zone}-{souszone}"))
-                    case "t": objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(levierZone(zone)).setEstActif(False).setActifSprite(levierZoneActif(zone)))
-                    case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
-                    case "F": objetsDict["bosssoleil"] = BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init()
-                    case "B": objetsDict["blocsecond"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSpriteSecond(zone,souszone,i,j)))
-                    case "a": objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)))
+                case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j,1)))
+                case "B": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j,2)))
+                case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}"))
+                case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
+                case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
+                case "P": objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(SPRITES_PNJS[f"{zone}-{souszone}"]).init_file(f"{zone}-{souszone}"))
+
+                case "e": 
+                    match zone:
+                        case "mer" : objetsDict["ennemis"].append(Ennemi((j*TILE_SIZE,i*TILE_SIZE),(3*TILE_SIZE,TILE_SIZE+1)).setSpeed(1).setMouvement("oaaaaaaaaaaeaaaaaaaaaa").setType("requin"))
+                        case _ : pass
+
+                case "d": 
+                    match zone:
+                        case "mer" : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)))
+                        case _ : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
+                
+                case "l": 
+                    match zone:
+                        case "foret" : objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_branche_en_feu).setEstActif(False).setActifSprite(sprite_branche_eteint))
+                        case "mer" : objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
+                        case _ : pass 
+
+                case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
+
+                case "F": objetsDict["bosssoleil"] = BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init()
+
+
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
     return objetsDict
 
 
-def levierZone(zone:str):
-    """
-    Déside de la texture des leviers désactiver en fonctions des mondes
-    Prends en paramètres :
-        \n- zone : une chaine représenant la zone parmis tileMaps, qui repertorie des sous zones.
-    """
-    match zone:
-        case "foret" : return sprite_branche_en_feu
-        case "mer" : return sprite_tortue_plastique
 
-def levierZoneActif(zone:str):
-    """
-    Déside de la texture des leviers activer en fonctions des mondes
-    Prends en paramètres :
-        \n- zone : une chaine représenant la zone parmis tileMaps, qui repertorie des sous zones.
-    """
-    match zone:
-        case "foret" : return sprite_branche_eteint
-        case "mer" : return sprite_tortue_sauvee
+
 
 
 def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|Levier|BlocTombant|BossSoleil]], screen:py.Surface, zone):
@@ -232,9 +231,6 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
     """
     for bloc in objetsDict["blocs"]:
         screen.blit(bloc.getSprite().convert_alpha(),bloc.topleft)
-
-    for blocsecond in objetsDict["blocsecond"]:
-        screen.blit(blocsecond.getSprite().convert_alpha(),blocsecond.topleft)
 
     for porte in objetsDict["portes"]:
         screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.topleft)
@@ -314,6 +310,8 @@ def dead(zone, souszone, joueur:Joueur, objetsDict:dict):    #Permet de recharge
     return objetsDict
 
 
+
+
 def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
     if not liste:
         return
@@ -360,6 +358,8 @@ def groupe_blocmouvs(liste:list[BlocMouv],zone,souszone):
                 bloc_du_groupe.setSpeed(speed)
                 bloc_du_groupe.setMouvement(mouvement)
         
+
+
 def presenceSoleil(objetsDict:dict):
     if (all(elt.getEstActif() == True for elt in objetsDict["leviers"]) and (objetsDict["bosssoleil"] is not None)):
         objetsDict["bosssoleil"] = None
@@ -379,7 +379,7 @@ def actifFire(objetsDict:dict):
                     i = randint(0, len(enFeu) - 1)
                     lev = objetsDict["leviers"][i]
                     lev.setEstActif(False)
-                    lev.setSprite(levierZone("foret"))
+                    lev.setSprite(sprite_branche_en_feu)
                     objetsDict["leviers"][i].update(lev)
                 objetsDict["bosssoleil"].resetCompteur()
     return objetsDict
@@ -393,43 +393,33 @@ def background(ecran:py.Surface,zone):
         case _ : ecran.fill("darkblue")
 
 
-def blocSprite(zone,souszone,i,j):
+def blocSprite(zone,souszone,i,j,type):
     tileMap = tileMaps[zone][souszone]
 
-    match zone:
-        case "mer": sprites = mer_tiles
-        case _ : sprites = base_tiles
+    if type == 1:
+        bloc = "b"
+        match zone:
+            case "mer": sprites = mer_tiles
+            case _ : sprites = base_tiles
+    elif type == 2:
+        bloc = "B"
+        match zone:
+            case "foret": sprites = dirt_tiles
+            case _ : sprites = base_tiles
 
-    if tileMap[i-1][j] == "b" : # S'il y a un bloc au dessus
-        if tileMap[i][j-1] != "b" : return sprites["gauche"] # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprites["droite"] # S'il y'a rien à droite
+    if tileMap[i-1][j] == bloc : # S'il y a un bloc au dessus
+        if tileMap[i][j-1] != bloc : return sprites["gauche"] # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != bloc : return sprites["droite"] # S'il y'a rien à droite
         else :  # S'il y'a un bloc à gauche ET à droite
-            if tileMap[i-1][j-1] != "b" : return sprites["angle_inte_gauche"]  # S'il y'a rien au-dessus à gauche
-            elif tileMap[i-1][(j+1)%len(tileMap[i])] != "b" : return sprites["angle_inte_droite"] # S'il y'a rien au-dessus à droite
+            if tileMap[i-1][j-1] != bloc : return sprites["angle_inte_gauche"]  # S'il y'a rien au-dessus à gauche
+            elif tileMap[i-1][(j+1)%len(tileMap[i])] != bloc : return sprites["angle_inte_droite"] # S'il y'a rien au-dessus à droite
             else: return sprites["base"]
     else :  # S'il y'a rien au-dessus
-        if tileMap[i][j-1] != "b" : return sprites["angle_exte_gauche"] # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != "b" : return sprites["angle_exte_droite"] # S'il y'a rien à droite
+        if tileMap[i][j-1] != bloc : return sprites["angle_exte_gauche"] # S'il y'a rien à gauche
+        elif tileMap[i][(j+1)%len(tileMap[i])] != bloc : return sprites["angle_exte_droite"] # S'il y'a rien à droite
         else : return sprites["sol"]
 
-def blocSpriteSecond(zone,souszone,i,j):
-    tileMap = tileMaps[zone][souszone]
 
-    match zone:
-        case "foret" : sprites = dirt_tiles
-        case _ : sprites = base_tiles
-
-    if tileMap[i-1][j] == "B" : # S'il y a un bloc au dessus
-        if tileMap[i][j-1] != "B" : return sprites["gauche"] # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != "B" : return sprites["droite"] # S'il y'a rien à droite
-        else :  # S'il y'a un bloc à gauche ET à droite
-            if tileMap[i-1][j-1] != "B" : return sprites["angle_inte_gauche"]  # S'il y'a rien au-dessus à gauche
-            elif tileMap[i-1][(j+1)%len(tileMap[i])] != "B" : return sprites["angle_inte_droite"] # S'il y'a rien au-dessus à droite
-            else: return sprites["base"]
-    else :  # S'il y'a rien au-dessus
-        if tileMap[i][j-1] != "B" : return sprites["angle_exte_gauche"] # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != "B" : return sprites["angle_exte_droite"] # S'il y'a rien à droite
-        else : return sprites["sol"]
 
 def anim_perso(j:Joueur):
     if j.getDir() == 'n' : return sprite_base       # Spawn

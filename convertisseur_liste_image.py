@@ -48,10 +48,10 @@ for ligne in range(36):
             case "m" :  image.putpixel((colonne,ligne),(63, 72, 204))        # Bleu indigo : blocMouv
             case "S" :  image.putpixel((colonne,ligne),(195, 195, 195))      # Gris clair : spawn
             case "E" :  image.putpixel((colonne,ligne),(127, 127, 127))      # Gris : end
-            case "r" :  image.putpixel((colonne,ligne),(200, 191, 231))      # Lavande : requin
-            case "l" :  image.putpixel((colonne,ligne),(34, 177, 76))        # Vert : lianes
+            case "e" :  image.putpixel((colonne,ligne),(200, 191, 231))      # Lavande : ennemi
+            case "d" :  image.putpixel((colonne,ligne),(34, 177, 76))        # Vert : décoration
             case "P" :  image.putpixel((colonne,ligne),(255, 127, 39))       # Orange : PNJs
-            case "t" :  image.putpixel((colonne,ligne),(181, 230, 29))       # Vert clair : tortue
+            case "l" :  image.putpixel((colonne,ligne),(181, 230, 29))       # Vert clair : levier
             case "A" :  image.putpixel((colonne,ligne),(185, 122, 87))       # Brun : arbre
             case "T" :  image.putpixel((colonne,ligne),(255, 174, 201))      # Rose saumon : blocTombant
             
