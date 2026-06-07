@@ -32,6 +32,9 @@ sprite_poissons_tl = py.image.load_animation("./assets/textures/mer/poissons_tl.
 sprite_poissons_tr = py.image.load_animation("./assets/textures/mer/poissons_tr.gif")
 sprite_poissons_bl = py.image.load_animation("./assets/textures/mer/poissons_bl.gif")
 sprite_poissons_br = py.image.load_animation("./assets/textures/mer/poissons_br.gif")
+sprite_branche_eteint = py.image.load("./assets/textures/foret/spriteBrancheNoFeu.png")
+sprite_branche_en_feu = py.image.load("./assets/textures/foret/spriteBrancheFeu.png")
+sprite_poissons_blocmouvs = py.image.load_animation("./assets/textures/mer/poissons.gif")
 
 # BLOCS #
 base_tiles = {
@@ -43,6 +46,19 @@ base_tiles = {
     "gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_left.png"),(TILE_SIZE,TILE_SIZE)),
     "angle_exte_gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topleft.png"),(TILE_SIZE,TILE_SIZE)),
     "angle_inte_gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topleft_corner.png"),(TILE_SIZE,TILE_SIZE))
+}
+
+
+tileset_dirt = py.image.load("./assets/textures/foret/blocTileset.png")
+dirt_tiles = {
+    "base" : tileset_dirt.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_dirt.subsurface(py.Rect(20,40,20,20)),
+    "droite" : tileset_dirt.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_dirt.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_dirt.subsurface(py.Rect(0,40,20,20)),
+    "gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,40,20,20)),1,0)
 }
 
 
@@ -62,6 +78,10 @@ mer_tiles = {
 
 sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
 
+### BOSS ###
+
+sprite_boss_sun = py.image.load_animation("./assets/textures/foret/boss_soleil.gif")
+
 ### DÉCORATIONS ###
 
 sprite_lianes = py.image.load_animation("./assets/textures/autre/lianes.gif")
@@ -77,10 +97,15 @@ sprite_requin = [py.transform.scale(s[0],(4*TILE_SIZE,2*TILE_SIZE)) for s in spr
 sprite_lianes = [py.transform.scale(s[0],(TILE_SIZE,2*TILE_SIZE)) for s in sprite_lianes]
 sprite_poissons_blocmouvs = [py.transform.scale(s[0],(TILE_SIZE,TILE_SIZE)) for s in sprite_poissons_tl + sprite_poissons_tr + sprite_poissons_bl + sprite_poissons_br]
 
-sprite_tortue_plastique = py.transform.scale(sprite_tortue_plastique,(4*TILE_SIZE,2*TILE_SIZE))
-sprite_tortue_sauvee = py.transform.scale(sprite_tortue_sauvee,(4*TILE_SIZE,2*TILE_SIZE))
+sprite_boss_sun = [py.transform.scale(s[0],(8*TILE_SIZE,8*TILE_SIZE)) for s in sprite_boss_sun]
 
 sprite_algues = [py.transform.scale(s[0],(TILE_SIZE,2*TILE_SIZE)) for s in sprite_algues]
+sprite_tortue_plastique = py.transform.scale(sprite_tortue_plastique,(2*TILE_SIZE,TILE_SIZE))
+sprite_tortue_sauvee = py.transform.scale(sprite_tortue_sauvee,(2*TILE_SIZE,TILE_SIZE))
+sprite_branche_eteint = py.transform.scale(sprite_branche_eteint, (2*TILE_SIZE, TILE_SIZE))
+sprite_branche_en_feu = py.transform.scale(sprite_branche_en_feu, (2*TILE_SIZE, TILE_SIZE))
+    
+
 #### DICTIONNAIRES D'ACCES ####
 
 SPRITES_PNJS = {
