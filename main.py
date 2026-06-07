@@ -14,8 +14,8 @@ except py.error: controller = None
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((300,400))
 
-zone = "mer"
-souszone = 6
+zone = "hub"
+souszone = 3
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
@@ -42,6 +42,7 @@ while running:
 
     joueur.move(keys,controller,zone)
     collisions(objetsDict, joueur, (zone, souszone))
+    objetsDict.update(actifFire(objetsDict))
 
 
     if zone == 'colline':     # Dégats Ville
@@ -76,7 +77,7 @@ while running:
         objetsDict , souszone = switchSousZone(zone,souszone,joueur,objetsDict)
 
 
-    if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:  # Tomber dans le vide
+    if joueur.getRect().y > 720 and SCREEN_WIDTH > joueur.getRect().x > 0:  # Tomber dans le vided
         objetsDict = dead(zone, souszone, joueur, objetsDict)
 
 
@@ -92,6 +93,5 @@ while running:
     py.display.flip()
     clock.tick(60)
     
-
 
 py.quit()
