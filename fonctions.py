@@ -99,21 +99,17 @@ def switchSousZone(zone:str,souszone:int,joueur:Joueur,objetsDict:dict):
     level = f"{zone}-{souszone}"
 
     if joueur.getRect().x + joueur.getRect().width > SCREEN_WIDTH:
-        for source, dest in TABLEAUX_CORRESPONDANCES.items():
-            if source == level: 
-                zone, souszone = dest.split('-')[0] , int(dest.split('-')[1])
-                objetsDict = preparationZone(zone,souszone)
-                joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
-                return objetsDict , souszone
+        if souszone+1 in tileMaps[zone].keys():
+            objetsDict = preparationZone(zone,souszone+1)
+            joueur.setXY(objetsDict["spawn"][0].x,objetsDict["spawn"][0].y)
+            return objetsDict , souszone+1
         joueur.setX(SCREEN_WIDTH-joueur.getRect().width)
 
     if joueur.getRect().x < 0:
-        for source, dest in TABLEAUX_CORRESPONDANCES.items():
-            if dest == level: 
-                zone, souszone = source.split('-')[0] , int(source.split('-')[1])
-                objetsDict = preparationZone(zone,souszone)
-                joueur.setXY(objetsDict["end"][0].x,objetsDict["end"][0].y)
-                return objetsDict , souszone
+        if souszone-1 in tileMaps[zone].keys():
+            objetsDict = preparationZone(zone,souszone-1)
+            joueur.setXY(objetsDict["end"][0].x,objetsDict["end"][0].y)
+            return objetsDict , souszone-1
         joueur.setX(0)
         
     return objetsDict , souszone

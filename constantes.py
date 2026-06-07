@@ -45,23 +45,6 @@ PORTES_CORRESPONDANCES = {
 }
 
 
-TABLEAUX_CORRESPONDANCES = {
-    "hub-1" : "hub-2",
-    "hub-2" : "hub-3",
-    "hub-3" : "hub-4",
-    "hub-4" : "hub-5",
-    "foret-1" : "foret-2",
-    "foret-2" : "foret-3",
-    "foret-3" : "foret-4",
-    "foret-4" : "foret-5",
-    "mer-1" : "mer-2",
-    "mer-2" : "mer-3",
-    "mer-3" : "mer-4",
-    "mer-4" : "mer-5",
-    "mer-5" : "mer-6"
-}
-
-
 MOUVEMENTS_BLOCMOUVS = {
     "hub-5-22-23" : ("naaaasaaaa",1),
     "hub-5-15-25" : ("naaaasaaaa",1),
