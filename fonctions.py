@@ -185,8 +185,8 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
             match map_tile[souszone][i][j]:
                 case "b": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j,1)))
                 case "B": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j,2)))
-                case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}"))
-                case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}").setSprite(sprite_porte))
+                case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(sprite_pique))
                 case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
                 case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                 case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
@@ -199,7 +199,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
 
                 case "d": 
                     match zone:
-                        case "mer" : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)))
+                        case "mer" : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_algues))
                         case _ : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                 
                 case "l": 
@@ -233,14 +233,14 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(bloc.getSprite().convert_alpha(),bloc.topleft)
 
     for porte in objetsDict["portes"]:
-        screen.blit(sprite_porte[int(10*time.time())%len(sprite_porte)].convert_alpha(),porte.topleft)
+        screen.blit(porte.getSprite()[int(10*time.time())%len(porte.getSprite())].convert_alpha(),porte.topleft)
 
     for pique in objetsDict["piques"]:
-        screen.blit(sprite_pique.convert_alpha(),pique.topleft)
+        screen.blit(pique.getSprite().convert_alpha(),pique.topleft)
 
     for deco in objetsDict["decorations"]:
         match zone:
-            case "mer" : screen.blit(sprite_algues[(deco.left//TILE_SIZE + int(5*time.time())) %len(sprite_algues)], deco.topleft)
+            case "mer" : screen.blit(deco.getSprite()[(deco.left//TILE_SIZE + int(5*time.time())) %len(deco.getSprite())], deco.topleft)
             case _ : screen.blit(deco.getSprite().convert_alpha(),deco.topleft) 
 
     for bmouv in objetsDict["blocmouvs"]:
