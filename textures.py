@@ -74,6 +74,18 @@ mer_tiles = {
     "angle_inte_gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,40,20,20)),1,0)
 }
 
+tileset_invis = py.image.load("./assets/textures/ville/bloc2Tileset.png")
+invis_tiles = {
+    "base" : tileset_invis.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_invis.subsurface(py.Rect(20,40,20,20)),
+    "droite" : tileset_invis.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_invis.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_invis.subsurface(py.Rect(0,40,20,20)),
+    "gauche" : py.transform.flip(tileset_invis.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_invis.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_invis.subsurface(py.Rect(0,40,20,20)),1,0)
+}
+
 ### ENNEMIS ### 
 
 sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")

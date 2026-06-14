@@ -210,6 +210,9 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
 
                 case "F": objetsDict["bosssoleil"] = BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init()
 
+                case "M1": objetsDict["decorations"].append(Decoration(((j-4)*TILE_SIZE,(i-11)*TILE_SIZE),(6*TILE_SIZE,12*TILE_SIZE)).setSprite(sprite_maison1))
+                case "M2": objetsDict["decorations"].append(Decoration(((j-4)*TILE_SIZE,(i-14)*TILE_SIZE),(6*TILE_SIZE,15*TILE_SIZE)).setSprite(sprite_maison2))
+
 
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
     groupe_blocmouvs(objetsDict["bloctombants"],zone,souszone)
@@ -403,6 +406,7 @@ def blocSprite(zone,souszone,i,j,type):
         bloc = "B"
         match zone:
             case "foret": sprites = dirt_tiles
+            case "ville": sprites = invis_tiles
             case _ : sprites = base_tiles
 
     if tileMap[i-1][j] == bloc : # S'il y a un bloc au dessus
