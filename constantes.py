@@ -57,5 +57,7 @@ MOUVEMENTS_BLOCMOUVS = {
     "mer-5-14-44" :("saaaaaaaaaanaaaaaaaaaaasa",1),
     "mer-6-10-20" : ("saaaaaaanaaaaaaa",1),
     "mer-6-10-40" : ("saaaaaaanaaaaaaa",1),
-    "mer-6-26-30" : ("naaaaaaasaaaaaaa",1)
+    "mer-6-26-30" : ("naaaaaaasaaaaaaa",1),
+    "mer-8-26-19" : ("naaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaa",1),
+    "mer-8-26-41" : ("naaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaa",1),
 }
