@@ -86,6 +86,8 @@ invis_tiles = {
     "angle_inte_gauche" : py.transform.flip(tileset_invis.subsurface(py.Rect(0,40,20,20)),1,0)
 }
 
+sprite_BT_ville = py.image.load("./assets/textures/ville/blocTombant.png")
+
 ### ENNEMIS ### 
 
 sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")

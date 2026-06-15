@@ -207,7 +207,10 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                         case "mer" : objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
                         case _ : pass 
 
-                case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
+                case "T": 
+                    match zone:
+                        case "ville" : objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").setSprite(sprite_BT_ville).saveState())
+                        case _ : objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
 
                 case "F": objetsDict["bosssoleil"] = BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init()
 
@@ -271,7 +274,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(levier.getSprite(),levier)
 
     for btombant in objetsDict["bloctombants"]:
-        py.draw.rect(screen, "orange", btombant)
+        try: screen.blit(btombant.getSprite(),btombant)
+        except: py.draw.rect(screen, "orange", btombant)
+
         if btombant.getActif(): btombant.incrCompteur()
         if btombant.getCompteur() >= BTOMBANT_DELAY:
             btombant.move()
