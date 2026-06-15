@@ -398,6 +398,7 @@ def background(ecran:py.Surface,zone):
     match zone:
         case "foret": ecran.blit(bg_foret)
         case "mer" : ecran.blit(bg_mer)
+        case "ville" : ecran.blit(bg_ville)
         case _ : ecran.fill("darkblue")
 
 

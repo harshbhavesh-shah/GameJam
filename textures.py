@@ -9,6 +9,9 @@ bg_foret = py.transform.scale(bg_foret,(SCREEN_WIDTH,SCREEN_HEIGHT))
 bg_mer = py.image.load("./assets/textures/mer/background.png")
 bg_mer = py.transform.scale(bg_mer,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
+bg_ville = py.image.load("./assets/textures/ville/background.png")
+bg_ville = py.transform.scale(bg_ville,(SCREEN_WIDTH,SCREEN_HEIGHT))
+
 ### PERSO PRINCIPAL ###
 
 sprite_idle = py.image.load("./assets/textures/autre/personnage/pose_attente.png")
