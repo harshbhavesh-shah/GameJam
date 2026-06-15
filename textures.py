@@ -101,6 +101,7 @@ sprite_brouillard = py.image.load("./assets/textures/ville/brouillard.png")
 sprite_algues = py.image.load_animation("./assets/textures/mer/algues.gif")
 sprite_maison1 = py.image.load("./assets/textures/ville/maison1.png")
 sprite_maison2 = py.image.load("./assets/textures/ville/maison2.png")
+sprite_nuage = py.image.load("./assets/textures/ville/nuage.png")
 
 
 ##### MISE A ECHELLE #####

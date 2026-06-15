@@ -198,6 +198,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                 case "d": 
                     match zone:
                         case "mer" : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_algues))
+                        case "ville" : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_nuage))
                         case _ : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                 
                 case "l": 
@@ -307,6 +308,7 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
 
 def dead(zone, souszone, joueur:Joueur, objetsDict:dict):    #Permet de recharger entièrement la page si le joueur meurt
     objetsDict = preparationZone(zone, souszone)
+    joueur.setFallSpeed(0)
     joueur.setXY(objetsDict["spawn"][0].right-joueur.getRect().width, objetsDict["spawn"][0].bottom-joueur.getRect().height)
     return objetsDict
 
