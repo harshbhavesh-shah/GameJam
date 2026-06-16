@@ -403,6 +403,7 @@ class Settings:
     def default(self):
         return {
             "volume": 50,
+            "voulumeSFX":50,
         }
     
     def getData(self):
