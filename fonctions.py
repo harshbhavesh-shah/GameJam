@@ -126,6 +126,7 @@ def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueu
                 objetsDict = preparationZone(zone,souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setInteractionCooldown(INTERACTION_COOLDOWN)
+                musique(zone)
                 break
     return objetsDict , zone , souszone
 
@@ -447,6 +448,12 @@ def anim_perso(j:Joueur):
 
 
 ### OPTIONS / MENUS ###
+
+def musique(zone:str):
+    match zone:
+        case "mer" : py.mixer_music.load("./assets/sons/music_mer.mp3")
+        case _ : py.mixer_music.load("./assets/sons/DDD.mp3")
+    py.mixer_music.play(-1)
 
 def menuPause(screen:py.Surface,parametres:Settings):
     """
