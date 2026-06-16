@@ -452,6 +452,7 @@ def anim_perso(j:Joueur):
 
 def musique(zone:str):
     match zone:
+        case "foret" : py.mixer_music.load("./assets/sons/music_foret.mp3")
         case "mer" : py.mixer_music.load("./assets/sons/music_mer.mp3")
         case "ville" : py.mixer_music.load("./assets/sons/music_ville.mp3")
         case "colline" : py.mixer_music.load("./assets/sons/music_colline.mp3")
