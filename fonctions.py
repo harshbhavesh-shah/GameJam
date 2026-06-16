@@ -296,6 +296,7 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
     
     isColliding = False
     for typeObjet in objets.keys():
+        if objets[typeObjet] is None: continue
         for objet in objets[typeObjet]:
 
             objetCopie = copy.copy(objet)
@@ -453,6 +454,7 @@ def musique(zone:str):
     match zone:
         case "mer" : py.mixer_music.load("./assets/sons/music_mer.mp3")
         case "ville" : py.mixer_music.load("./assets/sons/music_ville.mp3")
+        case "colline" : py.mixer_music.load("./assets/sons/music_colline.mp3")
         case _ : py.mixer_music.load("./assets/sons/DDD.mp3")
     py.mixer_music.play(-1)
 
