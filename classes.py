@@ -130,6 +130,8 @@ class Joueur:
 
         if keys[py.K_SPACE] or controllerState(joystick,"saut"):
             if not self.getFallState():
+                if self.getJumpTimer() == 0:
+                    py.mixer.Channel(1).play(py.Sound("./assets/sons/jump.mp3"))
                 self.setFallState(False)
                 self.setFallSpeed(0)
                 if zone == "mer": self.rect.y -= (JUMP_SPEED_IN_WATER - self.getJumpTimer()//4)
