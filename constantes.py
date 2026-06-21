@@ -23,7 +23,7 @@ VILLE_DPS = 1       # Dégats / Tick
 VILLE_HEAL = 2      # Heal / Tick
 
 BTOMBANT_SPEED = 3
-BTOMBANT_DELAY = 20
+BTOMBANT_DELAY = 60
 BTOMBANT_RESPAWN_TIMER = 500
 
 SPAWN_FIRE_TREE_COOLDOWN = 600
@@ -38,10 +38,16 @@ TEXT_BOX_MARGIN = 7
 
 # Zone - Sous-Zone - y - x
 PORTES_CORRESPONDANCES = {
-    "hub-5-30-15" : "foret-1-16-2",
+    "hub-5-30-15" : "foret-1-30-2",
+    "foret-1-30-2" : "hub-5-30-15",
+    "foret-11-31-35" : "hub-5-30-15",
     "hub-5-31-53" : "mer-1-22-17",
+    "mer-1-22-17" : "hub-5-31-53",
     "hub-5-9-14" : "ville-1-25-3",
-    "hub-5-12-50" : "colline-1-25-3"
+    "ville-1-25-3" : "hub-5-9-14",
+    "ville-9-22-55" : "hub-5-9-14",
+    "hub-5-12-50" : "colline-1-25-3",
+    "colline-1-25-3" : "hub-5-12-50"
 }
 
 
