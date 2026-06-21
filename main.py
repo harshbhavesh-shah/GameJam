@@ -18,7 +18,7 @@ zone = "foret"
 souszone = 3
 objetsDict = preparationZone(zone, souszone)
 
-py.mixer_music.load("./assets/sons/DDD.mp3")
+py.mixer_music.load("./assets/sons/music_hub.mp3")
 py.mixer_music.play(-1)
 
 hpBar = ProgressBar(screen, 10, 10, 200, 20, lambda: 1 - joueur.getHp()/100, completedColour=(250, 10, 10), incompletedColour=(165, 120, 120))
@@ -37,6 +37,7 @@ while running:
     keys = py.key.get_pressed()
     
     py.mixer_music.set_volume(param.getData()["volume"]/100)
+    py.mixer.Channel(1).set_volume(param.getData()["volumeSFX"]/100)
 
     # BOUCLE MAIN #
 
@@ -84,7 +85,7 @@ while running:
 
     background(screen,zone)
     affichageZone(objetsDict, screen, zone)
-    screen.blit(anim_perso(joueur),joueur.getXY())
+    screen.blit(anim_perso(joueur,zone),joueur.getXY())
 
     if zone == "ville":   # brouillard
         screen.blit(sprite_brouillard)

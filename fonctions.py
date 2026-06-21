@@ -126,6 +126,8 @@ def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueu
                 objetsDict = preparationZone(zone,souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setInteractionCooldown(INTERACTION_COOLDOWN)
+                joueur.setDir('n') 
+                musique(zone)
                 break
     return objetsDict , zone , souszone
 
@@ -198,6 +200,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                 case "d": 
                     match zone:
                         case "mer" : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_algues))
+                        case "ville" : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,(i-1)*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_nuage))
                         case _ : objetsDict["decorations"].append(Decoration((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,2*TILE_SIZE)).setSprite(sprite_lianes[(i+j)%2]))
                 
                 case "l": 
@@ -206,9 +209,15 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                         case "mer" : objetsDict["leviers"].append(Levier(((j-1)*TILE_SIZE,i*TILE_SIZE), (2*TILE_SIZE,TILE_SIZE)).setSprite(sprite_tortue_plastique).setEstActif(False).setActifSprite(sprite_tortue_sauvee))
                         case _ : pass 
 
-                case "T": objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
+                case "T": 
+                    match zone:
+                        case "ville" : objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").setSprite(sprite_BT_ville).saveState())
+                        case _ : objetsDict["bloctombants"].append(BlocTombant((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init().setSpeed(BTOMBANT_SPEED).setMouvement("saaaaaaaaaaa").saveState())
 
                 case "F": objetsDict["bosssoleil"] = BossSoleil((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).init()
+
+                case "M1": objetsDict["decorations"].append(Decoration(((j-4)*TILE_SIZE,(i-11)*TILE_SIZE),(6*TILE_SIZE,12*TILE_SIZE)).setSprite(sprite_maison1))
+                case "M2": objetsDict["decorations"].append(Decoration(((j-4)*TILE_SIZE,(i-14)*TILE_SIZE),(6*TILE_SIZE,15*TILE_SIZE)).setSprite(sprite_maison2))
 
 
     groupe_blocmouvs(objetsDict["blocmouvs"],zone,souszone)
@@ -267,7 +276,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(levier.getSprite(),levier)
 
     for btombant in objetsDict["bloctombants"]:
-        py.draw.rect(screen, "orange", btombant)
+        try: screen.blit(btombant.getSprite(),btombant)
+        except: py.draw.rect(screen, "orange", btombant)
+
         if btombant.getActif(): btombant.incrCompteur()
         if btombant.getCompteur() >= BTOMBANT_DELAY:
             btombant.move()
@@ -286,6 +297,7 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
     
     isColliding = False
     for typeObjet in objets.keys():
+        if objets[typeObjet] is None: continue
         for objet in objets[typeObjet]:
 
             objetCopie = copy.copy(objet)
@@ -304,6 +316,7 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
 
 def dead(zone, souszone, joueur:Joueur, objetsDict:dict):    #Permet de recharger entièrement la page si le joueur meurt
     objetsDict = preparationZone(zone, souszone)
+    joueur.setFallSpeed(0)
     joueur.setXY(objetsDict["spawn"][0].right-joueur.getRect().width, objetsDict["spawn"][0].bottom-joueur.getRect().height)
     return objetsDict
 
@@ -388,6 +401,7 @@ def background(ecran:py.Surface,zone):
     match zone:
         case "foret": ecran.blit(bg_foret)
         case "mer" : ecran.blit(bg_mer)
+        case "ville" : ecran.blit(bg_ville)
         case _ : ecran.fill("darkblue")
 
 
@@ -405,6 +419,7 @@ def blocSprite(zone,souszone,i,j,type):
         bloc = "B"
         match zone:
             case "foret": sprites = dirt_tiles
+            case "ville": sprites = invis_tiles
             case _ : sprites = base_tiles
 
     if tileMap[i-1][j] == bloc : # s'il y a un bloc au dessus
@@ -449,22 +464,37 @@ def blocSprite(zone,souszone,i,j,type):
         
 
 
-def anim_perso(j:Joueur):
-    if j.getDir() == 'n' : return sprite_base       # Spawn
+def anim_perso(j:Joueur,zone:str):
+    match zone:
+        case "mer" : sprites_perso = sprites_perso_mer
+        case "foret" : sprites_perso = sprites_perso_foret
+        case "colline" : sprites_perso = sprites_perso_colline
+        case _ : sprites_perso = sprites_perso_hub
+
+    if j.getDir() == 'n' : return sprites_perso["base"]       # Spawn
     
     elif j.getJumpTimer() != 0 :                      # Saut
-        if j.getDir() == 'd' : return sprite_saut     # droite
-        else : return py.transform.flip(sprite_saut,1,0)    # gauche
+        if j.getDir() == 'd' : return sprites_perso["saut"]     # droite
+        else : return py.transform.flip(sprites_perso["saut"] ,1,0)    # gauche
     
     elif j.isWalking:   # Marche
-        if j.getDir() == 'd' : return sprite_marche[int(10*time.time()) % len(sprite_marche)]     # droite
-        else : return py.transform.flip(sprite_marche[int(10*time.time()) % len(sprite_marche)],1,0)    # gauche
+        if j.getDir() == 'd' : return sprites_perso["marche"][int(10*time.time()) % len(sprites_perso["marche"])]     # droite
+        else : return py.transform.flip(sprites_perso["marche"][int(10*time.time()) % len(sprites_perso["marche"])],1,0)    # gauche
 
-    elif j.getDir() == 'd' : return sprite_idle
-    else : return py.transform.flip(sprite_idle,1,0)
+    elif j.getDir() == 'd' : return sprites_perso["idle"]
+    else : return py.transform.flip(sprites_perso["idle"],1,0)
 
 
 ### OPTIONS / MENUS ###
+
+def musique(zone:str):
+    match zone:
+        case "foret" : py.mixer_music.load("./assets/sons/music_foret.mp3")
+        case "mer" : py.mixer_music.load("./assets/sons/music_mer.mp3")
+        case "ville" : py.mixer_music.load("./assets/sons/music_ville.mp3")
+        case "colline" : py.mixer_music.load("./assets/sons/music_colline.mp3")
+        case _ : py.mixer_music.load("./assets/sons/music_hub.mp3")
+    py.mixer_music.play(-1)
 
 def menuPause(screen:py.Surface,parametres:Settings):
     """
@@ -500,6 +530,8 @@ def menuPause(screen:py.Surface,parametres:Settings):
 
 
 
+
+
 def menuParametres(screen:py.Surface,parametres:Settings):
     """
     Affichage du menu pause et gestion de ses fonctionnalités. Change le fichier ``settings.json`` en fonction.
@@ -507,6 +539,9 @@ def menuParametres(screen:py.Surface,parametres:Settings):
 
     slider_vol = Slider(screen, SCREEN_WIDTH//2 - 170, 200, 350, 10, max=100)
     slider_vol.setValue(parametres.getData()["volume"])
+
+    slider_SFX = Slider(screen, SCREEN_WIDTH//2 - 170, 300, 350, 10, max=100)
+    slider_SFX.setValue(parametres.getData()["volumeSFX"])
 
     inParam = True
     while inParam:
@@ -523,9 +558,13 @@ def menuParametres(screen:py.Surface,parametres:Settings):
         affichageTexte(screen, "PARAMETRES", (fond_param.centerx, fond_param.top + 40), 50)
 
 
+
         affichageTexte(screen, "Volume", (fond_param.left + 50, fond_param.top + 100), 30)
         affichageTexte(screen, str(slider_vol.getValue()), (fond_param.right - 50, fond_param.top + 100), 30)
         py.mixer_music.set_volume(slider_vol.getValue()/100)
+
+        affichageTexte(screen, "SFX", (fond_param.left + 50, fond_param.top + 200), 30)
+        affichageTexte(screen, str(slider_SFX.getValue()), (fond_param.right - 50, fond_param.top + 200), 30)
 
 
 
@@ -537,17 +576,19 @@ def menuParametres(screen:py.Surface,parametres:Settings):
 
         if py.mouse.get_just_pressed()[0]:
             if bt_appliquer.collidepoint(py.mouse.get_pos()) :
-                newSettingsDict = {"volume":slider_vol.getValue()}
+                newSettingsDict = {"volume":slider_vol.getValue(),"volumeSFX":slider_SFX.getValue()}
                 parametres.updateData(newSettingsDict)
                 inParam = False
             if bt_defaut.collidepoint(py.mouse.get_pos()) :
                 defaultSettings = parametres.default()
                 slider_vol.setValue(defaultSettings["volume"])
+                slider_SFX.setValue(defaultSettings["volumeSFX"])
 
 
 
         pw.update(events)
         py.display.flip()
+
 
 
 

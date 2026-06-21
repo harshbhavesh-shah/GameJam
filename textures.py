@@ -9,13 +9,38 @@ bg_foret = py.transform.scale(bg_foret,(SCREEN_WIDTH,SCREEN_HEIGHT))
 bg_mer = py.image.load("./assets/textures/mer/background.png")
 bg_mer = py.transform.scale(bg_mer,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
+bg_ville = py.image.load("./assets/textures/ville/background.png")
+bg_ville = py.transform.scale(bg_ville,(SCREEN_WIDTH,SCREEN_HEIGHT))
+
 ### PERSO PRINCIPAL ###
 
-sprite_idle = py.image.load("./assets/textures/autre/personnage/pose_attente.png")
-sprite_saut = py.image.load("./assets/textures/autre/personnage/saut.png")
-sprite_base = py.image.load("./assets/textures/autre/personnage/regard_face.png")
-sprite_marche = py.image.load_animation("./assets/textures/autre/personnage/marche.gif")
-sprite_marche = [s[0] for s in sprite_marche]
+sprites_perso_hub = {
+    "idle" :py.image.load("./assets/textures/autre/personnage/hub/pose_attente.png"),
+    "saut" : py.image.load("./assets/textures/autre/personnage/hub/saut.png"),
+    "base" : py.image.load("./assets/textures/autre/personnage/hub/regard_face.png"),
+    "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/hub/marche.gif")]
+}
+
+sprites_perso_mer = {
+    "idle" :py.image.load("./assets/textures/autre/personnage/mer/pose_attente.png"),
+    "saut" : py.image.load("./assets/textures/autre/personnage/mer/saut.png"),
+    "base" : py.image.load("./assets/textures/autre/personnage/mer/regard_face.png"),
+    "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/mer/marche.gif")]
+}
+
+sprites_perso_foret = {
+    "idle" :py.image.load("./assets/textures/autre/personnage/foret/pose_attente.png"),
+    "saut" : py.image.load("./assets/textures/autre/personnage/foret/saut.png"),
+    "base" : py.image.load("./assets/textures/autre/personnage/foret/regard_face.png"),
+    "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/foret/marche.gif")]
+}
+
+sprites_perso_colline = {
+    "idle" :py.image.load("./assets/textures/autre/personnage/colline/pose_attente.png"),
+    "saut" : py.image.load("./assets/textures/autre/personnage/colline/saut.png"),
+    "base" : py.image.load("./assets/textures/autre/personnage/colline/regard_face.png"),
+    "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/colline/marche.gif")]
+}
 
 ### OBJETS ###
 
@@ -122,6 +147,20 @@ mer_tiles = {
     "tout_angle_gauche" : tileset_mer.subsurface(py.Rect(20,20,20,20))
 }
 
+tileset_invis = py.image.load("./assets/textures/ville/bloc2Tileset.png")
+invis_tiles = {
+    "base" : tileset_invis.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_invis.subsurface(py.Rect(20,40,20,20)),
+    "droite" : tileset_invis.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_invis.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_invis.subsurface(py.Rect(0,40,20,20)),
+    "gauche" : py.transform.flip(tileset_invis.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_invis.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_invis.subsurface(py.Rect(0,40,20,20)),1,0)
+}
+
+sprite_BT_ville = py.image.load("./assets/textures/ville/blocTombant.png")
+
 ### ENNEMIS ### 
 
 sprite_requin = py.image.load_animation("./assets/textures/mer/requin.gif")
@@ -137,6 +176,7 @@ sprite_brouillard = py.image.load("./assets/textures/ville/brouillard.png")
 sprite_algues = py.image.load_animation("./assets/textures/mer/algues.gif")
 sprite_maison1 = py.image.load("./assets/textures/ville/maison1.png")
 sprite_maison2 = py.image.load("./assets/textures/ville/maison2.png")
+sprite_nuage = py.image.load("./assets/textures/ville/nuage.png")
 
 
 ##### MISE A ECHELLE #####
