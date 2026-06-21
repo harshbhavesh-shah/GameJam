@@ -270,7 +270,9 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(sprite_boss_sun[int(10*time.time())%len(sprite_boss_sun)].convert_alpha(),objetsDict["bosssoleil"].topleft)
 
     for pnj in objetsDict["pnjs"]:
-        try: screen.blit(pnj.getSprite(),pnj)
+        try: 
+            if pnj.getSprite() == sprite_pnj : screen.blit(pnj.getSprite(),(pnj.x,pnj.y-17))
+            else : screen.blit(pnj.getSprite(),pnj)
         except: py.draw.rect(screen, "green", pnj)
 
     for levier in objetsDict["leviers"]:

@@ -1,4 +1,5 @@
-Squeez
-ceci est un test
-ciao 
-kambucha
+Voyageur
+Salut toi !
+Les mondes que tu t'apprete a explorer sont difficiles a naviguer.
+Tu devrais t'entrainer un peu avant de te lancer dans l'aventure !
+Je te souhaite bonne chance, evidemment !

@@ -1,0 +1,3 @@
+Panneau
+Appuie sur Shift pour faire un dash dans une direction de ton choix.
+(Astuce) Fais un dash vers le haut en sautant pour un boost vetical !

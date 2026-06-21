@@ -15,7 +15,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((300,400))
 
 zone = "hub"
-souszone = 5
+souszone = 1
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/music_hub.mp3")

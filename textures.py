@@ -49,6 +49,7 @@ sprite_porte = py.image.load_animation("./assets/textures/autre/porte.gif")
 sprite_pique = py.image.load("./assets/textures/autre/pique.png")
 
 sprite_panneau_metal = py.image.load("./assets/textures/autre/panneau_metal.png")
+sprite_pnj = py.image.load("./assets/textures/autre/pnjs/pnj1.png")
 
 sprite_tortue_plastique = py.image.load("./assets/textures/mer/tortuePlastique1.png")
 sprite_tortue_sauvee = py.image.load("./assets/textures/mer/tortuePlastique2.png")
@@ -228,5 +229,7 @@ sprite_branche_en_feu = py.transform.scale(sprite_branche_en_feu, (2*TILE_SIZE, 
 #### DICTIONNAIRES D'ACCES ####
 
 SPRITES_PNJS = {
+    "hub-1" : sprite_pnj,
+    "hub-4" : sprite_panneau_metal,
     "mer-1" : sprite_panneau_metal
 }
