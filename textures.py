@@ -62,28 +62,67 @@ sprite_branche_en_feu = py.image.load("./assets/textures/foret/spriteBrancheFeu.
 sprite_poissons_blocmouvs = py.image.load_animation("./assets/textures/mer/poissons.gif")
 
 # BLOCS #
+tileset_base = py.image.load("./assets/textures/autre/blocBaseTileset.png")
 base_tiles = {
-    "base" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique.png"),(TILE_SIZE,TILE_SIZE)),
-    "sol" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_top.png"),(TILE_SIZE,TILE_SIZE)),
-    "droite" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_right.png"),(TILE_SIZE,TILE_SIZE)),
-    "angle_exte_droite" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topright.png"),(TILE_SIZE,TILE_SIZE)),
-    "angle_inte_droite" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topright_corner.png"),(TILE_SIZE,TILE_SIZE)),
-    "gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_left.png"),(TILE_SIZE,TILE_SIZE)),
-    "angle_exte_gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topleft.png"),(TILE_SIZE,TILE_SIZE)),
-    "angle_inte_gauche" : py.transform.scale(py.image.load("./assets/textures/autre/brique/brique_topleft_corner.png"),(TILE_SIZE,TILE_SIZE))
+    "base" : tileset_base.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_base.subsurface(py.Rect(20,40,20,20)),
+    "tout_angle_haut" : tileset_base.subsurface(py.Rect(20,40,20,20)),
+    "plafond" : tileset_base.subsurface(py.Rect(20,0,20,20)),
+    "tout_angle_bas" : tileset_base.subsurface(py.Rect(20,0,20,20)),
+    "droite" : tileset_base.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_base.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_base.subsurface(py.Rect(0,40,20,20)),
+    "angle_exte_droite_inver" : tileset_base.subsurface(py.Rect(0,20,20,20)),
+    "angle_inte_droite_inver" : tileset_base.subsurface(py.Rect(20,0,20,20)),
+    "tout_angle_droite" : tileset_base.subsurface(py.Rect(0,0,20,20)),
+    "gauche" : py.transform.flip(tileset_base.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_base.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_base.subsurface(py.Rect(0,40,20,20)),1,0),
+    "angle_exte_gauche_inver" : py.transform.flip(tileset_base.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_inte_gauche_inver" : tileset_base.subsurface(py.Rect(20,0,20,20)),
+    "tout_angle_gauche" : py.transform.flip(tileset_base.subsurface(py.Rect(0,0,20,20)),1,0)
 }
 
+tileset_jungle = py.image.load("./assets/textures/foret/jungleBlocTileset.png")
+jungle_tiles = {
+    "base" : tileset_jungle.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_jungle.subsurface(py.Rect(20,40,20,20)),
+    "tout_angle_haut" : py.transform.rotate(tileset_jungle.subsurface(py.Rect(20,20,20,20)), 270.0),
+    "plafond" : py.transform.rotate(tileset_jungle.subsurface(py.Rect(20,40,20,20)),180),
+    "tout_angle_bas" : py.transform.rotate(tileset_jungle.subsurface(py.Rect(20,20,20,20)), 90.0),
+    "droite" : tileset_jungle.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_jungle.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_jungle.subsurface(py.Rect(0,40,20,20)),
+    "angle_exte_droite_inver" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,0,20,20)),0,1),
+    "angle_inte_droite_inver" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,40,20,20)),0,1),
+    "tout_angle_droite" : py.transform.flip(tileset_jungle.subsurface(py.Rect(20,20,20,20)),1,0),
+    "gauche" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,40,20,20)),1,0),
+    "angle_exte_gauche_inver" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,0,20,20)),1,1),
+    "angle_inte_gauche_inver" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,40,20,20)),1,1),
+    "tout_angle_gauche" : tileset_jungle.subsurface(py.Rect(20,20,20,20))
+}   
 
 tileset_dirt = py.image.load("./assets/textures/foret/blocTileset.png")
 dirt_tiles = {
     "base" : tileset_dirt.subsurface(py.Rect(20,0,20,20)),
     "sol" : tileset_dirt.subsurface(py.Rect(20,40,20,20)),
+    "tout_angle_haut" : py.transform.rotate(tileset_dirt.subsurface(py.Rect(20,20,20,20)), 270.0),
+    "plafond" : py.transform.rotate(tileset_dirt.subsurface(py.Rect(20,40,20,20)),180),
+    "tout_angle_bas" : py.transform.rotate(tileset_dirt.subsurface(py.Rect(20,20,20,20)), 90.0),
     "droite" : tileset_dirt.subsurface(py.Rect(0,20,20,20)),
     "angle_exte_droite" : tileset_dirt.subsurface(py.Rect(0,0,20,20)),
     "angle_inte_droite" : tileset_dirt.subsurface(py.Rect(0,40,20,20)),
+    "angle_exte_droite_inver" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,0,20,20)),0,1),
+    "angle_inte_droite_inver" : py.transform.flip(tileset_jungle.subsurface(py.Rect(0,40,20,20)),0,1),
+    "tout_angle_droite" : py.transform.flip(tileset_dirt.subsurface(py.Rect(20,20,20,20)),1,0),
     "gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,20,20,20)),1,0),
     "angle_exte_gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,0,20,20)),1,0),
-    "angle_inte_gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,40,20,20)),1,0)
+    "angle_inte_gauche" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,40,20,20)),1,0),
+    "angle_exte_gauche_inver" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,0,20,20)),1,1),
+    "angle_inte_gauche_inver" : py.transform.flip(tileset_dirt.subsurface(py.Rect(0,40,20,20)),1,1),
+    "tout_angle_gauche" : tileset_dirt.subsurface(py.Rect(20,20,20,20))
 }
 
 
@@ -91,12 +130,21 @@ tileset_mer = py.image.load("./assets/textures/mer/blocTileset.png")
 mer_tiles = {
     "base" : tileset_mer.subsurface(py.Rect(20,0,20,20)),
     "sol" : tileset_mer.subsurface(py.Rect(20,40,20,20)),
+    "tout_angle_haut" : py.transform.rotate(tileset_mer.subsurface(py.Rect(20,20,20,20)), 270.0),
+    "plafond" : py.transform.rotate(tileset_mer.subsurface(py.Rect(20,40,20,20)),180),
+    "tout_angle_bas" : py.transform.rotate(tileset_mer.subsurface(py.Rect(20,20,20,20)), 90.0),
     "droite" : tileset_mer.subsurface(py.Rect(0,20,20,20)),
     "angle_exte_droite" : tileset_mer.subsurface(py.Rect(0,0,20,20)),
     "angle_inte_droite" : tileset_mer.subsurface(py.Rect(0,40,20,20)),
+    "angle_exte_droite_inver" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,0,20,20)),0,1),
+    "angle_inte_droite_inver" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,40,20,20)),0,1),
+    "tout_angle_droite" : py.transform.flip(tileset_mer.subsurface(py.Rect(20,20,20,20)),1,0),
     "gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,20,20,20)),1,0),
     "angle_exte_gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,0,20,20)),1,0),
-    "angle_inte_gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,40,20,20)),1,0)
+    "angle_inte_gauche" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,40,20,20)),1,0),
+    "angle_exte_gauche_inver" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,0,20,20)),1,1),
+    "angle_inte_gauche_inver" : py.transform.flip(tileset_mer.subsurface(py.Rect(0,40,20,20)),1,1),
+    "tout_angle_gauche" : tileset_mer.subsurface(py.Rect(20,20,20,20))
 }
 
 tileset_invis = py.image.load("./assets/textures/ville/bloc2Tileset.png")
