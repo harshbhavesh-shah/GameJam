@@ -43,6 +43,7 @@ PORTES_CORRESPONDANCES = {
     "foret-11-31-35" : "hub-5-30-15",
     "hub-5-31-53" : "mer-1-22-17",
     "mer-1-22-17" : "hub-5-31-53",
+    "mer-9-8-57" : "hub-5-31-53",
     "hub-5-9-14" : "ville-1-25-3",
     "ville-1-25-3" : "hub-5-9-14",
     "ville-9-22-55" : "hub-5-9-14",
@@ -66,4 +67,5 @@ MOUVEMENTS_BLOCMOUVS = {
     "mer-6-26-30" : ("naaaaaaasaaaaaaa",1),
     "mer-8-26-19" : ("naaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaa",1),
     "mer-8-26-41" : ("naaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaa",1),
+    "mer-9-26-30" : ("naaaaaaaaaaaasaaaaaaaaaaaa",1)
 }
