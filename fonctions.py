@@ -126,6 +126,7 @@ def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueu
                 objetsDict = preparationZone(zone,souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setInteractionCooldown(INTERACTION_COOLDOWN)
+                musique(zone)
                 break
     return objetsDict , zone , souszone
 
@@ -295,6 +296,7 @@ def degatsEnvironnementauxColline(j:Joueur,objets:dict):
     
     isColliding = False
     for typeObjet in objets.keys():
+        if objets[typeObjet] is None: continue
         for objet in objets[typeObjet]:
 
             objetCopie = copy.copy(objet)
@@ -448,6 +450,15 @@ def anim_perso(j:Joueur):
 
 ### OPTIONS / MENUS ###
 
+def musique(zone:str):
+    match zone:
+        case "foret" : py.mixer_music.load("./assets/sons/music_foret.mp3")
+        case "mer" : py.mixer_music.load("./assets/sons/music_mer.mp3")
+        case "ville" : py.mixer_music.load("./assets/sons/music_ville.mp3")
+        case "colline" : py.mixer_music.load("./assets/sons/music_colline.mp3")
+        case _ : py.mixer_music.load("./assets/sons/music_hub.mp3")
+    py.mixer_music.play(-1)
+
 def menuPause(screen:py.Surface,parametres:Settings):
     """
     Affichage du menu pause et gestion de ses fonctionnalités
@@ -482,6 +493,8 @@ def menuPause(screen:py.Surface,parametres:Settings):
 
 
 
+
+
 def menuParametres(screen:py.Surface,parametres:Settings):
     """
     Affichage du menu pause et gestion de ses fonctionnalités. Change le fichier ``settings.json`` en fonction.
@@ -489,6 +502,9 @@ def menuParametres(screen:py.Surface,parametres:Settings):
 
     slider_vol = Slider(screen, SCREEN_WIDTH//2 - 170, 200, 350, 10, max=100)
     slider_vol.setValue(parametres.getData()["volume"])
+
+    slider_SFX = Slider(screen, SCREEN_WIDTH//2 - 170, 300, 350, 10, max=100)
+    slider_SFX.setValue(parametres.getData()["volumeSFX"])
 
     inParam = True
     while inParam:
@@ -505,9 +521,13 @@ def menuParametres(screen:py.Surface,parametres:Settings):
         affichageTexte(screen, "PARAMETRES", (fond_param.centerx, fond_param.top + 40), 50)
 
 
+
         affichageTexte(screen, "Volume", (fond_param.left + 50, fond_param.top + 100), 30)
         affichageTexte(screen, str(slider_vol.getValue()), (fond_param.right - 50, fond_param.top + 100), 30)
         py.mixer_music.set_volume(slider_vol.getValue()/100)
+
+        affichageTexte(screen, "SFX", (fond_param.left + 50, fond_param.top + 200), 30)
+        affichageTexte(screen, str(slider_SFX.getValue()), (fond_param.right - 50, fond_param.top + 200), 30)
 
 
 
@@ -519,17 +539,19 @@ def menuParametres(screen:py.Surface,parametres:Settings):
 
         if py.mouse.get_just_pressed()[0]:
             if bt_appliquer.collidepoint(py.mouse.get_pos()) :
-                newSettingsDict = {"volume":slider_vol.getValue()}
+                newSettingsDict = {"volume":slider_vol.getValue(),"volumeSFX":slider_SFX.getValue()}
                 parametres.updateData(newSettingsDict)
                 inParam = False
             if bt_defaut.collidepoint(py.mouse.get_pos()) :
                 defaultSettings = parametres.default()
                 slider_vol.setValue(defaultSettings["volume"])
+                slider_SFX.setValue(defaultSettings["volumeSFX"])
 
 
 
         pw.update(events)
         py.display.flip()
+
 
 
 
