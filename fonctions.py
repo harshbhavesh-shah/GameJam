@@ -397,6 +397,8 @@ def blocSprite(zone,souszone,i,j,type):
     if type == 1:
         bloc = "b"
         match zone:
+            case "hub" : sprites = base_tiles
+            case "foret": sprites = jungle_tiles
             case "mer": sprites = mer_tiles
             case _ : sprites = base_tiles
     elif type == 2:
@@ -405,18 +407,46 @@ def blocSprite(zone,souszone,i,j,type):
             case "foret": sprites = dirt_tiles
             case _ : sprites = base_tiles
 
-    if tileMap[i-1][j] == bloc : # S'il y a un bloc au dessus
-        if tileMap[i][j-1] != bloc : return sprites["gauche"] # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != bloc : return sprites["droite"] # S'il y'a rien à droite
-        else :  # S'il y'a un bloc à gauche ET à droite
-            if tileMap[i-1][j-1] != bloc : return sprites["angle_inte_gauche"]  # S'il y'a rien au-dessus à gauche
-            elif tileMap[i-1][(j+1)%len(tileMap[i])] != bloc : return sprites["angle_inte_droite"] # S'il y'a rien au-dessus à droite
-            else: return sprites["base"]
-    else :  # S'il y'a rien au-dessus
-        if tileMap[i][j-1] != bloc : return sprites["angle_exte_gauche"] # S'il y'a rien à gauche
-        elif tileMap[i][(j+1)%len(tileMap[i])] != bloc : return sprites["angle_exte_droite"] # S'il y'a rien à droite
-        else : return sprites["sol"]
-
+    if tileMap[i-1][j] == bloc : # s'il y a un bloc au dessus
+        if tileMap[i][j-1] == bloc : # s'il y'a un bloc à gauche
+            if tileMap[i-1][j-1] == bloc: # s'il y'a un bloc en diagonale gauche
+                if tileMap[i][(j+1)%len(tileMap[0])] == bloc: # s'il y'a un bloc à droite
+                    if tileMap[i-1][(j+1)%len(tileMap[0])] == bloc: #s'il y'a un bloc en diagonale droite
+                        if tileMap[(i+1)%len(tileMap)][j] == bloc: # s'il y'a un bloc en dessus
+                            if tileMap[(i+1)%len(tileMap)][(j+1)%len(tileMap[0])] != bloc : # s'il n'y'a pas de bloc en diagonale bas droite
+                                return sprites["angle_inte_droite_inver"]
+                            if tileMap[(i+1)%len(tileMap)][j-1] != bloc : # s'il n'y'a pas de bloc en diagonale bas gauche
+                                return sprites["angle_inte_gauche_inver"]
+                            return sprites["base"] # s'il y'a des blocs tout autour du bloc
+                        else: return sprites["plafond"] # s'il n'y'a pas de bloc en dessus
+                    else: return sprites["angle_inte_droite"]
+                else: # s'il y'a pas de bloc à droite
+                    if tileMap[(i+1)%len(tileMap)][j] == bloc: return sprites["droite"] # s'il y'a un bloc en dessus
+                    else: return sprites["angle_exte_droite_inver"]
+            else: return sprites["angle_inte_gauche"] # s'il n'y a pas de bloc en diagonale gauche
+        else: 
+            if tileMap[i][(j+1)%len(tileMap[0])] == bloc: #s'il y'a un bloc à droite
+                if tileMap[(i+1)%len(tileMap)][j] == bloc: # s'il y'a un bloc en dessus
+                    return sprites["gauche"]
+                else:
+                    return sprites["angle_exte_gauche_inver"]
+            else:
+                return sprites["tout_angle_bas"]
+    else:
+        if tileMap[i][(j+1)%len(tileMap[0])] == bloc: # s'il y'a un bloc à droite
+            if tileMap[i][j-1] == bloc : #s'il y'a un bloc a gauche
+                return sprites["sol"]
+            else:
+                if tileMap[(i+1)%len(tileMap)][j] == bloc: #s'il y'a un bloc en dessous
+                    return sprites["angle_exte_gauche"]
+                else:
+                    return sprites["tout_angle_gauche"]
+        else:
+            if tileMap[i][j-1] == bloc : #s'il y'a un bloc a gauche
+                return sprites["angle_exte_droite"] 
+            else:
+                return sprites["tout_angle_haut"]
+        
 
 
 def anim_perso(j:Joueur):

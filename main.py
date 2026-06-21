@@ -14,8 +14,8 @@ except py.error: controller = None
 screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((300,400))
 
-zone = "ville"
-souszone = 1
+zone = "foret"
+souszone = 3
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/DDD.mp3")
