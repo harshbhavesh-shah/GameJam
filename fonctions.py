@@ -126,6 +126,7 @@ def telePorte(objetsDict:dict[str,list[Bloc|BlocMouv|Porte]],zone,souszone,joueu
                 objetsDict = preparationZone(zone,souszone)
                 joueur.setXY(x*TILE_SIZE,y*TILE_SIZE)
                 joueur.setInteractionCooldown(INTERACTION_COOLDOWN)
+                joueur.setDir('n') 
                 musique(zone)
                 break
     return objetsDict , zone , souszone
@@ -435,6 +436,9 @@ def blocSprite(zone,souszone,i,j,type):
 
 def anim_perso(j:Joueur,zone:str):
     match zone:
+        case "mer" : sprites_perso = sprites_perso_mer
+        case "foret" : sprites_perso = sprites_perso_foret
+        case "colline" : sprites_perso = sprites_perso_colline
         case _ : sprites_perso = sprites_perso_hub
 
     if j.getDir() == 'n' : return sprites_perso["base"]       # Spawn

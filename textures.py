@@ -21,6 +21,27 @@ sprites_perso_hub = {
     "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/hub/marche.gif")]
 }
 
+sprites_perso_mer = {
+    "idle" :py.image.load("./assets/textures/autre/personnage/mer/pose_attente.png"),
+    "saut" : py.image.load("./assets/textures/autre/personnage/mer/saut.png"),
+    "base" : py.image.load("./assets/textures/autre/personnage/mer/regard_face.png"),
+    "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/mer/marche.gif")]
+}
+
+sprites_perso_foret = {
+    "idle" :py.image.load("./assets/textures/autre/personnage/foret/pose_attente.png"),
+    "saut" : py.image.load("./assets/textures/autre/personnage/foret/saut.png"),
+    "base" : py.image.load("./assets/textures/autre/personnage/foret/regard_face.png"),
+    "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/foret/marche.gif")]
+}
+
+sprites_perso_colline = {
+    "idle" :py.image.load("./assets/textures/autre/personnage/colline/pose_attente.png"),
+    "saut" : py.image.load("./assets/textures/autre/personnage/colline/saut.png"),
+    "base" : py.image.load("./assets/textures/autre/personnage/colline/regard_face.png"),
+    "marche" : [s[0] for s in py.image.load_animation("./assets/textures/autre/personnage/colline/marche.gif")]
+}
+
 ### OBJETS ###
 
 sprite_porte = py.image.load_animation("./assets/textures/autre/porte.gif")
