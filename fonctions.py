@@ -456,7 +456,7 @@ def musique(zone:str):
         case "mer" : py.mixer_music.load("./assets/sons/music_mer.mp3")
         case "ville" : py.mixer_music.load("./assets/sons/music_ville.mp3")
         case "colline" : py.mixer_music.load("./assets/sons/music_colline.mp3")
-        case _ : py.mixer_music.load("./assets/sons/DDD.mp3")
+        case _ : py.mixer_music.load("./assets/sons/music_hub.mp3")
     py.mixer_music.play(-1)
 
 def menuPause(screen:py.Surface,parametres:Settings):
