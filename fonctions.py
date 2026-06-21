@@ -185,7 +185,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                 case "B": objetsDict["blocs"].append(Bloc((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j,2)))
                 case "p": objetsDict["portes"].append(Porte((((j-1)*TILE_SIZE,(i-1)*TILE_SIZE),(4*TILE_SIZE,2*TILE_SIZE))).setId(f"{zone}-{souszone}-{i}-{j}").setSprite(sprite_porte))
                 case "s": objetsDict["piques"].append(Pique((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(sprite_pique))
-                case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)))
+                case "m": objetsDict["blocmouvs"].append(BlocMouv((j*TILE_SIZE,i*TILE_SIZE),(TILE_SIZE,TILE_SIZE)).setSprite(blocSprite(zone,souszone,i,j,3)))
                 case "S": objetsDict["spawn"].append(Spawn((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                 case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                 case "P": 
@@ -255,7 +255,8 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
             case "mer" : # 0: tl, 1: tr, 2: bl, 3: br
                 sprite_index = ((bmouv.default_pos[1] // TILE_SIZE) % 2 * 2 + (bmouv.default_pos[0] // TILE_SIZE) % 2) * 2 + int(10 * time.time()) %2 # Magie noire
                 screen.blit(sprite_poissons_blocmouvs[sprite_index].convert_alpha(),bmouv.topleft)
-            case _ : py.draw.rect(screen, "blue", bmouv)
+            case _ : 
+                screen.blit(bmouv.getSprite(),bmouv.topleft)
         bmouv.move()
     
     for ennemi in objetsDict["ennemis"]:
@@ -421,6 +422,11 @@ def blocSprite(zone,souszone,i,j,type):
             case "foret": sprites = dirt_tiles
             case "ville": sprites = invis_tiles
             case _ : sprites = base_tiles
+    elif type == 3:
+        bloc = "m"
+        match zone:
+            case "mer" : return sprite_nuage # placeholder
+            case _ : sprites = colline_BM_tiles
 
     if tileMap[i-1][j] == bloc : # s'il y a un bloc au dessus
         if tileMap[i][j-1] == bloc : # s'il y'a un bloc à gauche

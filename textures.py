@@ -168,6 +168,26 @@ invis_tiles = {
     "tout_angle_gauche" : tileset_invis.subsurface(py.Rect(20,20,20,20))
 }
 
+tileset_BM_colline = py.image.load("./assets/textures/colline/blocMouv.png")
+colline_BM_tiles = {
+    "base" : tileset_BM_colline.subsurface(py.Rect(20,0,20,20)),
+    "sol" : tileset_BM_colline.subsurface(py.Rect(20,40,20,20)),
+    "tout_angle_haut" : py.transform.rotate(tileset_BM_colline.subsurface(py.Rect(20,20,20,20)), 270.0),
+    "plafond" : py.transform.rotate(tileset_BM_colline.subsurface(py.Rect(20,40,20,20)),180),
+    "tout_angle_bas" : py.transform.rotate(tileset_BM_colline.subsurface(py.Rect(20,20,20,20)), 90.0),
+    "droite" : tileset_BM_colline.subsurface(py.Rect(0,20,20,20)),
+    "angle_exte_droite" : tileset_BM_colline.subsurface(py.Rect(0,0,20,20)),
+    "angle_inte_droite" : tileset_BM_colline.subsurface(py.Rect(0,40,20,20)),
+    "angle_exte_droite_inver" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(0,0,20,20)),0,1),
+    "angle_inte_droite_inver" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(0,40,20,20)),0,1),
+    "tout_angle_droite" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(20,20,20,20)),1,0),
+    "gauche" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(0,20,20,20)),1,0),
+    "angle_exte_gauche" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(0,0,20,20)),1,0),
+    "angle_inte_gauche" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(0,40,20,20)),1,0),
+    "angle_exte_gauche_inver" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(0,0,20,20)),1,1),
+    "angle_inte_gauche_inver" : py.transform.flip(tileset_BM_colline.subsurface(py.Rect(0,40,20,20)),1,1),
+    "tout_angle_gauche" : tileset_BM_colline.subsurface(py.Rect(20,20,20,20))
+}   
 sprite_BT_ville = py.image.load("./assets/textures/ville/blocTombant.png")
 
 ### ENNEMIS ### 
