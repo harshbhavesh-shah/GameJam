@@ -85,7 +85,7 @@ while running:
 
     background(screen,zone)
     affichageZone(objetsDict, screen, zone)
-    screen.blit(anim_perso(joueur),joueur.getXY())
+    screen.blit(anim_perso(joueur,zone),joueur.getXY())
 
     if zone == "ville":   # brouillard
         screen.blit(sprite_brouillard)

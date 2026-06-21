@@ -433,19 +433,22 @@ def blocSprite(zone,souszone,i,j,type):
 
 
 
-def anim_perso(j:Joueur):
-    if j.getDir() == 'n' : return sprite_base       # Spawn
+def anim_perso(j:Joueur,zone:str):
+    match zone:
+        case _ : sprites_perso = sprites_perso_hub
+
+    if j.getDir() == 'n' : return sprites_perso["base"]       # Spawn
     
     elif j.getJumpTimer() != 0 :                      # Saut
-        if j.getDir() == 'd' : return sprite_saut     # droite
-        else : return py.transform.flip(sprite_saut,1,0)    # gauche
+        if j.getDir() == 'd' : return sprites_perso["saut"]     # droite
+        else : return py.transform.flip(sprites_perso["saut"] ,1,0)    # gauche
     
     elif j.isWalking:   # Marche
-        if j.getDir() == 'd' : return sprite_marche[int(10*time.time()) % len(sprite_marche)]     # droite
-        else : return py.transform.flip(sprite_marche[int(10*time.time()) % len(sprite_marche)],1,0)    # gauche
+        if j.getDir() == 'd' : return sprites_perso["marche"][int(10*time.time()) % len(sprites_perso["marche"])]     # droite
+        else : return py.transform.flip(sprites_perso["marche"][int(10*time.time()) % len(sprites_perso["marche"])],1,0)    # gauche
 
-    elif j.getDir() == 'd' : return sprite_idle
-    else : return py.transform.flip(sprite_idle,1,0)
+    elif j.getDir() == 'd' : return sprites_perso["idle"]
+    else : return py.transform.flip(sprites_perso["idle"],1,0)
 
 
 ### OPTIONS / MENUS ###
