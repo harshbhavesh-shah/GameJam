@@ -190,7 +190,7 @@ def preparationZone(zone:str, souszone:int) -> dict[str,list[Bloc|BlocMouv|Porte
                 case "E": objetsDict["end"].append(End((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)))
                 case "P": 
                     try : objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(SPRITES_PNJS[f"{zone}-{souszone}"]).init_file(f"{zone}-{souszone}"))
-                    except: objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(None).init_file(f"{zone}-{souszone}"))
+                    except : objetsDict["pnjs"].append(PNJ((j*TILE_SIZE,i*TILE_SIZE), (TILE_SIZE,TILE_SIZE)).setSprite(None).init_file(f"{zone}-{souszone}"))
 
                 case "e": 
                     match zone:
@@ -270,10 +270,13 @@ def affichageZone(objetsDict:dict[str,list[Bloc|BlocMouv|Porte|Pique|Ennemi|PNJ|
         screen.blit(sprite_boss_sun[int(10*time.time())%len(sprite_boss_sun)].convert_alpha(),objetsDict["bosssoleil"].topleft)
 
     for pnj in objetsDict["pnjs"]:
-        try: 
-            if pnj.getSprite() == sprite_pnj : screen.blit(pnj.getSprite(),(pnj.x,pnj.y-17))
-            else : screen.blit(pnj.getSprite(),pnj)
-        except: py.draw.rect(screen, "green", pnj)
+        if pnj.getSprite() is not None:
+            sprite = pnj.getSprite()
+            x = pnj.x
+            y = pnj.bottom - sprite.get_height()  # aligne le bas du sprite avec le bas de la hitbox
+            screen.blit(sprite, (x, y))
+        else:
+            py.draw.rect(screen, "green", pnj)
 
     for levier in objetsDict["leviers"]:
         screen.blit(levier.getSprite(),levier)
