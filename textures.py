@@ -12,6 +12,12 @@ bg_mer = py.transform.scale(bg_mer,(SCREEN_WIDTH,SCREEN_HEIGHT))
 bg_ville = py.image.load("./assets/textures/ville/background.png")
 bg_ville = py.transform.scale(bg_ville,(SCREEN_WIDTH,SCREEN_HEIGHT))
 
+bg_colline = py.image.load("./assets/textures/colline/background.png")
+bg_colline = py.transform.scale(bg_colline,(SCREEN_WIDTH,SCREEN_HEIGHT))
+
+bg_hub = py.image.load("./assets/textures/hub/background.png")
+bg_hub = py.transform.scale(bg_hub,(SCREEN_WIDTH,SCREEN_HEIGHT))
+
 ### PERSO PRINCIPAL ###
 
 sprites_perso_hub = {
@@ -49,7 +55,11 @@ sprite_porte = py.image.load_animation("./assets/textures/autre/porte.gif")
 sprite_pique = py.image.load("./assets/textures/autre/pique.png")
 
 sprite_panneau_metal = py.image.load("./assets/textures/autre/panneau_metal.png")
-sprite_pnj = py.image.load("./assets/textures/autre/pnjs/pnj1.png")
+sprite_pnj_hub = py.image.load("./assets/textures/autre/pnjs/pnj1.png")
+sprite_pnj_foret = py.image.load("./assets/textures/autre/pnjs/garde_forestier.png")
+sprite_pnj_mer = py.image.load("./assets/textures/autre/pnjs/")
+sprite_pnj_ville = py.image.load("./assets/textures/autre/pnjs/")
+sprite_pnj_colline = py.image.load("./assets/textures/autre/pnjs/vielle_dame.png")
 
 sprite_tortue_plastique = py.image.load("./assets/textures/mer/tortuePlastique1.png")
 sprite_tortue_sauvee = py.image.load("./assets/textures/mer/tortuePlastique2.png")
@@ -229,7 +239,12 @@ sprite_branche_en_feu = py.transform.scale(sprite_branche_en_feu, (2*TILE_SIZE, 
 #### DICTIONNAIRES D'ACCES ####
 
 SPRITES_PNJS = {
-    "hub-1" : sprite_pnj,
+    "hub-1" : sprite_pnj_hub,
+    "foret-11" : sprite_pnj_foret,
+    "mer-9" : sprite_pnj_mer,
+    "ville-9" : sprite_pnj_ville,
+    "colline-10" : sprite_pnj_colline,
     "hub-4" : sprite_panneau_metal,
-    "mer-1" : sprite_panneau_metal
+    "mer-1" : sprite_panneau_metal,
+    "foret-3" : sprite_panneau_metal
 }
