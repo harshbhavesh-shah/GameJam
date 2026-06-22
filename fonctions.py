@@ -402,9 +402,11 @@ def actifFire(objetsDict:dict):
 
 def background(ecran:py.Surface,zone):
     match zone:
+        #case "hub" : ecran.blit(bg_hub)  #background pas adapté...
         case "foret": ecran.blit(bg_foret)
         case "mer" : ecran.blit(bg_mer)
         case "ville" : ecran.blit(bg_ville)
+        case "colline" : ecran.blit(bg_colline)
         case _ : ecran.fill("darkblue")
 
 
