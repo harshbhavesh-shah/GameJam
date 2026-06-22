@@ -1,6 +1,6 @@
 from PIL import Image
 
-image = Image.open("C:\\Applis\\n1.png")
+image = Image.open("C:\\Users\\jolan\\Pictures\\gamejam\\colline9.png")
 result = []
 
 for ligne in range(36):

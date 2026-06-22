@@ -50,8 +50,7 @@ while running:
         hpBar.show()
         degatsEnvironnementauxColline(joueur,objetsDict)
         if joueur.getHp() <= 0:
-            joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
-            joueur.setHp(100)
+           objetsDict = dead(zone, souszone, joueur, objetsDict)
     else:
         hpBar.hide()
         joueur.setHp(100)

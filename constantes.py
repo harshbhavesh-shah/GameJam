@@ -48,7 +48,8 @@ PORTES_CORRESPONDANCES = {
     "ville-1-25-3" : "hub-5-9-14",
     "ville-9-22-55" : "hub-5-9-14",
     "hub-5-12-50" : "colline-1-25-3",
-    "colline-1-25-3" : "hub-5-12-50"
+    "colline-1-25-3" : "hub-5-12-50",
+    "colline-10-31-60" : "hub-5-12-50"
 }
 
 
@@ -56,16 +57,25 @@ MOUVEMENTS_BLOCMOUVS = {
     "hub-5-22-23" : ("naaaasaaaa",1),
     "hub-5-15-25" : ("naaaasaaaa",1),
     "hub-5-18-32" : ("naaaasaaaa",1),
-    "foret-2-15-39" : ("saanaa",1),
-    "foret-3-23-6" : ("eaaaaaaaaaaoaaaaaaaaaa",1),
-    "foret-4-14-2" : ("naaaasaaaa",1),
     "mer-3-26-31" : ("naaaaaaaasaaaaaaaa",1),
-    "mer-5-24-15" :("naaaaaaaaaaasaaaaaaaaaaa",1),
-    "mer-5-14-44" :("saaaaaaaaaanaaaaaaaaaaasa",1),
+    "mer-5-24-15" : ("naaaaaaaaaaasaaaaaaaaaaa",1),
+    "mer-5-14-44" : ("saaaaaaaaaanaaaaaaaaaaasa",1),
     "mer-6-10-20" : ("saaaaaaanaaaaaaa",1),
     "mer-6-10-40" : ("saaaaaaanaaaaaaa",1),
     "mer-6-26-30" : ("naaaaaaasaaaaaaa",1),
     "mer-8-26-19" : ("naaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaa",1),
     "mer-8-26-41" : ("naaaaaaaaaaaaaaaasaaaaaaaaaaaaaaaa",1),
-    "mer-9-26-30" : ("naaaaaaaaaaaasaaaaaaaaaaaa",1)
+    "mer-9-26-30" : ("naaaaaaaaaaaasaaaaaaaaaaaa",1),
+    "colline-1-2-4" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-2-0-3" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-2-1-19" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",2),
+    "colline-3-1-2" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",2),
+    "colline-3-2-27" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-4-0-5" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-5-1-5" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-6-1-3" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-7-0-4" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-8-0-3" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-9-0-6" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1),
+    "colline-10-2-3" : ("eaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1)
 }
