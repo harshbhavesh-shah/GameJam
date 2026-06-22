@@ -15,7 +15,7 @@ screen = py.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 joueur = Joueur((300,400))
 
 zone = "hub"
-souszone = 5
+souszone = 1
 objetsDict = preparationZone(zone, souszone)
 
 py.mixer_music.load("./assets/sons/music_hub.mp3")
@@ -50,8 +50,7 @@ while running:
         hpBar.show()
         degatsEnvironnementauxColline(joueur,objetsDict)
         if joueur.getHp() <= 0:
-            joueur.setXY(objetsDict["spawn"][0].x, objetsDict["spawn"][0].y)
-            joueur.setHp(100)
+           objetsDict = dead(zone, souszone, joueur, objetsDict)
     else:
         hpBar.hide()
         joueur.setHp(100)
